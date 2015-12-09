@@ -1,8 +1,8 @@
 /*
  * RobotVikings
- * math.cpp
+ * help.cpp
  * 12/6/15
- * Defines math functions to help with whatever we may need them for.
+ * Defines help functions to help with whatever we may need them for.
  */
 
 #include <cassert>

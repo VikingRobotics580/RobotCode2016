@@ -1,6 +1,6 @@
 /*
  * RobotVikings
- * math.h
+ * help.h
  * 12/6/15
  * Declares helper functions to help with whatever we may need.
  */
