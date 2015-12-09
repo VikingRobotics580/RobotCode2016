@@ -12,7 +12,20 @@ class IterativeRobot;
 
 class Robot: public IterativeRobot{
     public:
+        /*
+         * Robot - Constructor
+         * Accepts nothing
+         * Returns nothing
+         * Constructs Robot
+         */
         Robot();
+
+        /*
+         * Robot - Destructor
+         * Accepts nothing
+         * Returns nothing
+         * Deconstructs Robot
+         */
         ~Robot();
 
     protected:
