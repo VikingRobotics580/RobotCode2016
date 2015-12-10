@@ -87,7 +87,8 @@ int convert::toMap(std::string& str,std::map<std::string,std::string>& m){
     std::string n = str.substr(1,str.size()-1); // Chop off { and }
     while(i!=std::string::npos){
         i=n.find(',',i); // Find the next ','
-        std::string set = n.substr(i-1,x); // get the next set (this is wrong, fix it) Did I fix it yet?
+        // get the next set (this is wrong, fix it) Did I fix it yet? Can somebody check for me?
+        std::string set = n.substr(i-1,x);
         x=i;
         m.at(set.substr(0,set.find(':')-1)) = set.substr(set.find(':')+1); // Get key and set it to value in m
     }

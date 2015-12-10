@@ -13,6 +13,8 @@
 #include <map>
 #include <string>
 
+#include "macros.h"
+
 namespace help{
  // Make it so that the "math" namespace is inside help. This is allowed according to Standard C++ 7.3.2/3. Fite me.
  namespace math = math_help;
