@@ -5,14 +5,23 @@ Robotics code for FRC Team 580 (Vikings Robotics). It is written in C++ and comp
 
 # Programming Team Contributors
 Maxwell Chow
+
 John Forristal
+
 Johnny Jones
+
 Conlon Meek
+
 Ryan Phillips
+
 Tyler Robbins
+
 Josh Sihota
+
 Cameron Taylor
+
 Andrew V.
+
 
 # Deploying
 1) Have Eclipse running
