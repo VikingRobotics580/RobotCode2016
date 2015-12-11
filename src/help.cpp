@@ -26,6 +26,20 @@ int misc::range(int stop,std::vector<int>&store){
     return misc::range(0,stop,store);
 }
 
+int misc::split(std::string& str, char delim, std::vector<std::string>& store){
+	return misc::split(str,delim,str.find_last_not_of(delim),store);
+}
+
+int misc::split(std::string& str, char delim, int n, std::vector<std::string>& store){
+    size_t i=0;
+    std::string fstr = str.substr(); // get a copy of str
+    while(i!=std::string::npos){
+        i=fstr.find(',',i); // Find the next ','
+        store.push_back(fstr.substr(i,fstr.find(',',i)-1)); // add substring of element to vector (chop off ',')
+    }
+	return 0;
+}
+
 int convert::toInt(char c){
     assert(c < '9' && c > '0');
     return (int)(c)-'0';
@@ -70,13 +84,13 @@ bool convert::toBool(std::string& str){
 }
 
 int convert::toVector(std::string& str,std::vector<std::string>& v){
-    size_t i=0;
+//    size_t i=0;
     std::string n = str.substr(1,str.size()-1); // Chop off [ and ]
-    while(i!=std::string::npos){
-        i=n.find(',',i); // Find the next ','
-        v.push_back(str.substr(i,n.find(',',i)-1)); // add substring of element to vector (chop off ',')
-    }
-    return 0;
+//    while(i!=std::string::npos){
+//        i=n.find(',',i); // Find the next ','
+//        v.push_back(str.substr(i,n.find(',',i)-1)); // add substring of element to vector (chop off ',')
+//    }
+    return misc::split(n,',',v);
 }
 
 int convert::toMap(std::string& str,std::map<std::string,std::string>& m){
@@ -93,4 +107,40 @@ int convert::toMap(std::string& str,std::map<std::string,std::string>& m){
         m.at(set.substr(0,set.find(':')-1)) = set.substr(set.find(':')+1); // Get key and set it to value in m
     }
     return 0;
+}
+
+bool is::isInt(char c){
+	return (c<'9' || c>'0'); // is c a number (all 'number' characters are between 0 and 9
+}
+bool is::isInt(std::string& str){
+	size_t i=0;
+	if(str.at(0) == '-' || isInt(str.at(0)))
+		i=1;
+	for(;i<str.size();i++) // For every character
+		if(!isInt(str.at(i)))
+			return false;
+	return true;
+}
+bool is::isFloat(std::string& str){
+	size_t i=0;
+	if(str.at(0) == '-' || isInt(str.at(0)))
+		i=1;
+	for(;i<str.size();i++)
+		if(!isInt(str.at(i)))
+			if(str.at(i) != '.') // If it isn't a number or a '.'
+				return false;
+	return true;
+}
+bool is::isBool(std::string& str){
+	return (str.compare("true") || str.compare("false"));
+}
+bool is::isString(std::string& str){
+	return (str.at(0) == '"' && str.at(str.size()-1) == '"');
+}
+bool is::isVector(std::string& str){
+	return (str.at(0) == '[' && str.at(str.size()-1) == ']') ||
+			(str.at(0) == '(' && str.at(str.size()-1) == ')');
+}
+bool is::isMap(std::string& str){
+	return (str.at(0) == '{' && str.at(str.size()-1) == '}');
 }

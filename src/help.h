@@ -52,6 +52,44 @@ namespace help{
    * 1,3
    */
   int range(int,int,int,std::vector<int>&);
+
+  /*
+   * split
+   * Accepts a string (str), a char (delimiter), and a vector<std::string&> (store)
+   * Returns an int as status (0 upon success, 1 upon failure)
+   * Splits a string str by delim and stores them in a vector store
+   * Example:
+   * str="hello,there",delim=','
+   * ["hello","there"]
+   */
+  int split(std::string&,char,std::vector<std::string>&);
+
+  /*
+   * split
+   * Accepts a string (str), a char (delimiter), an int (n), and a vector<std::string&> (store)
+   * Returns an int as status (0 upon success, 1 upon failure)
+   * Splits a string str by delim and stores them in a vector store
+   * Example:
+   * str="hello,there,world",delim=',',n=1
+   * ["hello","there,world"]
+   */
+  int split(std::string&,char,int,std::vector<std::string>&);
+ }
+
+ namespace is{
+  /*
+   * isType
+   * Accepts a string
+   * Returns a bool
+   * Returns true if the passed string is the specified type. False otherwise.
+   */
+  bool isInt(char);
+  bool isInt(std::string&);
+  bool isFloat(std::string&);
+  bool isBool(std::string&);
+  bool isString(std::string&);
+  bool isVector(std::string&);
+  bool isMap(std::string&);
  }
 
  namespace convert{
