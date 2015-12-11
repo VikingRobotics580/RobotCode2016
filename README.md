@@ -4,7 +4,15 @@ Vikings Robotics
 Robotics code for FRC Team 580 (Vikings Robotics). It is written in C++ and compiled using [Eclipse](http://www.eclipse.org/downloads/). Instructions for setting up Eclipse to work with FRC Robotics Code can be found [here](http://wpilib.screenstepslive.com/s/4485/m/13809/l/145002-installing-eclipse-c-java).
 
 # Programming Team Contributors
+Maxwell Chow
+John Forristal
+Johnny Jones
+Conlon Meek
+Ryan Phillips
 Tyler Robbins
+Josh Sihota
+Cameron Taylor
+Andrew V.
 
 # Deploying
 1) Have Eclipse running
