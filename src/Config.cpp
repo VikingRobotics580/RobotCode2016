@@ -58,11 +58,13 @@ void Config::Init(std::string& filename){
 
 int Config::parseData(){
 	std::vector<std::string> v;
-	help::misc::split(m_raw_data,'\n',v);
+	help::strings::split(m_raw_data,'\n',v);
 	for(size_t i=0;i<v.size();i++){
 		std::string line = v.at(i);
+		help::strings::trim(line,line);
+
 		std::vector<std::string> varval;
-		help::misc::split(line,'=',varval);
+		help::strings::split(line,'=',varval);
 
 		if(help::is::isInt(v.at(i))){
 			m_options[varval[0]] = (uint64)(help::convert::toInt(varval[1]));
