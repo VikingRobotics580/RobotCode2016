@@ -18,14 +18,6 @@ int misc::range(int start,int stop,int step,std::vector<int>& store){
     return 0;
 }
 
-int misc::range(int start,int stop,std::vector<int>& store){
-    return misc::range(start,stop,1,store);
-}
-
-int misc::range(int stop,std::vector<int>&store){
-    return misc::range(0,stop,store);
-}
-
 int strings::split(std::string& str, char delim, std::vector<std::string>& store){
 	return strings::split(str,delim,str.find_last_not_of(delim),store);
 }

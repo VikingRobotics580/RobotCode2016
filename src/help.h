@@ -26,14 +26,14 @@ namespace help{
  namespace misc{
   /*
    * range
-   * Accepts an int (stop) and a vector<int> (store)
+   * Accepts an int (start), an int (stop), an int (step) and a vector<int> (store)
    * Returns an int as status (0 upon success, 1 upon failure)
-   * Creates a range of ints from 0 to stop and stores them in store.
+   * Creates a range of ints from start to stop, every step and stores them in store.
    * Example:
-   * stop=5
-   * 0,1,2,3,4
+   * start=1,stop=5,step=2
+   * 1,3
    */
-  inline int range(int,std::vector<int>&);
+  int range(int,int,int,std::vector<int>&);
 
   /*
    * range
@@ -44,18 +44,22 @@ namespace help{
    * start=1,stop=5
    * 1,2,3,4
    */
-  inline int range(int,int,std::vector<int>&);
+  inline int range(int start,int stop,std::vector<int>& store){
+      return misc::range(start,stop,1,store);
+  }
 
   /*
    * range
-   * Accepts an int (start), an int (stop), an int (step) and a vector<int> (store)
+   * Accepts an int (stop) and a vector<int> (store)
    * Returns an int as status (0 upon success, 1 upon failure)
-   * Creates a range of ints from start to stop, every step and stores them in store.
+   * Creates a range of ints from 0 to stop and stores them in store.
    * Example:
-   * start=1,stop=5,step=2
-   * 1,3
+   * stop=5
+   * 0,1,2,3,4
    */
-  int range(int,int,int,std::vector<int>&);
+  inline int range(int stop,std::vector<int>&store){
+      return misc::range(0,stop,store);
+  }
 
  }
  namespace strings{
@@ -81,6 +85,11 @@ namespace help{
    */
   int split(std::string&,char,int,std::vector<std::string>&);
 
+  // A NOTE TO ALL FUTURE PROGRAMMERS!
+  // These definitions MUST be here, because, since they are inline, they won't be visible if they are not defined in the same location as their
+  // declaration.
+  // Why? Who knows.
+  // Don't believe me? Refer to "http://stackoverflow.com/questions/19609239/function-declared-but-not-defined-yet-it-is-defined#19609425"
   /*
    * ltrim
    * Accepts a string
