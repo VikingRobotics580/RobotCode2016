@@ -12,6 +12,10 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <algorithm>
+#include <functional>
+#include <locale>
+#include <cctype>
 
 #include "macros.h"
 
@@ -53,6 +57,8 @@ namespace help{
    */
   int range(int,int,int,std::vector<int>&);
 
+ }
+ namespace strings{
   /*
    * split
    * Accepts a string (str), a char (delimiter), and a vector<std::string&> (store)
@@ -74,6 +80,77 @@ namespace help{
    * ["hello","there,world"]
    */
   int split(std::string&,char,int,std::vector<std::string>&);
+
+  /*
+   * ltrim
+   * Accepts a string
+   * Returns a string
+   * Trims all whitespace from the left side of the string
+   */
+  inline int ltrim(std::string& s,std::string& store){
+      store = s.substr();
+      // erase from beginning to first character that isn't a whitespace character
+      // erase(pos,len) - erases all characters from pos to len
+      //   pos is the start, len is
+      // find_if(first,last,pred) - finds the first index between first and last where pred is true
+      //  pred is
+      // not1(pred) - returns the opposite of pred
+      //  pred is
+      // ptr_fun<class Arg, class Result>(f) - returns a function object of f, where f is a function
+      //  pointer.
+      // isspace - a function pointer which returns true if the passed in character is a whitespace char
+
+      // For more information on how this works, look at the following links where I
+      //  ~shamelessly copy pasted~ found this code.
+      // http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
+      // http://www.cplusplus.com/reference/string/string/erase/
+      // http://www.cplusplus.com/reference/functional/ptr_fun/
+      // http://www.cplusplus.com/reference/locale/isspace/
+      // http://www.cplusplus.com/reference/functional/not1
+      // http://www.cplusplus.com/reference/algorithm/find_if/
+      // http://stackoverflow.com/questions/5921609/what-is-predicate-in-c
+      store.erase(store.begin(),
+              std::find_if(s.begin(),s.end(),
+                      std::not1(std::ptr_fun<int,int>(std::isspace))
+              )
+      );
+      return 0;
+  }
+  /*
+   * rtrim
+   * Accepts a string
+   * Returns a string
+   * Trims all whitespace from the right side of the string
+   */
+  inline int rtrim(std::string& s,std::string& store){
+      store = s.substr();
+      // previous stuff all compounded in one line.
+      // forgive me for how hard this is to read.
+      //  or don't, it's your choice.
+      store.erase(std::find_if(s.rbegin(),s.rend(),std::not1(std::ptr_fun<int,int>(std::isspace))).base(),s.end());
+      return 0;
+
+      // Oh right, if you want explanation as to what the hell this does, look at ltrim.
+  }
+  /*
+   * trim
+   * Accepts a string
+   * Returns a string
+   * Trims all whitespace from both sides of the string
+   */
+  inline int trim(std::string& s,std::string& store){
+    // To make sure we get a proper error value, create a special int, which uses bitwise or
+    //  to ensure that both values return 0
+    // We also need to send a temporary string to rtrim because the trim functions overwrite
+    //  whatever is in store, meaning that it will disappear the instant it is sent to ltrim
+    std::string nstore;
+    int ret = strings::rtrim(s,nstore) | strings::ltrim(nstore,store);
+    return ret;
+
+    // P.S: Although, now that I'm thinking about it, we could just not have nstore and just pass
+    //  nstore twice to ltrim.
+    // Somebody else who wants to take a look at these, please consider this.
+}
  }
 
  namespace is{
