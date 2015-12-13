@@ -26,11 +26,11 @@ int misc::range(int stop,std::vector<int>&store){
     return misc::range(0,stop,store);
 }
 
-int misc::split(std::string& str, char delim, std::vector<std::string>& store){
-	return misc::split(str,delim,str.find_last_not_of(delim),store);
+int strings::split(std::string& str, char delim, std::vector<std::string>& store){
+	return strings::split(str,delim,str.find_last_not_of(delim),store);
 }
 
-int misc::split(std::string& str, char delim, int n, std::vector<std::string>& store){
+int strings::split(std::string& str, char delim, int n, std::vector<std::string>& store){
     size_t i=0;
     std::string fstr = str.substr(); // get a copy of str
     while(i!=std::string::npos){
@@ -90,7 +90,7 @@ int convert::toVector(std::string& str,std::vector<std::string>& v){
 //        i=n.find(',',i); // Find the next ','
 //        v.push_back(str.substr(i,n.find(',',i)-1)); // add substring of element to vector (chop off ',')
 //    }
-    return misc::split(n,',',v);
+    return strings::split(n,',',v);
 }
 
 int convert::toMap(std::string& str,std::map<std::string,std::string>& m){
