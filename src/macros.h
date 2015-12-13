@@ -8,26 +8,6 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-/*
- * A macro implementing a foreach loop.
- * If this was Java, it would look like:
- *    for(string s: std::vector<string> v)
- * WARNING! This macro is experimental and may not work. Use at your own risk!
- */
-/*
- * The following two macros have been commented out due to them not working.
- * If somebody could fix them, that would be grand.
-
-#define checkSize(x,y) \
-    { x = y.at(i); \
-    return i < y.size(); }
-
-#define foreach(x,y) \
-    for(int i=0; i < y.size(); i++){ \
-        x = y.at(i);
-#warning foreach has been enabled. Please note that foreach is experimental and may not work.
-*/
-
 // What do you want me to write here?
 #define forever for(;;)
 
