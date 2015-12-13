@@ -21,7 +21,7 @@ public:
 	Config();
 
 	template<typename T>
-	T* getOption(std::string& var){
+	inline T* getOption(std::string& var){
 		return (T*)(m_options.at(var));
 	}
 
