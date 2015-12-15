@@ -59,36 +59,35 @@ void Config::Init(std::string& filename){
 int Config::parseData(){
 	std::vector<std::string> v;
 	help::strings::split(m_raw_data,'\n',v);
-	for(size_t i=0;i<v.size();i++){
-		std::string line = v.at(i);
+	for(auto& line : v){
 		help::strings::trim(line,line);
 
 		std::vector<std::string> varval;
 		help::strings::split(line,'=',varval);
 
-		if(help::is::isInt(v.at(i))){
+		if(help::is::isInt(varval.at(1))){
 			m_options[varval[0]] = (uint64)(help::convert::toInt(varval[1]));
-		}else if(help::is::isFloat(v.at(i))){
+		}else if(help::is::isFloat(varval.at(1))){
 			m_options[varval[0]] = (uint64)(help::convert::toFloat(varval[1])*UINT64_MAX);
-		}else if(help::is::isBool(v.at(i))){
+		}else if(help::is::isBool(varval.at(1))){
 			m_options[varval[0]] = (uint64)(help::convert::toBool(varval[1]));
-		}else if(help::is::isString(v.at(i))){
-			std::string s = (v.at(i).substr(1,v.at(i).size()-1));
+		}else if(help::is::isString(varval.at(1))){
+			std::string s = (varval.at(1).substr(1,varval.at(1).size()-1));
 			m_options[varval[0]] = reinterpret_cast<uint64>(&s);
-		}else if(help::is::isVector(v.at(i))){
+		}else if(help::is::isVector(varval.at(1))){
 			std::vector<std::string> nv;
 			std::vector<uint64> nnv;
-			help::convert::toVector(v.at(i),nv);
+			help::convert::toVector(varval.at(1),nv);
 			parseVector(nv,nnv);
 			m_options[varval[0]] = reinterpret_cast<uint64>(&nv);
-		}else if(help::is::isMap(v.at(i))){
+		}else if(help::is::isMap(varval.at(1))){
 			std::map<std::string,std::string> m;
 			std::map<std::string,uint64> nm;
-			help::convert::toMap(v.at(i),m);
+			help::convert::toMap(varval.at(1),m);
 			parseMap(m,nm);
 			m_options[varval[0]] = reinterpret_cast<uint64>(&nm);
 		}else{
-			m_options[varval[0]] = reinterpret_cast<uint64>(&v.at(i));
+			m_options[varval[0]] = reinterpret_cast<uint64>(&varval.at(1));
 		}
 	}
 	return 0;
@@ -127,8 +126,7 @@ int Config::parseMap(std::map<std::string,std::string>& map,std::map<std::string
 }
 
 int Config::parseVector(std::vector<std::string>& vector,std::vector<uint64>& newvector){
-	for(size_t i=0;i<vector.size();i++){
-		std::string elem = vector.at(i);
+    for(auto& elem : vector){
 		if(help::is::isInt(elem)){
 			newvector.push_back((uint64)(help::convert::toInt(elem)));
 		}else if(help::is::isFloat(elem)){
