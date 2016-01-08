@@ -6,11 +6,14 @@
  */
 
 #include <cassert>
+#include <stdio.h>
+#include <cstring>
 #include <cmath>
 #include "help.h"
 
 using namespace help;
 
+// RANGE
 int misc::range(int start,int stop,int step,std::vector<int>& store){
     for(int i=start;i<stop;i+=step){
         store.push_back(i);
@@ -18,6 +21,73 @@ int misc::range(int start,int stop,int step,std::vector<int>& store){
     return 0;
 }
 
+// STARTSWITH
+bool strings::startswith(std::string& input, std::string& check){
+    if(input.size() < check.size()) return false;
+    for(size_t i=0;i<check.size();i++){
+        if(input.at(i) != check.at(i)) return false;
+    }
+    return true;
+}
+
+bool strings::startswith(std::string& input, const char* check){
+    if(input.size() < strlen(check)) return false;
+    for(size_t i=0;i<strlen(check);i++){
+        if(input.at(i) != check[i]) return false;
+    }
+    return true;
+}
+
+bool strings::startswith(const char* input, const char* check){
+    if(strlen(input) < strlen(check)) return false;
+    for(size_t i=0;i<strlen(check);i++){
+        if(input[i] != check[i]) return false;
+    }
+    return true;
+}
+
+bool strings::startswith(const char* input, std::string& check){
+    if(strlen(input) < check.size()) return false;
+    for(size_t i=0;i<check.size();i++){
+        if(input[i] != check.at(i)) return false;
+    }
+    return true;
+}
+
+// ENDSWITH
+bool strings::endswith(std::string& input, std::string& check){
+    if(input.size() < check.size()) return false;
+    for(size_t i=check.size()-1;i>0;i--){
+        if(input.at(input.size()-i) != check.at(i)) return false;
+    }
+    return true;
+}
+
+bool strings::endswith(std::string& input, const char* check){
+    if(input.size() < strlen(check)) return false;
+    for(size_t i=strlen(check)-1;i>0;i--){
+        if(input.at(i) != check[i]) return false;
+    }
+    return true;
+}
+
+bool strings::endswith(const char* input, const char* check){
+    if(strlen(input) < strlen(check)) return false;
+    for(size_t i=strlen(check)-1;i>0;i--){
+        if(input[strlen(input)-i] != check[i]) return false;
+    }
+    return true;
+}
+
+bool strings::endswith(const char* input, std::string& check){
+    if(strlen(input) < check.size()) return false;
+    for(size_t i=check.size();i>0;i++){
+        if(input[strlen(input)-i] != check.at(i)) return false;
+    }
+    return true;
+}
+
+// SPLIT
 int strings::split(std::string& str, char delim, std::vector<std::string>& store){
 	return strings::split(str,delim,str.find_last_not_of(delim),store);
 }
@@ -32,6 +102,7 @@ int strings::split(std::string& str, char delim, int n, std::vector<std::string>
 	return 0;
 }
 
+// TOTYPE
 int convert::toInt(char c){
     assert(c < '9' && c > '0');
     return (int)(c)-'0';
@@ -101,9 +172,11 @@ int convert::toMap(std::string& str,std::map<std::string,std::string>& m){
     return 0;
 }
 
+// ISTYPE
 bool is::isInt(char c){
 	return (c<'9' || c>'0'); // is c a number (all 'number' characters are between 0 and 9
 }
+
 bool is::isInt(std::string& str){
 	size_t i=0;
 	if(str.at(0) == '-' || isInt(str.at(0)))
@@ -113,6 +186,7 @@ bool is::isInt(std::string& str){
 			return false;
 	return true;
 }
+
 bool is::isFloat(std::string& str){
 	size_t i=0;
 	if(str.at(0) == '-' || isInt(str.at(0)))
@@ -123,16 +197,21 @@ bool is::isFloat(std::string& str){
 				return false;
 	return true;
 }
+
 bool is::isBool(std::string& str){
 	return (str.compare("true") || str.compare("false"));
 }
+
 bool is::isString(std::string& str){
 	return (str.at(0) == '"' && str.at(str.size()-1) == '"');
 }
+
 bool is::isVector(std::string& str){
 	return (str.at(0) == '[' && str.at(str.size()-1) == ']') ||
 			(str.at(0) == '(' && str.at(str.size()-1) == ')');
 }
+
 bool is::isMap(std::string& str){
 	return (str.at(0) == '{' && str.at(str.size()-1) == '}');
 }
+

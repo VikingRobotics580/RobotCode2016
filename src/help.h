@@ -64,6 +64,26 @@ namespace help{
  }
  namespace strings{
   /*
+   * startswith
+   * Accepts two strings, an input string and a check
+   * Returns true if the input string starts with the check string
+   */
+  bool startswith(std::string&,std::string&);
+  bool startswith(std::string&,const char*);
+  bool startswith(const char*,const char*);
+  bool startswith(const char*,std::string&);
+
+  /*
+   * endswith
+   * Accepts two strings, an input string and a check
+   * Returns true if the input string ends with the check string
+   */
+  bool endswith(std::string&,std::string&);
+  bool endswith(std::string&,const char*);
+  bool endswith(const char*,const char*);
+  bool endswith(const char*,std::string&);
+
+  /*
    * split
    * Accepts a string (str), a char (delimiter), and a vector<std::string&> (store)
    * Returns an int as status (0 upon success, 1 upon failure)
