@@ -8,6 +8,9 @@
 #ifndef _HELP_H_
 #define _HELP_H_
 
+#include <sys/mman.h>
+#include <unistd.h>
+#include <iostream>
 #include <math_help.h>
 #include <vector>
 #include <map>
@@ -250,6 +253,47 @@ namespace help{
    *   {foo:5,h:25,etc...}
    */
   int toMap(std::string&,std::map<std::string,std::string>&);
+ }
+
+ // A word of advice.
+ // Please, please, PLEASE, do not ever use the functions here unless you absolutely have to
+ // Using them will result in extremely hacky code, and should only ever be used in extremely ugly situations
+ namespace hell{
+    // The following two monstrosities can be found here: http://yosefk.com/blog/machine-code-monkey-patching.html
+    /*
+    * monkey_patch
+    * Accepts an int and a template type.
+    * Returns an int as status (0 upon success, 1 upon failure)
+    * Dynamically replaces the functionality of virtual method idx in class T with function F
+    */
+    template<class T, class F>
+    int monkey_patch(int idx, F newFunc){
+      std::cout << "Hello! I am the monkey patcher. Whoever is calling me is a bad person." << std::endl;
+      T obj;
+      int* vptr = *(int**)&obj;
+      void* page = (void*)(int(vptr) & ~(getpagesize()-1));
+      if(mprotect(page,getpagesize(),PROT_WRITE|PROT_READ|PROT_EXEC)){
+          std::cerr << "mprotect has thrown an error" << std::endl;
+          return 1;
+      }
+      vptr[idx] = (int)newFunc;
+      return 0;
+    }
+
+    /*
+     * monkey_patch
+     * Accepts two function pointers
+     * Returns an int as status (0 upon success, 1 upon failure)
+     * Dynamically replaces the functionality of function1 with function2
+     * Will only work on ARM Processors
+     */
+    // NOTE: Somebody should really put this function inside some preprocessor if-statements to make sure it doesn't get compiled if it won't work
+    inline int monkey_patch(void (*func1)(),void (*func2)()){
+        std::cout << "Hello! I am the monkey patcher. Whoever is calling me is a bad person." << std::endl;
+        ((int*)func1)[0] = 0xe51ff004;
+        ((int*)func1)[1] = (int)func2;
+        return 0;
+    }
  }
 }
 
