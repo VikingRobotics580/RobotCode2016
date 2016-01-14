@@ -9,8 +9,7 @@
 #define _AUTONOMOUSDRIVE_H_
 
 #include <string>
-
-class Command;
+#include "WPILib.h"
 
 enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
 
