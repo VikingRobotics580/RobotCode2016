@@ -6,7 +6,7 @@
  */
 
 
-#include <math_help.h>
+#include "math_help.h"
 
 // Copied from https://en.wikipedia.org/wiki/Fast_inverse_square_root
 float math_help::Q_rsqrt(float number){

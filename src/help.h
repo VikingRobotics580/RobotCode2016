@@ -11,7 +11,6 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <iostream>
-#include <math_help.h>
 #include <vector>
 #include <map>
 #include <string>
@@ -21,6 +20,7 @@
 #include <cctype>
 
 #include "macros.h"
+#include "math_help.h"
 
 namespace help{
  // Make it so that the "math" namespace is inside help. This is allowed according to Standard C++ 7.3.2/3. Fite me.
