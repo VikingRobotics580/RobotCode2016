@@ -36,7 +36,7 @@ Config::Config(const char* filename):
     Init((std::string&)(filename)); // Cast it to a string, rather than pass it to a constructor. wut.
 }
 
-void Config::Init(std::string& filename){
+int Config::Init(std::string& filename){
     std::ifstream file(filename.c_str());
     if(file){
         file.seekg(0,file.end);
@@ -50,10 +50,12 @@ void Config::Init(std::string& filename){
 
         delete[] buffer;
     }else{
-        assert(false&&"Failed to open config file!");
+        return 1;
     }
-    assert(parseData() == 1);
+    if(parseData())
+        return 1;
     m_ready = true;
+    return 0;
 }
 
 int Config::parseData(){

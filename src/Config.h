@@ -29,8 +29,8 @@ public:
     inline T* getOption(const char* var){
         return (T*)(m_options.at((std::string&)(var)));
     }
+    int Init(std::string&);
 protected:
-    void Init(std::string&);
     int parseData();
     int parseVector(std::vector<std::string>&,std::vector<uint64>&);
     int parseMap(std::map<std::string,std::string>&,std::map<std::string,uint64>&);
