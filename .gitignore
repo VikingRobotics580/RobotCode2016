@@ -2,4 +2,6 @@
 Debug/
 *.swp
 *.o
+build/
+bin/
 
