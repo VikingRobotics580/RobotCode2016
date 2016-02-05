@@ -20,7 +20,7 @@ LFLAGS = -L$(HOME)/wpilib/cpp/current/lib -lwpi
 CXX = arm-frc-linux-gnueabi-g++
 TEAM = 580
 RMCOMMAND = rm -f
-DEPLOYTARGET = roboRIO-$(TEAM).local
+DEPLOYTARGET = roboRIO-$(TEAM)-FRC.local
 
 SOURCES = $(wildcard src/*.cpp)
 HEADERS = $(wildcard src/*.hpp)
