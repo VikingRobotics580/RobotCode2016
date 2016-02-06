@@ -93,13 +93,24 @@ int strings::split(std::string& str, char delim, std::vector<std::string>& store
 }
 
 int strings::split(std::string& str, char delim, int n, std::vector<std::string>& store){
-    size_t i=0;
-    std::string fstr = str.substr(); // get a copy of str
-    while(i!=std::string::npos){
-        i=fstr.find(',',i); // Find the next ','
-        store.push_back(fstr.substr(i,fstr.find(',',i)-1)); // add substring of element to vector (chop off ',')
+    std::string fstr = str.substr();
+    std::string nstr;
+    size_t s=0;
+    size_t i=fstr.find(delim,0);
+    int n2=0;
+
+    while(i!=std::string::npos && n2!=n){
+        nstr = fstr.substr(s,i); // Get the next bit of the string
+        store.push_back(nstr);
+        fstr = fstr.substr(i+1);
+        s=i+1;
+        i=fstr.find(delim,0);
+        std::cout << "i="<<i << std::endl;
+        n2++;
     }
-	return 0;
+
+    store.push_back(fstr); // Put whatever the last value is into store. This kills the off-by-one error.
+    return 0;
 }
 
 // TOTYPE
