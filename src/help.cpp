@@ -105,7 +105,6 @@ int strings::split(std::string& str, char delim, int n, std::vector<std::string>
         fstr = fstr.substr(i+1);
         s=i+1;
         i=fstr.find(delim,0);
-        std::cout << "i="<<i << std::endl;
         n2++;
     }
 
