@@ -7,6 +7,7 @@
 
 #include "WPILib.h"
 #include "BaseManager.h"
+#include "structs.h"
 
 typedef std::map<std::string,SpeedController*> talon_map;
 
@@ -20,6 +21,8 @@ class HardwareManager: public BaseManager {
         bool IsFinished() override;
         int End() override;
         int move();
+        int launch();
+        int suck();
 
         /*
          * getAllTalons
@@ -58,6 +61,7 @@ class HardwareManager: public BaseManager {
         inline void addTalon(int id,const char* identifier=""){
             this->addTalon(id,(std::string&)identifier);
         }
+
     private:
         bool m_finished;
         talon_map m_talons;

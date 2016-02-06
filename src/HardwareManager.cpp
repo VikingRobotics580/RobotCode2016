@@ -42,3 +42,11 @@ int HardwareManager::move(){
     return 0;
 }
 
+int HardwareManager::launch(){
+    return 0;
+}
+
+int HardwareManager::suck(){
+    return 0;
+}
+
