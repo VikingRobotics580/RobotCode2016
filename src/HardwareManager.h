@@ -8,6 +8,8 @@
 #include "WPILib.h"
 #include "BaseManager.h"
 
+typedef std::map<std::string,SpeedController*> talon_map;
+
 class HardwareManager: public BaseManager {
     public:
         HardwareManager();
@@ -17,24 +19,30 @@ class HardwareManager: public BaseManager {
         int Update() override;
         bool IsFinished() override;
         int End() override;
+        int move();
 
         /*
          * getAllTalons
          * Accepts void
-         * Returns a std::map<std::string,CANTalon*>
+         * Returns a talon_map
          * Returns the map of existing talons
          */
-        inline std::map<std::string,CANTalon*>& getAllTalons(){ return this->m_talons; };
+        inline talon_map& getAllTalons(){ return this->m_talons; };
 
         /*
          * getTalon
          * Accepts a std::string&
-         * Returns a CANTalon*
-         * Returns the CANTalon specified by iden
+         * Returns a SpeedController*
+         * Returns the SpeedController specified by iden
          */
-        inline CANTalon* getTalon(std::string& iden){
-            if(this->m_talons.find(iden) != this->m_talons.end()) 
+        inline SpeedController* getTalon(std::string& iden){
+            if(this->m_talons.find(iden) != this->m_talons.end())
                 return this->m_talons.at(iden);
+            else
+                return NULL;
+        }
+        inline SpeedController* getTalon(const char* iden){
+            return this->getTalon((std::string&)iden);
         }
 
         /*
@@ -47,9 +55,13 @@ class HardwareManager: public BaseManager {
             if(identifier.compare("") == 0) identifier = std::to_string(id);
             this->m_talons.at(identifier) = new CANTalon(id);
         }
+        inline void addTalon(int id,const char* identifier=""){
+            this->addTalon(id,(std::string&)identifier);
+        }
     private:
         bool m_finished;
-        std::map<std::string,CANTalon*> m_talons;
+        talon_map m_talons;
+        RobotDrive* m_drive;
 };
 
 #endif
