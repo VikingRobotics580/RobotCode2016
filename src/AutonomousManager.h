@@ -20,6 +20,11 @@ enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
 class AutonomousManager: public BaseManager{
     public:
         const static int AUTO_MAGIC_NUMBER = 0x4155544f;
+        const static int AUTO_TYPE_MASK = 0xFF00;
+        const static int AUTO_MOVE_ID = 0x3000;
+        const static int AUTO_AXIS_ID = 0x2000;
+        const static int AUTO_BUTT_ID = 0x1000;
+
         /*
          * AutonomousManager - Constructor
          * Accepts no parameters
@@ -91,12 +96,12 @@ class AutonomousManager: public BaseManager{
         int mode();
 
         /*
-         * executeCommand
+         * executeInstruction
          * Accepts a command_struct (aka command) pointer
          * Returns 0 upon success and 1 upon failure
          * Executes the command
          */
-        int executeCommand(command*);
+        int executeInstruction(instruction*);
 
     private:
         /*

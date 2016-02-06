@@ -44,15 +44,20 @@ int AutonomousManager::Init(){
 }
 
 int AutonomousManager::Update(){
+    /*
     command** c_list = this->m_instructions[m_current_instruction]->commands;
     int c_list_length = this->m_instructions[m_current_instruction]->num_commands;
+    */
+    if(this->executeInstruction(this->m_instructions[m_current_instruction]))
+        return 1;
+    /*
     command* com = NULL;
     if(c_list_length != 0) 
         com = c_list[0];
     for(int i=1; i < c_list_length; i++){
-        if(this->executeCommand(com)) return 1;
         com = c_list[i];
     }
+    */
     this->m_current_instruction++;
     return 0;
 }
@@ -74,7 +79,22 @@ int AutonomousManager::mode(){
     return 1;
 }
 
-int AutonomousManager::executeCommand(command* com){
+int AutonomousManager::executeInstruction(instruction* instr){
+    int com_count = instr->num_commands;
+    if(com_count == 0) return 0;
+    command* com = instr->commands[0];
+    int type = (*(com->com))&AutonomousManager::AUTO_TYPE_MASK;
+    if(type == AutonomousManager::AUTO_AXIS_ID){
+        // Axis
+        if(com_count < 2) return 1;
+        command* param = instr->commands[1];
+    }else if(type == AutonomousManager::AUTO_BUTT_ID){
+        // Button
+        if(com_count < 2) return 1;
+    }else if(type == AutonomousManager::AUTO_MOVE_ID){
+        // Generic movement
+        // Maybe not actually do anything with this
+    }
     return 1;
 }
 
