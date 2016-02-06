@@ -16,6 +16,7 @@
 AutonomousManager::AutonomousManager() :
     BaseManager(),
     m_filename(""),
+    m_current_instruction(0),
     m_instruction_amt(0)
 {
     this->m_instructions=NULL;
@@ -25,6 +26,7 @@ AutonomousManager::AutonomousManager() :
 AutonomousManager::AutonomousManager(std::string& fname) :
     BaseManager(),
     m_filename(fname),
+    m_current_instruction(0),
     m_instruction_amt(0)
 {
     this->m_instructions=NULL;
@@ -32,14 +34,27 @@ AutonomousManager::AutonomousManager(std::string& fname) :
 }
 
 AutonomousManager::~AutonomousManager(){
+    delete[] this->m_auto_raw_data;
+    delete[] this->m_instructions;
 }
 
 int AutonomousManager::Init(){
+    this->m_current_instruction = 0;
     return 1;
 }
 
 int AutonomousManager::Update(){
-    return 1;
+    command** c_list = this->m_instructions[m_current_instruction]->commands;
+    int c_list_length = this->m_instructions[m_current_instruction]->num_commands;
+    command* com = NULL;
+    if(c_list_length != 0) 
+        com = c_list[0];
+    for(int i=1; i < c_list_length; i++){
+        if(this->executeCommand(com)) return 1;
+        com = c_list[i];
+    }
+    this->m_current_instruction++;
+    return 0;
 }
 
 bool AutonomousManager::IsFinished(){
@@ -56,6 +71,10 @@ void AutonomousManager::Interrupted(){
 */
 
 int AutonomousManager::mode(){
+    return 1;
+}
+
+int AutonomousManager::executeCommand(command* com){
     return 1;
 }
 
@@ -94,7 +113,7 @@ int AutonomousManager::readAutoSyntax(){
         }else if(byte == 'T'){
             int n=0;
             // Create a new instruction array
-            this->m_instructions = new instruction[this->m_instruction_amt];
+            this->m_instructions = new instruction*[this->m_instruction_amt];
             while(n!=this->m_instruction_amt){
                 byte = this->m_auto_raw_data[++i];
                 // INSTRUCTION SECTION

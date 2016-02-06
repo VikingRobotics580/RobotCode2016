@@ -90,6 +90,14 @@ class AutonomousManager: public BaseManager{
          */
         int mode();
 
+        /*
+         * executeCommand
+         * Accepts a command_struct (aka command) pointer
+         * Returns 0 upon success and 1 upon failure
+         * Executes the command
+         */
+        int executeCommand(command*);
+
     private:
         /*
          * readAutoSyntax
@@ -99,9 +107,10 @@ class AutonomousManager: public BaseManager{
          */
         int readAutoSyntax();
 
-        instruction* m_instructions;
+        instruction** m_instructions;
         std::string m_filename;
 
+        int m_current_instruction;
         int m_instruction_amt;
         char* m_auto_raw_data;
 };
