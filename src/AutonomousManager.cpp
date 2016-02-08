@@ -13,7 +13,7 @@
 
 //AutonomousManager::AUTO_MAGIC_NUMBER::0x4155544f;
 
-AutonomousManager::AutonomousManager() :
+AutonomousManager::AutonomousManager(JoystickManager* jman) :
     BaseManager(),
     m_filename(""),
     m_current_instruction(0),
@@ -21,9 +21,10 @@ AutonomousManager::AutonomousManager() :
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
+    this->m_jman = jman;
 }
 
-AutonomousManager::AutonomousManager(std::string& fname) :
+AutonomousManager::AutonomousManager(std::string& fname, JoystickManager* jman) :
     BaseManager(),
     m_filename(fname),
     m_current_instruction(0),
@@ -31,6 +32,7 @@ AutonomousManager::AutonomousManager(std::string& fname) :
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
+    this->m_jman = jman;
 }
 
 AutonomousManager::~AutonomousManager(){
@@ -84,20 +86,34 @@ int AutonomousManager::executeInstruction(instruction* instr){
     if(com_count == 0) return 0;
     command* com = instr->commands[0];
     int type = (*(com->com))&AutonomousManager::AUTO_TYPE_MASK;
+
     if(type == AutonomousManager::AUTO_AXIS_ID){
         // Axis
-        if(com_count < 2) return 1;
-        command* param = instr->commands[1];
+        if(com_count < 3) return 1; // INSTR:VAL,DURATION
+        command* val_param = instr->commands[1];
+        command* dur_param = instr->commands[2];
+        float val = ((int)val_param)/1000.0F;
+        float dur = ((int)dur_param)/1000.0F;
+        int id = (*(com->com))&AutonomousManager::AUTO_ID_MASK;
+        m_jman->FakeAxisInput(id,val,dur);
     }else if(type == AutonomousManager::AUTO_BUTT_ID){
         // Button
-        if(com_count < 2) return 1;
+        if(com_count < 2) return 1; // INSTR:DURATION
+        command* dur_param = instr->commands[1];
+        // Convert char to int and then to float
+        float dur = ((int)dur_param)/1000.0F;
+        int id = (*(com->com))&AutonomousManager::AUTO_ID_MASK;
+        m_jman->FakePressButton(id,dur);
     }else if(type == AutonomousManager::AUTO_MOVE_ID){
+        // NOTE: NOT IMPLEMENTED
         // Generic movement
         // Maybe not actually do anything with this
     }
     return 1;
 }
 
+// Simple function to parse AUTO files
+// Don't touch it
 int AutonomousManager::readAutoSyntax(){
     std::ifstream f(this->m_filename,std::ios::in|std::ios::binary);
     std::ifstream::pos_type size;
@@ -114,7 +130,7 @@ int AutonomousManager::readAutoSyntax(){
         return 1;
     }
 
-    // MAGIC NUMBER! :D
+    // MAGIC
     int magic = (this->m_auto_raw_data[0]<<24)|(this->m_auto_raw_data[1]<<16)|(this->m_auto_raw_data[2]<<8)|(this->m_auto_raw_data[3]);
     if(magic != AutonomousManager::AUTO_MAGIC_NUMBER) return 1;
 
@@ -180,7 +196,7 @@ int AutonomousManager::readAutoSyntax(){
                 }
             }
         }else if(byte == 0){
-            // Do nothing afterthe end of the data has been reached
+            // Do nothing after the end of the data has been reached
             break;
         }
     }
@@ -189,5 +205,6 @@ int AutonomousManager::readAutoSyntax(){
 
     return 0;
 }
+// Didn't I say not to touch this method?
 
 
