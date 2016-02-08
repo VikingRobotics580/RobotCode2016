@@ -13,6 +13,7 @@
 #include "WPILib.h"
 
 #include "BaseManager.h"
+#include "JoystickManager.h"
 #include "structs.h"
 
 enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
@@ -20,24 +21,27 @@ enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
 class AutonomousManager: public BaseManager{
     public:
         const static int AUTO_MAGIC_NUMBER = 0x4155544f;
-        const static int AUTO_TYPE_MASK = 0xFF00;
+        const static int AUTO_TYPE_MASK = 0xFF00; // 255 different types supported
+        const static int AUTO_ID_MASK = 0x00FF; // 255 different ID's supported
         const static int AUTO_MOVE_ID = 0x3000;
         const static int AUTO_AXIS_ID = 0x2000;
         const static int AUTO_BUTT_ID = 0x1000;
+        // Only $29.99! 
+        // Buy Now! Beat the Rush!
 
         /*
          * AutonomousManager - Constructor
          * Accepts no parameters
          * Constructs AutonomousManager
          */
-        AutonomousManager();
+        AutonomousManager(JoystickManager*);
 
         /*
          * AutonomousManager - Constructor
          * Accepts no parameters
          * Constructs AutonomousManager
          */
-        AutonomousManager(std::string&);
+        AutonomousManager(std::string&,JoystickManager*);
 
         /*
          * AutonomousManager - Destructor
@@ -118,6 +122,7 @@ class AutonomousManager: public BaseManager{
         int m_current_instruction;
         int m_instruction_amt;
         char* m_auto_raw_data;
+        JoystickManager* m_jman;
 };
 
 
