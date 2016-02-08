@@ -118,6 +118,14 @@ void JoystickManager::Periodic() {
 	m_fakeJoystickX += m_dX / dT;
 	m_fakeJoystickY += m_dY / dT;
 	m_fakeJoystickTwist += m_dTwist / dT;
+
+    for (size_t i = 0; i < NUM_AXES; ++i){
+        if(m_axisHoldUntil[i] >= m_timer->Get())
+            m_axes[i] = m_fakeAxis[i];
+        else
+            m_axes[i] = m_joystick->GetRawAxis(i);
+    }
+
 	m_lastDeltaT = m_timer->Get();
 }
 
@@ -190,3 +198,8 @@ void JoystickManager::StopAssisted() {
 	ClearFakeJoystickInput();
 	ClearFakeButtonInput();
 }
+
+float JoystickManager::GetAxis(int id){
+    return m_axes[id];
+}
+
