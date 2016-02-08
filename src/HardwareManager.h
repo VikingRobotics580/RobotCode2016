@@ -6,6 +6,8 @@
 #include <string>
 
 #include "WPILib.h"
+
+#include "JoystickManager.h"
 #include "BaseManager.h"
 #include "structs.h"
 
@@ -13,7 +15,10 @@ typedef std::map<std::string,SpeedController*> talon_map;
 
 class HardwareManager: public BaseManager {
     public:
-        HardwareManager();
+        // TODO: Replace these with the actual buttons
+        const static int HW_LAUNCH_BUTTON_IDX = 1;
+        const static int HW_SUCK_BUTTON_IDX = 2;
+        HardwareManager(JoystickManager*);
         ~HardwareManager();
 
         int Init() override;
@@ -66,6 +71,7 @@ class HardwareManager: public BaseManager {
         bool m_finished;
         talon_map m_talons;
         RobotDrive* m_drive;
+        JoystickManager* m_jman;
 };
 
 #endif

@@ -1,12 +1,13 @@
 
 #include "HardwareManager.h"
 
-HardwareManager::HardwareManager():
+HardwareManager::HardwareManager(JoystickManager* jman):
     BaseManager(),
     m_finished(false),
     m_talons()
 {
     m_drive = NULL;
+    m_jman = jman;
 }
 
 HardwareManager::~HardwareManager(){
@@ -37,16 +38,23 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
-    // TODO: Somehow get stuff from JoystickManager
-    this->m_drive->TankDrive(0.0,0.0);
+    this->m_drive->TankDrive(m_jman->GetAxis(1),m_jman->GetAxis(2));
     return 0;
 }
 
 int HardwareManager::launch(){
+    if(m_jman->Get(HardwareManager::HW_LAUNCH_BUTTON_IDX)){
+        //TODO: Somehow move the correct motors
+        //      I'd do it myself, but I haven't implemented that yet.
+    }
     return 0;
 }
 
 int HardwareManager::suck(){
+    if(m_jman->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
+        // TODO: Somehow move the correct motors
+        //       I'd do it myself, but I haven't implemented that yet.
+    }
     return 0;
 }
 
