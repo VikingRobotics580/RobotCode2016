@@ -203,3 +203,9 @@ float JoystickManager::GetAxis(int id){
     return m_axes[id];
 }
 
+void JoystickManager::FakeAxisInput(int id, float value, float duration){
+    float curr_time = m_timer->Get();
+    m_axisHoldUntil[id] = curr_time + duration;
+    m_fakeAxis[id] = value;
+}
+
