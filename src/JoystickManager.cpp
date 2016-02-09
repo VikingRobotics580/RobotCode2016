@@ -5,7 +5,7 @@
  *
  * Caffeine consumed while writing this file: 68mg
  *
- *	The only thing we have to fear are off-by-one errors in the ButtonManager class itself.
+ *  The only thing we have to fear are off-by-one errors in the ButtonManager class itself.
  */
 
 #include "WPILib.h"
@@ -22,33 +22,33 @@
  * */
 
 JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]) {
-	m_joystick = j;
-	m_buttons = butts;
-	m_timer = new Timer();
-	m_timer->Start();
-	m_fakeJoystickX = 0;
-	m_fakeJoystickY = 0;
-	m_fakeJoystickTwist = 0;
-	m_lastDeltaT = m_timer->Get();
+    m_joystick = j;
+    m_buttons = butts;
+    m_timer = new Timer();
+    m_timer->Start();
+    m_fakeJoystickX = 0;
+    m_fakeJoystickY = 0;
+    m_fakeJoystickTwist = 0;
+    m_lastDeltaT = m_timer->Get();
 }
 
 /*
  * JoystickManager Constructor
  *
  * Accepts same parameters as the first constructor, plus a Timer* object (usually
- * 	initialized in the class this is being constructed). The advantage of this
- * 	constructor is that the Timer* can be started or stopped already.
+ *  initialized in the class this is being constructed). The advantage of this
+ *  constructor is that the Timer* can be started or stopped already.
  *
  * */
 
 JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], Timer* time) {
-	m_joystick = j;
-	m_buttons = butts;
-	m_timer = time;
-	m_fakeJoystickX = 0;
-	m_fakeJoystickY = 0;
-	m_fakeJoystickTwist = 0;
-	m_lastDeltaT = m_timer->Get();
+    m_joystick = j;
+    m_buttons = butts;
+    m_timer = time;
+    m_fakeJoystickX = 0;
+    m_fakeJoystickY = 0;
+    m_fakeJoystickTwist = 0;
+    m_lastDeltaT = m_timer->Get();
 }
 
 /*
@@ -61,7 +61,7 @@ JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], 
  * */
 
 JoystickButton* JoystickManager::GetButtonByIndex(int index) {
-	return m_buttons[index];
+    return m_buttons[index];
 }
 
 /*
@@ -72,7 +72,7 @@ JoystickButton* JoystickManager::GetButtonByIndex(int index) {
  * */
 
 JoystickButton* JoystickManager::GetButtonByID(int id) {
-	return m_buttons[id - 1];
+    return m_buttons[id - 1];
 }
 
 /*
@@ -84,19 +84,19 @@ JoystickButton* JoystickManager::GetButtonByID(int id) {
  * */
 
 bool JoystickManager::Get(int index) {
-	return m_pressed[index];
+    return m_pressed[index];
 }
 
 /*
  * FakePressButton
  *
  * Tells JoystickManager to simulate a button press at the specified index
- * 	for the specified duration.
+ *  for the specified duration.
  * */
 
 void JoystickManager::FakePressButton(int index, float duration) {
-	float currTime = m_timer->Get();
-	m_holdUntil[index] = currTime + duration;
+    float currTime = m_timer->Get();
+    m_holdUntil[index] = currTime + duration;
 }
 
 /*
@@ -107,17 +107,17 @@ void JoystickManager::FakePressButton(int index, float duration) {
  * */
 
 void JoystickManager::Periodic() {
-	for (size_t i = 0; i < NUM_BUTTS; ++i) {
-		if (m_holdUntil[i] >= m_timer->Get()) {
-			m_pressed[i] = true;
-		} else {
-			m_pressed[i] = m_buttons[i]->Get();
-		}
-	}
-	float dT = m_timer->Get() - m_lastDeltaT;
-	m_fakeJoystickX += m_dX / dT;
-	m_fakeJoystickY += m_dY / dT;
-	m_fakeJoystickTwist += m_dTwist / dT;
+    for (size_t i = 0; i < NUM_BUTTS; ++i) {
+        if (m_holdUntil[i] >= m_timer->Get()) {
+            m_pressed[i] = true;
+        } else {
+            m_pressed[i] = m_buttons[i]->Get();
+        }
+    }
+    float dT = m_timer->Get() - m_lastDeltaT;
+    m_fakeJoystickX += m_dX / dT;
+    m_fakeJoystickY += m_dY / dT;
+    m_fakeJoystickTwist += m_dTwist / dT;
 
     for (size_t i = 0; i < NUM_AXES; ++i){
         if(m_axisHoldUntil[i] >= m_timer->Get())
@@ -126,23 +126,23 @@ void JoystickManager::Periodic() {
             m_axes[i] = m_joystick->GetRawAxis(i);
     }
 
-	m_lastDeltaT = m_timer->Get();
+    m_lastDeltaT = m_timer->Get();
 }
 
 bool JoystickManager::IsJoystickSentient() {
-	return true;
+    return true;
 }
 
 /*
  * GetJoystickX
  *
  * Returns a float in the interval [-1,1] representing the Joystick's
- * 	input on the X-Axis.
+ *  input on the X-Axis.
  *
  * */
 
 float JoystickManager::GetJoystickX() {
-	return m_joystick->GetX() + m_fakeJoystickX;
+    return m_joystick->GetX() + m_fakeJoystickX;
 }
 
 /*
@@ -153,7 +153,7 @@ float JoystickManager::GetJoystickX() {
  * */
 
 float JoystickManager::GetJoystickY() {
-	return m_joystick->GetY() + m_fakeJoystickY;
+    return m_joystick->GetY() + m_fakeJoystickY;
 }
 
 /*
@@ -164,39 +164,39 @@ float JoystickManager::GetJoystickY() {
  * */
 
 float JoystickManager::GetJoystickTwist() {
-	return m_joystick->GetTwist() + m_fakeJoystickTwist;
+    return m_joystick->GetTwist() + m_fakeJoystickTwist;
 }
 
 void JoystickManager::FakeJoystickX(float x) {
-	m_fakeJoystickX = x;
+    m_fakeJoystickX = x;
 }
 
 void JoystickManager::FakeJoystickY(float y) {
-	m_fakeJoystickY = y;
+    m_fakeJoystickY = y;
 }
 
 void JoystickManager::FakeJoystickTwist(float twist) {
-	m_fakeJoystickTwist = twist;
+    m_fakeJoystickTwist = twist;
 }
 
 void JoystickManager::ClearFakeJoystickInput() {
-	m_dX = 0;
-	m_dY = 0;
-	m_dTwist = 0;
-	m_fakeJoystickX = 0;
-	m_fakeJoystickY = 0;
-	m_fakeJoystickTwist = 0;
+    m_dX = 0;
+    m_dY = 0;
+    m_dTwist = 0;
+    m_fakeJoystickX = 0;
+    m_fakeJoystickY = 0;
+    m_fakeJoystickTwist = 0;
 }
 
 void JoystickManager::ClearFakeButtonInput() {
-	for(size_t i = 0; i < NUM_BUTTS; ++i) {
-		m_holdUntil[i] = m_timer->Get();
-	}
+    for(size_t i = 0; i < NUM_BUTTS; ++i) {
+        m_holdUntil[i] = m_timer->Get();
+    }
 }
 
 void JoystickManager::StopAssisted() {
-	ClearFakeJoystickInput();
-	ClearFakeButtonInput();
+    ClearFakeJoystickInput();
+    ClearFakeButtonInput();
 }
 
 float JoystickManager::GetAxis(int id){
