@@ -13,6 +13,7 @@ class JoystickManager {
         const static int NUM_BUTTS = 6; //lol butts
         const static int NUM_AXES = 6; // Axe me a question
     public:
+        JoystickManager(Joystick* j);
         JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]);
         JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], Timer*);
         ~JoystickManager();

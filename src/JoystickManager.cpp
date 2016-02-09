@@ -12,6 +12,19 @@
 #include "stdio.h"
 #include "JoystickManager.h"
 
+JoystickManager::JoystickManager(Joystick* j){
+    m_joystick = j;
+    m_buttons = new JoystickButton*[NUM_BUTTS];
+    for(int i=0; i <  NUM_BUTTS; i++)
+        m_buttons[i] = new JoystickButton(j,i);
+    m_timer = new Timer();
+    m_timer->Start();
+    m_fakeJoystickX = 0;
+    m_fakeJoystickY = 0;
+    m_fakeJoystickTwist = 0;
+    m_lastDeltaT = m_timer->Get();
+}
+
 /*
  * JoystickManager Constructor
  *
@@ -50,6 +63,8 @@ JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], 
     m_fakeJoystickTwist = 0;
     m_lastDeltaT = m_timer->Get();
 }
+
+JoystickManager::~JoystickManager(){ }
 
 /*
  * GetButtonByIndex
