@@ -112,9 +112,8 @@ int AutonomousManager::executeInstruction(instruction* instr){
     return 1;
 }
 
-// Simple function to parse AUTO files
-// Don't touch it
-int AutonomousManager::readAutoSyntax(){
+// Read everything
+int AutonomousManager::readFile(){
     std::ifstream f(this->m_filename,std::ios::in|std::ios::binary);
     std::ifstream::pos_type size;
 
@@ -130,12 +129,22 @@ int AutonomousManager::readAutoSyntax(){
         return 1;
     }
 
+    this->m_raw_data_size = size;
+
+    return 0;
+}
+
+// Simple function to parse AUTO files
+// Don't touch it
+int AutonomousManager::parseAutoSyntax(){
+    if(this->readFile()) return 1;
     // MAGIC
     int magic = (this->m_auto_raw_data[0]<<24)|(this->m_auto_raw_data[1]<<16)|(this->m_auto_raw_data[2]<<8)|(this->m_auto_raw_data[3]);
     if(magic != AutonomousManager::AUTO_MAGIC_NUMBER) return 1;
 
+    // I have no idea what the hell any of this means
     int i=4;
-    while(i < size){
+    while(i < this->m_raw_data_size){
         char byte = this->m_auto_raw_data[i];
         // HEADER SECTION
         if(byte == 'H'){
@@ -201,7 +210,7 @@ int AutonomousManager::readAutoSyntax(){
         }
     }
 
-    printf("Read %d bytes of %d bytes.",i,(int)size);
+    printf("Read %d bytes of %d bytes.",i,(int)m_raw_data_size);
 
     return 0;
 }

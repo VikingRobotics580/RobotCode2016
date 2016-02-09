@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 #include "WPILib.h"
 
 #include "BaseManager.h"
@@ -109,18 +110,27 @@ class AutonomousManager: public BaseManager{
 
     private:
         /*
-         * readAutoSyntax
+         * parseAutoSyntax
          * Accepts nothing
          * Returns 0 upon success and 1 upon failure
-         * Reads the contents of m_filename into m_auto_syntax
+         * Parses the contents of m_auto_raw_data into an array of instruction structs.
          */
-        int readAutoSyntax();
+        int parseAutoSyntax();
+
+        /*
+         * readFile
+         * Accepts nothing
+         * Returns 0 upon success and 1 upon error
+         * Reads the contents of m_filename into m_auto_raw_data
+         */
+        int readFile();
 
         instruction** m_instructions;
         std::string m_filename;
 
         int m_current_instruction;
         int m_instruction_amt;
+        std::ifstream::pos_type m_raw_data_size;
         char* m_auto_raw_data;
         JoystickManager* m_jman;
 };
