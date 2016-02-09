@@ -19,7 +19,7 @@ class HardwareManager: public BaseManager {
         const static int HW_LAUNCH_BUTTON_IDX = 1;
         const static int HW_SUCK_BUTTON_IDX = 2;
         HardwareManager(JoystickManager*);
-        ~HardwareManager();
+        virtual ~HardwareManager();
 
         int Init() override;
         int Update() override;
