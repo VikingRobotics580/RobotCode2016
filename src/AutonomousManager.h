@@ -49,7 +49,7 @@ class AutonomousManager: public BaseManager{
          * Accepts no parameters
          * Deconstructs AutonomousManager
          */
-        ~AutonomousManager();
+        virtual ~AutonomousManager();
 
         /*
          * Initialize
