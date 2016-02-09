@@ -8,6 +8,10 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
+#include "HardwareManager.h"
+#include "JoystickManager.h"
+#include "AutonomousManager.h"
+
 class IterativeRobot;
 
 class Robot: public IterativeRobot{
@@ -100,6 +104,10 @@ class Robot: public IterativeRobot{
          * Is run periodically during Disabled mode
          */
         void DisabledPeriodic() override;
+    private:
+        HardwareManager* m_hw_man;
+        JoystickManager* m_joy_man;
+        AutonomousManager* m_auto_man;
 };
 
 
