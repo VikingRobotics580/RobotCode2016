@@ -94,7 +94,7 @@ class AutonomousManager: public BaseManager{
         // What do you think this does
         inline JoystickManager* getJoystickManager(){ return this->m_jman; };
 
-        inline void setFilename(std:string&){ this->m_filename; };
+        inline void setFilename(std::string& fname){ this->m_filename = fname; };
 
     protected:
         /*

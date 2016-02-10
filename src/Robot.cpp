@@ -29,7 +29,7 @@ void Robot::RobotInit(){
     if(this->m_hw_man->Init()) m_hardware_disabled=true;
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
-    this->m_auto_man->setFilename("auto_1.joy");
+    this->m_auto_man->setFilename((std::string&)"auto_1.joy");
     //if(this->m_auto_man->Init()) m_autonomo_disabled=true;
 }
 void Robot::AutonomousInit(){
