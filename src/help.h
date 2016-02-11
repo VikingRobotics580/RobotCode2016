@@ -201,7 +201,7 @@ namespace help{
 
   inline int simple_trim(std::string& s, std::string& store){
       std::string nstore;
-      return simple_rtrim(s,nstore) | simple_ltrim(nstore,s);
+      return simple_rtrim(s,nstore) | simple_ltrim(nstore,store);
   }
  }
 
