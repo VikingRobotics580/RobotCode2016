@@ -12,17 +12,17 @@
 #include "stdio.h"
 #include "JoystickManager.h"
 
-JoystickManager::JoystickManager(Joystick* j){
+JoystickManager::JoystickManager(Joystick* j):
+    BaseManager()
+{
     m_joystick = j;
     m_buttons = new JoystickButton*[NUM_BUTTS];
     for(int i=0; i <  NUM_BUTTS; i++)
         m_buttons[i] = new JoystickButton(j,i);
     m_timer = new Timer();
-    m_timer->Start();
     m_fakeJoystickX = 0;
     m_fakeJoystickY = 0;
     m_fakeJoystickTwist = 0;
-    m_lastDeltaT = m_timer->Get();
 }
 
 /*
@@ -34,7 +34,9 @@ JoystickManager::JoystickManager(Joystick* j){
  *
  * */
 
-JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]) {
+JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]):
+    BaseManager()
+{
     m_joystick = j;
     m_buttons = butts;
     m_timer = new Timer();
@@ -42,7 +44,6 @@ JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]) 
     m_fakeJoystickX = 0;
     m_fakeJoystickY = 0;
     m_fakeJoystickTwist = 0;
-    m_lastDeltaT = m_timer->Get();
 }
 
 /*
@@ -54,19 +55,22 @@ JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]) 
  *
  * */
 
-JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], Timer* time) {
+JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], Timer* time):
+    BaseManager()
+{
     m_joystick = j;
     m_buttons = butts;
     m_timer = time;
     m_fakeJoystickX = 0;
     m_fakeJoystickY = 0;
     m_fakeJoystickTwist = 0;
-    m_lastDeltaT = m_timer->Get();
 }
 
 JoystickManager::~JoystickManager(){ }
 
 int JoystickManager::Init() {
+    m_timer->Start();
+    m_lastDeltaT = m_timer->Get();
     return 0;
     //it always works because I am perfect
 }
@@ -121,13 +125,13 @@ void JoystickManager::FakePressButton(int index, float duration) {
 }
 
 /*
- * Periodic
+ * Update
  *
- * Call this in the Periodic method of the IterativeRobot.
+ * Call this in the Update method of the IterativeRobot.
  *
  * */
 
-void JoystickManager::Periodic() {
+void JoystickManager::Update() {
     for (size_t i = 0; i < NUM_BUTTS; ++i) {
         if (m_holdUntil[i] >= m_timer->Get()) {
             m_pressed[i] = true;

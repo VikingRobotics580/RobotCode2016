@@ -8,7 +8,9 @@
 #ifndef JOYSTICKMANAGER_H_
 #define JOYSTICKMANAGER_H_
 
-class JoystickManager {
+#include "BaseManager.h"
+
+class JoystickManager : public BaseManager{
     private:
         const static int NUM_BUTTS = 6; //lol butts
         const static int NUM_AXES = 6; // Axe me a question
@@ -21,21 +23,21 @@ class JoystickManager {
         JoystickButton* GetButtonByID(int);
         bool Get(int);
         float GetAxis(int);
-        float GetJoystickX();
-        float GetJoystickY();
-        float GetJoystickTwist();
-        float GetJoystickThrottle();
+        float GetJoystickX(void);
+        float GetJoystickY(void);
+        float GetJoystickTwist(void);
+        float GetJoystickThrottle(void);
         void FakeJoystickX(float);
         void FakeJoystickY(float);
         void FakeJoystickTwist(float);
-        void Periodic(void);
+        void Update(void) override;
         void FakeAxisInput(int,float,float);
         void FakePressButton(int, float);
-        void ClearFakeJoystickInput();
-        void ClearFakeButtonInput();
-        void StopAssisted();
-        bool IsJoystickSentient();
-        int Init();
+        void ClearFakeJoystickInput(void);
+        void ClearFakeButtonInput(void);
+        void StopAssisted(void);
+        bool IsJoystickSentient(void);
+        int Init(void) override;
     private:
         Joystick* m_joystick;
         JoystickButton** m_buttons;
