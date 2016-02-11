@@ -131,7 +131,7 @@ void JoystickManager::FakePressButton(int index, float duration) {
  *
  * */
 
-void JoystickManager::Update() {
+int JoystickManager::Update() {
     for (size_t i = 0; i < NUM_BUTTS; ++i) {
         if (m_holdUntil[i] >= m_timer->Get()) {
             m_pressed[i] = true;
@@ -152,6 +152,7 @@ void JoystickManager::Update() {
     }
 
     m_lastDeltaT = m_timer->Get();
+    return 0;
 }
 
 bool JoystickManager::IsJoystickSentient() {
@@ -233,4 +234,10 @@ void JoystickManager::FakeAxisInput(int id, float value, float duration){
     m_axisHoldUntil[id] = curr_time + duration;
     m_fakeAxis[id] = value;
 }
+
+int JoystickManager::End(){
+    return 0;
+}
+
+bool JoystickManager::IsFinished(){ return false; }
 

@@ -18,7 +18,7 @@ class JoystickManager : public BaseManager{
         JoystickManager(Joystick* j);
         JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS]);
         JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], Timer*);
-        ~JoystickManager();
+        virtual ~JoystickManager();
         JoystickButton* GetButtonByIndex(int);
         JoystickButton* GetButtonByID(int);
         bool Get(int);
@@ -30,7 +30,7 @@ class JoystickManager : public BaseManager{
         void FakeJoystickX(float);
         void FakeJoystickY(float);
         void FakeJoystickTwist(float);
-        void Update(void) override;
+        int Update(void) override;
         void FakeAxisInput(int,float,float);
         void FakePressButton(int, float);
         void ClearFakeJoystickInput(void);
@@ -38,6 +38,8 @@ class JoystickManager : public BaseManager{
         void StopAssisted(void);
         bool IsJoystickSentient(void);
         int Init(void) override;
+        int End(void) override;
+        bool IsFinished(void) override;
     private:
         Joystick* m_joystick;
         JoystickButton** m_buttons;
