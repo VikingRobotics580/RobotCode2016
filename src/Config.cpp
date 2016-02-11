@@ -24,7 +24,7 @@ Config::Config(std::string& filename):
     m_raw_data(""),
     m_ready(false)
 {
-    if(Init(filename));
+    if(Init(filename))
         std::cout << "An error occurred during Init("<<filename<<");"<<std::endl;
 }
 
