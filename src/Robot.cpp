@@ -48,7 +48,7 @@ void Robot::DisabledInit(){
 void Robot::AutonomousPeriodic(){
     // If anything is disabled, don't use it
     if(!this->m_joystick_disabled)
-        this->m_joy_man->Periodic();
+        this->m_joy_man->Update();
     if(!this->m_autonomo_disabled)
         this->m_auto_man->Update();
     if(!this->m_hardware_disabled)
@@ -56,7 +56,7 @@ void Robot::AutonomousPeriodic(){
 }
 void Robot::TeleopPeriodic(){
     if(!this->m_joystick_disabled)
-        this->m_joy_man->Periodic();
+        this->m_joy_man->Update();
     if(!this->m_hardware_disabled)
         this->m_hw_man->Update();
 }
