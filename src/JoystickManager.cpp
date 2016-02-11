@@ -66,6 +66,10 @@ JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], 
 
 JoystickManager::~JoystickManager(){ }
 
+int JoystickManager::Init() {
+    return 1;
+}
+
 /*
  * GetButtonByIndex
  *
@@ -74,6 +78,7 @@ JoystickManager::~JoystickManager(){ }
  *  destructing the JoystickManager, or constructing a new one.
  *
  * */
+
 
 JoystickButton* JoystickManager::GetButtonByIndex(int index) {
     return m_buttons[index];

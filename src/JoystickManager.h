@@ -35,6 +35,7 @@ class JoystickManager {
         void ClearFakeButtonInput();
         void StopAssisted();
         bool IsJoystickSentient();
+        int Init();
     private:
         Joystick* m_joystick;
         JoystickButton** m_buttons;
