@@ -67,7 +67,8 @@ JoystickManager::JoystickManager(Joystick* j, JoystickButton* butts[NUM_BUTTS], 
 JoystickManager::~JoystickManager(){ }
 
 int JoystickManager::Init() {
-    return 1;
+    return 0;
+    //it always works because I am perfect
 }
 
 /*
