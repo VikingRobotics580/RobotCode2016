@@ -26,14 +26,14 @@ Robot::~Robot(){
 }
 
 void Robot::RobotInit(){
-    if(this->m_hw_man->Init()) m_hardware_disabled=true;
+    m_hardware_disabled = this->m_hw_man->Init();
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
     this->m_auto_man->setFilename((std::string&)"auto_1.joy");
     //if(this->m_auto_man->Init()) m_autonomo_disabled=true;
 }
 void Robot::AutonomousInit(){
-    if(this->m_auto_man->Init()) m_autonomo_disabled=true;
+    m_autonomo_disabled = this->m_auto_man->Init();
 }
 void Robot::TeleopInit(){
 
