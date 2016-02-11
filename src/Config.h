@@ -20,14 +20,20 @@ public:
     Config(const char*);
     Config();
 
+    inline std::map<std::string,uint64> getOptions(){ return this->m_options; };
+
     template<typename T>
     inline T* getOption(std::string& var){
-        return (T*)(m_options.at(var));
+        if(m_options.find(var) != m_options.end())
+            return (T*)(m_options.at(var));
+        return NULL;
     }
 
     template<typename T>
     inline T* getOption(const char* var){
-        return (T*)(m_options.at((std::string&)(var)));
+        if(m_options.find((std::string&)(var)) != m_options.end())
+            return (T*)(m_options.at((std::string&)(var)));
+        return NULL;
     }
     int Init(std::string&);
 protected:
