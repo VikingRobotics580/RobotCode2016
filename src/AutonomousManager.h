@@ -90,6 +90,11 @@ class AutonomousManager: public BaseManager{
          * Similarly to End, Interrupted runs cleanup on AutonomousManager if an error occurs while it is running.
          */
         //void Interrupted() override;
+        
+        // What do you think this does
+        inline JoystickManager* getJoystickManager(){ return this->m_jman; };
+
+        inline void setFilename(std::string& fname){ this->m_filename = fname; };
 
     protected:
         /*

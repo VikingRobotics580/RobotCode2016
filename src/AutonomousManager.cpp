@@ -42,7 +42,13 @@ AutonomousManager::~AutonomousManager(){
 
 int AutonomousManager::Init(){
     this->m_current_instruction = 0;
-    return 1;
+    // Don't initialize if the filename hasn't been set yet
+    // Print an error as well
+    if(this->m_filename == ""){
+        printf("Error in AutonomousManager::Init(): line %d - Filename not set.",__LINE__);
+        return 1; 
+    }
+    return this->parseAutoSyntax();
 }
 
 int AutonomousManager::Update(){
@@ -60,7 +66,8 @@ int AutonomousManager::Update(){
         com = c_list[i];
     }
     */
-    this->m_current_instruction++;
+    if(this->m_current_instruction < this->m_instruction_amt)
+        this->m_current_instruction++;
     return 0;
 }
 

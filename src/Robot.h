@@ -32,6 +32,11 @@ class Robot: public IterativeRobot{
          */
         ~Robot();
 
+        // What do you expect me to write here. These methods do exactly what you think they do: Go back in time to kill John Connor
+        inline bool isHardwareDisabled(){ return m_hardware_disabled; };
+        inline bool isJoystickDisabled(){ return m_joystick_disabled; };
+        inline bool isAutonomoDisabled(){ return m_autonomo_disabled; };
+
     protected:
         /*
          * RobotInit
@@ -108,6 +113,11 @@ class Robot: public IterativeRobot{
         HardwareManager* m_hw_man;
         JoystickManager* m_joy_man;
         AutonomousManager* m_auto_man;
+
+        // Disable various managers if they fail to initialize
+        bool m_hardware_disabled;
+        bool m_joystick_disabled;
+        bool m_autonomo_disabled;
 };
 
 
