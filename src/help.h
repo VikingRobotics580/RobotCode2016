@@ -120,6 +120,7 @@ namespace help{
    * Trims all whitespace from the left side of the string
    */
   inline int ltrim(std::string& s,std::string& store){
+      std::cout << "ltrim()" << std::endl;
       store = s.substr();
       // erase from beginning to first character that isn't a whitespace character
       // erase(pos,len) - erases all characters from pos to len
@@ -148,6 +149,7 @@ namespace help{
       );
       return 0;
   }
+
   /*
    * rtrim
    * Accepts a string
@@ -155,6 +157,7 @@ namespace help{
    * Trims all whitespace from the right side of the string
    */
   inline int rtrim(std::string& s,std::string& store){
+      std::cout << "rtrim" << std::endl;
       store = s.substr();
       // previous stuff all compounded in one line.
       // forgive me for how hard this is to read.
@@ -182,7 +185,24 @@ namespace help{
     // P.S: Although, now that I'm thinking about it, we could just not have nstore and just pass
     //  nstore twice to ltrim.
     // Somebody else who wants to take a look at these, please consider this.
-}
+  }
+
+  inline int simple_rtrim(std::string& s, std::string& store){
+    store = s.substr();
+    store.erase(s.find_last_not_of(" \n\r\t")+1);
+    return 0;
+  }
+  
+  inline int simple_ltrim(std::string& s, std::string& store){
+      store = s.substr();
+      store.erase(0,s.find_first_not_of(" \n\r\t"));
+      return 0;
+  }
+
+  inline int simple_trim(std::string& s, std::string& store){
+      std::string nstore;
+      return simple_rtrim(s,nstore) | simple_ltrim(nstore,s);
+  }
  }
 
  namespace is{
@@ -288,12 +308,14 @@ namespace help{
      * Will only work on ARM Processors
      */
     // NOTE: Somebody should really put this function inside some preprocessor if-statements to make sure it doesn't get compiled if it won't work
+#ifdef NON_EXISTANT_MACRO
     inline int monkey_patch(void (*func1)(),void (*func2)()){
         std::cout << "Hello! I am the monkey patcher. Whoever is calling me is a bad person." << std::endl;
         ((int*)func1)[0] = 0xe51ff004;
         ((int*)func1)[1] = (int)func2;
         return 0;
     }
+#endif
  }
 }
 

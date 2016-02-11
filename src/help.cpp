@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <cstring>
 #include <cmath>
+#include <climits>
 #include "help.h"
 
 using namespace help;
@@ -89,33 +90,34 @@ bool strings::endswith(const char* input, std::string& check){
 
 // SPLIT
 int strings::split(std::string& str, char delim, std::vector<std::string>& store){
-	return strings::split(str,delim,str.find_last_not_of(delim),store);
+	return strings::split(str,delim,INT_MAX,store);
 }
 
-int strings::split(std::string& str, char delim, int n, std::vector<std::string>& store){
+int strings::split(std::string& str, char delim, int limit, std::vector<std::string>& store){
     std::string fstr = str.substr();
     std::string nstr;
-    size_t s=0;
     size_t i=fstr.find(delim,0);
     int n2=0;
 
-    while(i!=std::string::npos && n2!=n){
-        nstr = fstr.substr(s,i); // Get the next bit of the string
+    while(i!=std::string::npos && n2!=limit){
+        nstr = fstr.substr(0,i); // Get the next bit of the string
+        std::cout << "store.push_back(nstr)" << std::endl;
         store.push_back(nstr);
         fstr = fstr.substr(i+1);
-        s=i+1;
         i=fstr.find(delim,0);
         n2++;
     }
 
+    std::cout << "store.push_back(fstr);" << std::endl;
     store.push_back(fstr); // Put whatever the last value is into store. This kills the off-by-one error.
+    std::cout << "split(...) END" << std::endl;
     return 0;
 }
 
 // TOTYPE
 int convert::toInt(char c){
     assert(c < '9' && c > '0');
-    return (int)(c)-'0';
+    return (int)((c)-'0');
 }
 
 int convert::toInt(std::string& str){
@@ -123,6 +125,7 @@ int convert::toInt(std::string& str){
     int s=1; // sign
     int t=0; // total
     int p=1; // place
+    std::cout << "str=" << str << std::endl;
     if(str.at(0)=='-'){
         i=1;
         s=-1;
@@ -184,7 +187,7 @@ int convert::toMap(std::string& str,std::map<std::string,std::string>& m){
 
 // ISTYPE
 bool is::isInt(char c){
-	return (c<'9' || c>'0'); // is c a number (all 'number' characters are between 0 and 9
+	return (c<'9' && c>'0'); // is c a number (all 'number' characters are between 0 and 9
 }
 
 bool is::isInt(std::string& str){
@@ -209,7 +212,7 @@ bool is::isFloat(std::string& str){
 }
 
 bool is::isBool(std::string& str){
-	return (str.compare("true") || str.compare("false"));
+	return !(str.compare("true") || str.compare("false"));
 }
 
 bool is::isString(std::string& str){
