@@ -18,6 +18,8 @@ class HardwareManager: public BaseManager {
         // TODO: Replace these with the actual buttons
         const static int HW_LAUNCH_BUTTON_IDX = 1;
         const static int HW_SUCK_BUTTON_IDX = 2;
+        const static int HW_CLIMB_BUTTON_IDX = 3;
+
         HardwareManager(JoystickManager*);
         virtual ~HardwareManager();
 
@@ -28,6 +30,7 @@ class HardwareManager: public BaseManager {
         int move();
         int launch();
         int suck();
+        int climb();
 
         /*
          * getAllTalons

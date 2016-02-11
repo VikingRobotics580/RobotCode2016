@@ -26,7 +26,12 @@ int HardwareManager::Init(){
 }
 
 int HardwareManager::Update(){
-    return this->move();
+    int ret = 0;
+    ret |= this->move();
+    ret |= this->launch();
+    ret |= this->suck();
+    ret |= this->climb();
+    return ret;
 }
 
 bool HardwareManager::IsFinished(){
@@ -54,6 +59,14 @@ int HardwareManager::suck(){
     if(m_jman->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
         // TODO: Somehow move the correct motors
         //       I'd do it myself, but I haven't implemented that yet.
+    }
+    return 0;
+}
+
+int HardwareManager::climb(){
+    if(m_jman->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
+        // TODO: Somehow move the correct motors
+        //       I'd do it myself but I haven't implemented that yet.
     }
     return 0;
 }
