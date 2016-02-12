@@ -17,6 +17,22 @@ namespace math_help{
   */
  float Q_rsqrt(float);
 
+ /*
+  * cos
+  * Accepts a float and an optional int
+  * Returns a float
+  * Calculates the cosine of a number as many times as is specified
+  */
+ float cos(float,int);
+
+ /*
+  * sin
+  * Accepts a float and an optional int
+  * Returns a float
+  * Calculates the sine of a number as many times as is specified
+  */
+ float sin(float,int);
+
 }
 
 #endif
