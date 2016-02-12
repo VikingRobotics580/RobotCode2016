@@ -27,10 +27,12 @@ Robot::~Robot(){
 
 void Robot::RobotInit(){
     m_hardware_disabled = this->m_hw_man->Init();
+    // TODO: Find out why the bottom of this method causes the code to SEGFAULT
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
+    return;
     this->m_auto_man->setFilename((std::string&)"auto_1.joy");
-    //if(this->m_auto_man->Init()) m_autonomo_disabled=true;
+    m_autonomo_disabled = this->m_auto_man->Init();
 }
 void Robot::AutonomousInit(){
     m_autonomo_disabled = this->m_auto_man->Init();
@@ -39,7 +41,10 @@ void Robot::TeleopInit(){
 
 }
 void Robot::TestInit(){
-
+    /*
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->getAllTalons()["TESTSERVO"]->Set(0.5);
+        */
 }
 void Robot::DisabledInit(){
 
@@ -61,7 +66,8 @@ void Robot::TeleopPeriodic(){
         this->m_hw_man->Update();
 }
 void Robot::TestPeriodic(){
-
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(360);
 }
 void Robot::DisabledPeriodic(){
 
