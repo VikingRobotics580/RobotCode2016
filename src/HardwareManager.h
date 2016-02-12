@@ -68,10 +68,7 @@ class HardwareManager: public BaseManager {
          * Adds a CANTalon to the registered talons, with a unique identifier
          */
         inline void addTalon(int id,std::string& identifier=(std::string&)("")){
-            std::cout << "'" << identifier << "'" << std::endl;
-            std::cout << "Comparing identifier and \"\"" << std::endl;
             if(identifier.compare("") == 0) identifier = std::to_string(id);
-            std::cout << "this->m_talons[identifier] = new CANTalon(id);" << std::endl;
             this->m_talons[identifier] = new CANTalon(id);
         }
         inline void addTalon(int id,const char* identifier=""){

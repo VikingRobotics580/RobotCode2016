@@ -21,17 +21,8 @@ int HardwareManager::Init(){
     this->m_talons["backLeft"] = new CANTalon(1);
     this->m_talons["frontRight"] = new CANTalon(2);
     this->m_talons["backRight"] = new CANTalon(3);
-    /*
-    this->addTalon(1,"backLeft");
-    this->addTalon(2,"frontRight");
-    this->addTalon(3,"backRight");
-    */
     this->m_servos["TESTSERVO"] = new Servo(0);
-    /*
-    m_drive = new RobotDrive(
-            this->getTalon("frontLeft"),this->getTalon("backLeft"),
-            this->getTalon("frontRight"),this->getTalon("backRight"));
-            */
+
     m_drive = new RobotDrive(
             this->m_talons["frontLeft"],this->m_talons["backLeft"],
             this->m_talons["frontRight"],this->m_talons["backRight"]);
