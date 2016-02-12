@@ -4,7 +4,8 @@
 HardwareManager::HardwareManager(JoystickManager* jman):
     BaseManager(),
     m_finished(false),
-    m_talons()
+    m_talons(),
+    m_servos()
 {
     m_drive = NULL;
     m_jman = jman;
@@ -14,13 +15,26 @@ HardwareManager::~HardwareManager(){
 }
 
 int HardwareManager::Init(){
-    this->addTalon(0,"frontLeft");
+    //std::cout << "Calling addTalon(0,\"frontLeft\")" << std::endl;
+    //this->addTalon(0,"frontLeft");
+    this->m_talons["frontLeft"] = new CANTalon(0);
+    this->m_talons["backLeft"] = new CANTalon(1);
+    this->m_talons["frontRight"] = new CANTalon(2);
+    this->m_talons["backRight"] = new CANTalon(3);
+    /*
     this->addTalon(1,"backLeft");
     this->addTalon(2,"frontRight");
     this->addTalon(3,"backRight");
+    */
+    this->m_servos["TESTSERVO"] = new Servo(0);
+    /*
     m_drive = new RobotDrive(
             this->getTalon("frontLeft"),this->getTalon("backLeft"),
             this->getTalon("frontRight"),this->getTalon("backRight"));
+            */
+    m_drive = new RobotDrive(
+            this->m_talons["frontLeft"],this->m_talons["backLeft"],
+            this->m_talons["frontRight"],this->m_talons["backRight"]);
 
     return 0;
 }

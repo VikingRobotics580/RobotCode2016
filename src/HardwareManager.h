@@ -2,6 +2,7 @@
 #ifndef _HARDWARE_MANAGER_H_
 #define _HARDWARE_MANAGER_H_
 
+#include <iostream>
 #include <map>
 #include <string>
 
@@ -12,6 +13,8 @@
 #include "structs.h"
 
 typedef std::map<std::string,SpeedController*> talon_map;
+typedef std::map<std::string,Servo*> servo_map;
+//typedef std::map<std::string,SpeedController*> talon_map;
 
 class HardwareManager: public BaseManager {
     public:
@@ -40,6 +43,8 @@ class HardwareManager: public BaseManager {
          */
         inline talon_map& getAllTalons(){ return this->m_talons; };
 
+        inline servo_map& getAllServos(){ return this->m_servos; };
+
         /*
          * getTalon
          * Accepts a std::string&
@@ -63,8 +68,11 @@ class HardwareManager: public BaseManager {
          * Adds a CANTalon to the registered talons, with a unique identifier
          */
         inline void addTalon(int id,std::string& identifier=(std::string&)("")){
+            std::cout << "'" << identifier << "'" << std::endl;
+            std::cout << "Comparing identifier and \"\"" << std::endl;
             if(identifier.compare("") == 0) identifier = std::to_string(id);
-            this->m_talons.at(identifier) = new CANTalon(id);
+            std::cout << "this->m_talons[identifier] = new CANTalon(id);" << std::endl;
+            this->m_talons[identifier] = new CANTalon(id);
         }
         inline void addTalon(int id,const char* identifier=""){
             this->addTalon(id,(std::string&)identifier);
@@ -73,6 +81,8 @@ class HardwareManager: public BaseManager {
     private:
         bool m_finished;
         talon_map m_talons;
+        servo_map m_servos; // :(
+        //sensor_map m_sensors;
         RobotDrive* m_drive;
         JoystickManager* m_jman;
 };
