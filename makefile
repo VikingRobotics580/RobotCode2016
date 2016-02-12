@@ -37,9 +37,9 @@ clean:
 	$(RMCOMMAND) src/*.o
 	
 deploy:
-	ssh lvuser$(AT)$(DEPLOYTARGET) "rm /home/lvuser/FRCUserProgram || true"
-	sftp -oBatchMode=no -b sftpbatchfile lvuser$(AT)$(DEPLOYTARGET)
-	ssh lvuser$(AT)$(DEPLOYTARGET) ". /etc/profile.d/natinst-path.sh; chmod a+x /home/lvuser/FRCUserProgram; /usr/local/frc/bin/frcKillRobot.sh -t -r"
+	ssh -o StrictHostKeyChecking=no lvuser$(AT)$(DEPLOYTARGET) "rm /home/lvuser/FRCUserProgram || true"
+	sftp -o StrictHostKeyChecking=no -oBatchMode=no -b sftpbatchfile lvuser$(AT)$(DEPLOYTARGET)
+	ssh -o StrictHostKeyChecking=no lvuser$(AT)$(DEPLOYTARGET) ". /etc/profile.d/natinst-path.sh; chmod a+x /home/lvuser/FRCUserProgram; /usr/local/frc/bin/frcKillRobot.sh -t -r"
 
 kill-robot:
 	ssh lvuser$(AT)$(DEPLOYTARGET) "/usr/local/frc/bin/frcKillRobot.sh"
