@@ -10,6 +10,7 @@
 #include <istream>
 #include <fstream>
 #include "AutonomousManager.h"
+#include "macros.h"
 
 //AutonomousManager::AUTO_MAGIC_NUMBER::0x4155544f;
 
@@ -17,7 +18,8 @@ AutonomousManager::AutonomousManager(JoystickManager* jman) :
     BaseManager(),
     m_filename(""),
     m_current_instruction(0),
-    m_instruction_amt(0)
+    m_instruction_amt(0),
+    m_useHardcodedAuto(false)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
@@ -28,7 +30,8 @@ AutonomousManager::AutonomousManager(std::string& fname, JoystickManager* jman) 
     BaseManager(),
     m_filename(fname),
     m_current_instruction(0),
-    m_instruction_amt(0)
+    m_instruction_amt(0),
+    m_useHardcodedAuto(false)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
@@ -41,14 +44,22 @@ AutonomousManager::~AutonomousManager(){
 }
 
 int AutonomousManager::Init(){
+    log_info("AutonomousManager::Init()");
     this->m_current_instruction = 0;
     // Don't initialize if the filename hasn't been set yet
     // Print an error as well
     if(this->m_filename == ""){
-        printf("Error in AutonomousManager::Init(): line %d - Filename not set.",__LINE__);
+        log_err("Filename not set.");
         return 1; 
     }
-    return this->parseAutoSyntax();
+
+    // If we failed to read the dynamic Autonomous file, then fall back to a hardcoded method
+    if(this->parseAutoSyntax()){
+        log_err("Failed to parse dynamic Autonomous code.");
+        log_info("Falling back to hardcoded Autonomous code.");
+        this->m_useHardcodedAuto = true;
+    }
+    return 0;
 }
 
 int AutonomousManager::Update(){
@@ -56,19 +67,24 @@ int AutonomousManager::Update(){
     command** c_list = this->m_instructions[m_current_instruction]->commands;
     int c_list_length = this->m_instructions[m_current_instruction]->num_commands;
     */
-    if(this->executeInstruction(this->m_instructions[m_current_instruction]))
-        return 1;
-    /*
-    command* com = NULL;
-    if(c_list_length != 0) 
-        com = c_list[0];
-    for(int i=1; i < c_list_length; i++){
-        com = c_list[i];
+    if(!this->m_useHardcodedAuto){
+        log_info("Executing instruction %d",m_current_instruction);
+        if(this->executeInstruction(this->m_instructions[m_current_instruction]))
+            return 1;
+        /*
+        command* com = NULL;
+        if(c_list_length != 0) 
+            com = c_list[0];
+        for(int i=1; i < c_list_length; i++){
+            com = c_list[i];
+        }
+        */
+        if(this->m_current_instruction < this->m_instruction_amt)
+            this->m_current_instruction++;
+        return 0;
+    }else{
+        return this->mode();
     }
-    */
-    if(this->m_current_instruction < this->m_instruction_amt)
-        this->m_current_instruction++;
-    return 0;
 }
 
 bool AutonomousManager::IsFinished(){
@@ -121,6 +137,7 @@ int AutonomousManager::executeInstruction(instruction* instr){
 
 // Read everything
 int AutonomousManager::readFile(){
+    log_info("AutonomousManager::readFile()");
     std::ifstream f(this->m_filename,std::ios::in|std::ios::binary);
     std::ifstream::pos_type size;
 
@@ -133,6 +150,7 @@ int AutonomousManager::readFile(){
 
         if(!f.read(this->m_auto_raw_data,size)) return 1;
     }else{
+        log_err("Unable to open file %s",m_filename.c_str());
         return 1;
     }
 
@@ -144,7 +162,11 @@ int AutonomousManager::readFile(){
 // Simple function to parse AUTO files
 // Don't touch it
 int AutonomousManager::parseAutoSyntax(){
-    if(this->readFile()) return 1;
+    log_info("AutonomousManager::parseAutoSyntax()");
+    if(this->readFile()){
+        log_err("Failed to read file.");
+        return 1;
+    }
     // MAGIC
     int magic = (this->m_auto_raw_data[0]<<24)|(this->m_auto_raw_data[1]<<16)|(this->m_auto_raw_data[2]<<8)|(this->m_auto_raw_data[3]);
     if(magic != AutonomousManager::AUTO_MAGIC_NUMBER) return 1;
@@ -201,12 +223,11 @@ int AutonomousManager::parseAutoSyntax(){
                     // Premature end
                     // This should never happen unless the file is corrupted.
 #ifdef AUTO_DRIVE_FILES_TREAT_WARNINGS_AS_ERRORS
-                    printf("ERROR! End of Instruction Section found before the number of instructions listed! File may be corrupted.");
+                    log_err("End of Instruction Section found before the number of instructions listed! File may be corrupted.");
                     //printf("Instructions read: %d",n);
                     return 1;
 #else
-                    printf("WARNING! End of Instruction Section found before the number of instructions listed! File may be corrupted.");
-                    printf("Instructions read: %d",n);
+                    log_warn("End of Instruction Section found before the number of instructions listed! File may be corrupted.\n    Instructions read: %d",n);
                     break;
 #endif
                 }
@@ -217,7 +238,7 @@ int AutonomousManager::parseAutoSyntax(){
         }
     }
 
-    printf("Read %d bytes of %d bytes.",i,(int)m_raw_data_size);
+    log_info("Read %d bytes of %d bytes.",i,(int)m_raw_data_size);
 
     return 0;
 }

@@ -95,13 +95,14 @@ class AutonomousManager: public BaseManager{
         inline JoystickManager* getJoystickManager(){ return this->m_jman; };
 
         inline void setFilename(std::string& fname){ this->m_filename = fname; };
+        inline void setFilename(const char* fname){ this->m_filename = fname; };
 
     protected:
         /*
          * mode
          * Accepts nothing
          * Returns 0 upon success and 1 upon failure
-         * Parses m_auto_syntax and executes the commands specified by it.
+         * Executes a hardcoded autonomous mode. Should only run if Init fails.
          */
         int mode();
 
@@ -138,6 +139,8 @@ class AutonomousManager: public BaseManager{
         std::ifstream::pos_type m_raw_data_size;
         char* m_auto_raw_data;
         JoystickManager* m_jman;
+
+        bool m_useHardcodedAuto;
 };
 
 
