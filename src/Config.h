@@ -14,7 +14,7 @@
 #include "structs.h"
 
 //static const uint64 UINT64_MAX = (0-1);
-typedef std::map<std::string,proxy*> opt_map;
+typedef std::map<std::string,Iproxy*> opt_map;
 
 class Config{
 public:
@@ -41,13 +41,13 @@ public:
     }
     */
 
-    inline proxy* getOption(const char* var){
+    inline Iproxy* getOption(const char* var){
         if(m_options.find((std::string&)var) != m_options.end())
             return m_options.at((std::string&)var);
         return NULL;
     }
 
-    inline proxy* getOption(std::string& var){
+    inline Iproxy* getOption(std::string& var){
         if(m_options.find(var) != m_options.end())
             return m_options.at(var);
         return NULL;
@@ -56,7 +56,7 @@ public:
     int Init(std::string&);
 protected:
     int parseData();
-    int parseVector(std::vector<std::string>&,std::vector<uint64>&);
+    int parseVector(std::vector<std::string>&,std::vector<Iproxy*>&);
     int parseMap(std::map<std::string,std::string>&,opt_map&);
 private:
     std::string m_filename;

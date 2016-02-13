@@ -100,18 +100,18 @@ int Config::parseData(){
             m_options[varval[0]] = new proxy<std::string>(s);
         }else if(help::is::isVector(varval.at(1))){
             std::vector<std::string> nv;
-            std::vector<proxy*> nnv;
+            std::vector<Iproxy*> nnv;
             help::convert::toVector(varval.at(1),nv);
             parseVector(nv,nnv);
             //m_options[varval[0]] = reinterpret_cast<uint64>(&nv);
-            m_options[varval[0]] = new proxy<std::vector<proxy*>>(nv);
+            m_options[varval[0]] = new proxy<std::vector<Iproxy*>>(nnv);
         }else if(help::is::isMap(varval.at(1))){
             std::map<std::string,std::string> m;
-            std::map<std::string,proxy*> nm;
+            std::map<std::string,Iproxy*> nm;
             help::convert::toMap(varval.at(1),m);
             parseMap(m,nm);
             //m_options[varval[0]] = reinterpret_cast<uint64>(&nm);
-            m_options[varval[0]] = new proxy<std::map<std::string,proxy*>>(nm);
+            m_options[varval[0]] = new proxy<std::map<std::string,Iproxy*>>(nm);
         }else{
             //m_options[varval[0]] = reinterpret_cast<uint64>(&varval.at(1));
             m_options[varval[0]] = new proxy<std::string>(varval.at(1));
@@ -120,7 +120,7 @@ int Config::parseData(){
     return 0;
 }
 
-int Config::parseMap(std::map<std::string,std::string>& map,std::map<std::string,proxy*>& newmap){
+int Config::parseMap(std::map<std::string,std::string>& map,std::map<std::string,Iproxy*>& newmap){
     for(std::map<std::string,std::string>::iterator it = map.begin();it != map.end();it++){
         std::string var = it->first;
         std::string val = it->second;
@@ -136,18 +136,18 @@ int Config::parseMap(std::map<std::string,std::string>& map,std::map<std::string
             newmap[var] = new proxy<std::string>(s);
         }else if(help::is::isVector(val)){
             std::vector<std::string> nv;
-            std::vector<proxy*> nnv;
+            std::vector<Iproxy*> nnv;
             help::convert::toVector(val,nv);
             parseVector(nv,nnv);
             //newmap[var] = reinterpret_cast<uint64>(&nv);
-            newmap[var] = new proxy<std::vector<proxy*>>(nnv);
+            newmap[var] = new proxy<std::vector<Iproxy*>>(nnv);
         }else if(help::is::isMap(val)){
             std::map<std::string,std::string> m;
-            std::map<std::string,proxy*> nm;
+            std::map<std::string,Iproxy*> nm;
             help::convert::toMap(val,m);
             parseMap(m,nm);
             //newmap[var] = reinterpret_cast<uint64>(&nm);
-            newmap[var] = new proxy<std::map<std::string,proxy*>>(nm);
+            newmap[var] = new proxy<std::map<std::string,Iproxy*>>(nm);
         }else{
             //newmap[var] = reinterpret_cast<uint64>(&val);
             newmap[var] = new proxy<std::string>(val);
@@ -156,7 +156,7 @@ int Config::parseMap(std::map<std::string,std::string>& map,std::map<std::string
     return 0;
 }
 
-int Config::parseVector(std::vector<std::string>& vector,std::vector<proxy*>& newvector){
+int Config::parseVector(std::vector<std::string>& vector,std::vector<Iproxy*>& newvector){
     for(auto& elem : vector){
         if(help::is::isInt(elem)){
             //newvector.push_back((uint64)(help::convert::toInt(elem)));
@@ -173,18 +173,18 @@ int Config::parseVector(std::vector<std::string>& vector,std::vector<proxy*>& ne
             newvector.push_back(new proxy<std::string>(s));
         }else if(help::is::isVector(elem)){
             std::vector<std::string> nv;
-            std::vector<proxy*> nnv;
+            std::vector<Iproxy*> nnv;
             help::convert::toVector(elem,nv);
             parseVector(nv,nnv);
             //newvector.push_back(reinterpret_cast<uint64>(&nv));
-            newvector.push_back(new proxy<std::vector<proxy*>>(nnv));
+            newvector.push_back(new proxy<std::vector<Iproxy*>>(nnv));
         }else if(help::is::isMap(elem)){
             std::map<std::string,std::string> m;
-            std::map<std::string,proxy*> nm;
+            std::map<std::string,Iproxy*> nm;
             help::convert::toMap(elem,m);
             parseMap(m,nm);
             //newvector.push_back(reinterpret_cast<uint64>(&nm));
-            newvector.push_back(new proxy<std::map<std::string,proxy*>>(nm));
+            newvector.push_back(new proxy<std::map<std::string,Iproxy*>>(nm));
         }else{
             //newvector.push_back(reinterpret_cast<uint64>(&elem));
             newvector.push_back(new proxy<std::string>(elem));
