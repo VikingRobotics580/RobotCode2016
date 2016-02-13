@@ -59,7 +59,20 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
-    this->m_drive->TankDrive(m_jman->GetAxis(1),m_jman->GetAxis(2));
+    float rawX = m_jman->GetAxis(0);
+    float rawY = m_jman->GetAxis(1);
+    float x=rawX;
+    float y=rawY;
+    if(y>90){
+        x=1;
+        y=-1;
+    }else if(y<-90){
+        x=-1;
+        y=1;
+    }
+    float left=x-y;
+    float right=x+y;
+    this->m_drive->TankDrive(left,right);
     return 0;
 }
 
