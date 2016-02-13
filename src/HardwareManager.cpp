@@ -19,18 +19,25 @@ HardwareManager::~HardwareManager(){
 }
 
 int HardwareManager::Init(){
-    //std::cout << "Calling addTalon(0,\"frontLeft\")" << std::endl;
+    log_info("Beginning HardwareManager Initialization.");
     //this->addTalon(0,"frontLeft");
+    log_info("Adding CANTalon frontLeft at ID=0");
     this->m_talons["frontLeft"] = new CANTalon(0);
+    log_info("Adding CANTalon backLeft at ID=1");
     this->m_talons["backLeft"] = new CANTalon(1);
+    log_info("Adding CANTalon frontRight at ID=2");
     this->m_talons["frontRight"] = new CANTalon(2);
+    log_info("Adding CANTalon backRight at ID=3");
     this->m_talons["backRight"] = new CANTalon(3);
+    log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
 
+    log_info("Constructing RobotDrive");
     m_drive = new RobotDrive(
             this->m_talons["frontLeft"],this->m_talons["backLeft"],
             this->m_talons["frontRight"],this->m_talons["backRight"]);
 
+    log_info("Done Initializing HardwareManager.");
     return 0;
 }
 

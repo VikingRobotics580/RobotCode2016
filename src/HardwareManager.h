@@ -11,6 +11,7 @@
 #include "JoystickManager.h"
 #include "BaseManager.h"
 #include "structs.h"
+#include "macros.h"
 
 typedef std::map<std::string,SpeedController*> talon_map;
 typedef std::map<std::string,Servo*> servo_map;
@@ -71,11 +72,15 @@ class HardwareManager: public BaseManager {
          * Returns void
          * Adds a CANTalon to the registered talons, with a unique identifier
          */
-        inline void addTalon(int id,std::string& identifier=(std::string&)("")){
-            if(identifier.compare("") == 0) identifier = std::to_string(id);
+        inline void addTalon(int id){
+            std::string i = std::to_string(id);
+            this->addTalon(id,i);
+        }
+        inline void addTalon(int id,std::string& identifier){
+            log_info("Adding Talon '%s' : %d",identifier.c_str(),id);
             this->m_talons[identifier] = new CANTalon(id);
         }
-        inline void addTalon(int id,const char* identifier=""){
+        inline void addTalon(int id,const char* identifier){
             this->addTalon(id,(std::string&)identifier);
         }
 
