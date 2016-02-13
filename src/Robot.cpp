@@ -6,6 +6,7 @@
 
 #include "WPILib.h"
 #include "Robot.h"
+#include "macros.h"
 
 Robot::Robot():
     IterativeRobot(),
@@ -27,12 +28,17 @@ Robot::~Robot(){
 
 void Robot::RobotInit(){
     m_hardware_disabled = this->m_hw_man->Init();
-    // TODO: Find out why the bottom of this method causes the code to SEGFAULT
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
-    return;
-    this->m_auto_man->setFilename((std::string&)"auto_1.joy");
+    this->m_auto_man->setFilename("auto_1.joy");
     m_autonomo_disabled = this->m_auto_man->Init();
+
+    log_test("Current Manager Status:");
+    log_test("(int)m_hardware_disabled=%d",(int)m_hardware_disabled);
+    log_test("(int)m_joystick_disabled=%d",(int)m_joystick_disabled);
+    log_test("(int)m_autonomo_disabled=%d",(int)m_autonomo_disabled);
+
+    return;
 }
 void Robot::AutonomousInit(){
     m_autonomo_disabled = this->m_auto_man->Init();
@@ -53,17 +59,17 @@ void Robot::DisabledInit(){
 void Robot::AutonomousPeriodic(){
     // If anything is disabled, don't use it
     if(!this->m_joystick_disabled)
-        this->m_joy_man->Update();
+        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
     if(!this->m_autonomo_disabled)
-        this->m_auto_man->Update();
+        this->m_autonomo_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_auto_man->Update();
     if(!this->m_hardware_disabled)
-        this->m_hw_man->Update();
+        this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
 }
 void Robot::TeleopPeriodic(){
     if(!this->m_joystick_disabled)
-        this->m_joy_man->Update();
+        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
     if(!this->m_hardware_disabled)
-        this->m_hw_man->Update();
+        this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
 }
 void Robot::TestPeriodic(){
     if(!this->m_hardware_disabled)
