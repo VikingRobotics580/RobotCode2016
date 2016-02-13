@@ -1,6 +1,10 @@
 
 #include "HardwareManager.h"
 
+
+const float HardwareManager::WHEEL_RPM_FULL_SPEED = 0.0;
+const float HardwareManager::WHEEL_RADIUS = 0.0;
+
 HardwareManager::HardwareManager(JoystickManager* jman):
     BaseManager(),
     m_finished(false),

@@ -23,6 +23,10 @@ class HardwareManager: public BaseManager {
         const static int HW_SUCK_BUTTON_IDX = 2;
         const static int HW_CLIMB_BUTTON_IDX = 3;
 
+        // TODO: Actually define these
+        const static float WHEEL_RPM_FULL_SPEED;
+        const static float WHEEL_RADIUS;
+
         HardwareManager(JoystickManager*);
         virtual ~HardwareManager();
 
