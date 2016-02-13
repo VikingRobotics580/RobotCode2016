@@ -11,8 +11,10 @@
 #include <vector>
 #include <map>
 #include "types.h"
+#include "structs.h"
 
 //static const uint64 UINT64_MAX = (0-1);
+typedef std::map<std::string,proxy*> opt_map;
 
 class Config{
 public:
@@ -20,8 +22,10 @@ public:
     Config(const char*);
     Config();
 
-    inline std::map<std::string,uint64> getOptions(){ return this->m_options; };
+    //inline std::map<std::string,uint64> getOptions(){ return this->m_options; };
+    inline opt_map getOptions(){ return this->m_options; };
 
+    /*
     template<typename T>
     inline T* getOption(std::string& var){
         if(m_options.find(var) != m_options.end())
@@ -35,14 +39,29 @@ public:
             return (T*)(m_options.at((std::string&)(var)));
         return NULL;
     }
+    */
+
+    inline proxy* getOption(const char* var){
+        if(m_options.find((std::string&)var) != m_options.end())
+            return m_options.at((std::string&)var);
+        return NULL;
+    }
+
+    inline proxy* getOption(std::string& var){
+        if(m_options.find(var) != m_options.end())
+            return m_options.at(var);
+        return NULL;
+    }
+
     int Init(std::string&);
 protected:
     int parseData();
     int parseVector(std::vector<std::string>&,std::vector<uint64>&);
-    int parseMap(std::map<std::string,std::string>&,std::map<std::string,uint64>&);
+    int parseMap(std::map<std::string,std::string>&,opt_map&);
 private:
     std::string m_filename;
-    std::map<std::string,uint64> m_options;
+    //std::map<std::string,uint64> m_options;
+    opt_map m_options;
     std::string m_raw_data;
     bool m_ready;
 };
