@@ -8,6 +8,8 @@
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
+#include <stdio.h>
+
 // What do you want me to write here?
 #define forever for(;;)
 
@@ -22,6 +24,49 @@
 // Just in case NULL isn't actually defined.
 #ifndef NULL
 #define NULL 0
+#endif
+
+// A special macro that decides whether we should disable a manager if it fails while executing
+#define DISABLE_MANAGER_ON_FAILURE true
+
+// Whether to hold a funeral for a manager that has failed.
+#define MANAGER_FUNERAL true
+
+
+/*
+ * LOGGING FUNCTIONS
+ * MACRO FUNCTIONS THAT PERFORM LOGGING AND ABSTRACT IT AWAY
+ * To disable, simply comment out any of the following macros
+ */
+
+#define ENABLE_ERROR
+#define ENABLE_WARN
+#define ENABLE_INFO
+#define ENABLE_TEST
+
+
+#ifdef ENABLE_ERROR
+#define log_err(message,...) printf("[ERROR]: (%s,%d) - " message "\n",__FILE__,__LINE__,##__VA_ARGS__)
+#else
+#define log_err(message,...)
+#endif
+
+#ifdef ENABLE_WARN
+#define log_warn(message,...) printf("[WARN]: (%s,%d) - " message "\n",__FILE__,__LINE__,##__VA_ARGS__)
+#else
+#define log_warn(message,...)
+#endif
+
+#ifdef ENABLE_INFO
+#define log_info(message,...) printf("[INFO]: (%s,%d) - " message "\n",__FILE__,__LINE__,##__VA_ARGS__)
+#else
+#define log_info(message,...)
+#endif
+
+#ifdef ENABLE_TEST
+#define log_test(message,...) printf("[TEST]: (%s,%d) - " message "\n",__FILE__,__LINE__,##__VA_ARGS__)
+#else
+#define log_test(message,...)
 #endif
 
 #endif
