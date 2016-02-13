@@ -60,4 +60,9 @@ float math_help::sin(float x, int n){
     return total;
 }
 
+float math_help::tan(float x, int n){ return sin(x,n)/cos(x,n); }
+
+float math_help::asin(float x, int n){ return 1/sin(x,n); }
+float math_help::acos(float x, int n){ return 1/cos(x,n); }
+float math_help::atan(float x, int n){ return cos(x,n)/sin(x,n); }
 

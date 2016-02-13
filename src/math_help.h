@@ -33,6 +33,37 @@ namespace math_help{
   */
  float sin(float,int);
 
+ /*
+  * tan
+  * Accepts a float and an optional int
+  * Returns a float
+  * Calculates the tangent of a number as many times as is specified
+  */
+ float tan(float,int);
+
+ /*
+  * arc cos
+  * Accepts a float and an optional int
+  * Returns a float
+  * Calculates the arc cosine of a number as many times as is specified
+  */
+ float acos(float,int);
+
+ /*
+  * arc sin
+  * Accepts a float and an optional int
+  * Returns a float
+  * Calculates the arc sine of a number as many times as is specified
+  */
+ float asin(float,int);
+
+ /*
+  * arc tan
+  * Accepts a float and an optional int
+  * Returns a float
+  * Calculates the arc tangent of a number as many times as is specified
+  */
+ float atan(float,int);
 }
 
 #endif
