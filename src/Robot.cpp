@@ -40,20 +40,22 @@ void Robot::RobotInit(){
 
     return;
 }
+
 void Robot::AutonomousInit(){
     m_autonomo_disabled = this->m_auto_man->Init();
 }
-void Robot::TeleopInit(){
 
+void Robot::TeleopInit(){
 }
+
 void Robot::TestInit(){
     /*
     if(!this->m_hardware_disabled)
         this->m_hw_man->getAllTalons()["TESTSERVO"]->Set(0.5);
         */
 }
-void Robot::DisabledInit(){
 
+void Robot::DisabledInit(){
 }
 
 void Robot::AutonomousPeriodic(){
@@ -65,18 +67,24 @@ void Robot::AutonomousPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
 }
+
 void Robot::TeleopPeriodic(){
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
 }
+
 void Robot::TestPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(360);
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->getAllTalons()["TESTTALON"]->Set(1);
 }
-void Robot::DisabledPeriodic(){
 
+void Robot::DisabledPeriodic(){
+    if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
+        log_warn("WARNING! NOT IMPLEMENTED YET!");
 }
 
 void Robot::End(){
