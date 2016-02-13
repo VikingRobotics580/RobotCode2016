@@ -120,7 +120,7 @@ namespace help{
    * Trims all whitespace from the left side of the string
    */
   inline int ltrim(std::string& s,std::string& store){
-      std::cout << "ltrim()" << std::endl;
+      log_test("ltrim()");
       store = s.substr();
       // erase from beginning to first character that isn't a whitespace character
       // erase(pos,len) - erases all characters from pos to len
@@ -157,7 +157,7 @@ namespace help{
    * Trims all whitespace from the right side of the string
    */
   inline int rtrim(std::string& s,std::string& store){
-      std::cout << "rtrim" << std::endl;
+      log_test("rtrim()");
       store = s.substr();
       // previous stuff all compounded in one line.
       // forgive me for how hard this is to read.
@@ -288,7 +288,7 @@ namespace help{
     */
     template<class T, class F>
     int monkey_patch(int idx, F newFunc){
-      std::cout << "Hello! I am the monkey patcher. Whoever is calling me is a bad person." << std::endl;
+      log_info("Hello! I am the monkey patcher. Whoever is calling me is a bad person.");
       T obj;
       int* vptr = *(int**)&obj;
       void* page = (void*)(int(vptr) & ~(getpagesize()-1));
@@ -310,7 +310,7 @@ namespace help{
     // NOTE: Somebody should really put this function inside some preprocessor if-statements to make sure it doesn't get compiled if it won't work
 #ifdef NON_EXISTANT_MACRO
     inline int monkey_patch(void (*func1)(),void (*func2)()){
-        std::cout << "Hello! I am the monkey patcher. Whoever is calling me is a bad person." << std::endl;
+        log_info("Hello! I am the monkey patcher. Whoever is calling me is a bad person.");
         ((int*)func1)[0] = 0xe51ff004;
         ((int*)func1)[1] = (int)func2;
         return 0;

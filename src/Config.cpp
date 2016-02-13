@@ -27,7 +27,7 @@ Config::Config(std::string& filename):
     m_ready(false)
 {
     if(Init(filename))
-        std::cout << "An error occurred during Init("<<filename<<");"<<std::endl;
+        log_err("An error occurred during Initialization.");
 }
 
 Config::Config(const char* filename):
@@ -37,7 +37,7 @@ Config::Config(const char* filename):
     m_ready(false)
 {
     if(Init((std::string&)(filename))) // Cast it to a string, rather than pass it to a constructor. wut.
-        std::cout << "An error occurred during Init("<<filename<<");"<<std::endl;
+        log_err("An error occurred during Initialization.");
 }
 
 int Config::Init(std::string& filename){
@@ -64,25 +64,25 @@ int Config::Init(std::string& filename){
 
 int Config::parseData(){
     std::vector<std::string> v;
-    std::cout << "split(m_raw_data,'\\n',v)" << std::endl;
+    log_test("split(m_raw_data,'\\n',v)");
     help::strings::split(m_raw_data,'\n',v);
     for(auto& line : v){
-        std::cout << "line=" << line << std::endl;
-        std::cout << "trim(line,line)" << std::endl;
+        log_test("line=%s",line.c_str());
+        log_test("trim(line,line)");
         help::strings::simple_trim(line,line);
-        std::cout<< "line=" << line << std::endl;
+        log_test("line=%s",line.c_str());
 
         if(line == ""||line.at(0) == '@') continue;
 
         std::vector<std::string> varval;
-        std::cout << "split(line,'=',varval)"<<std::endl;
+        log_test("split(line,'=',varval)");
         help::strings::split(line,'=',varval);
 
         // Trim each side
         help::strings::simple_trim(varval.at(0),varval.at(0));
         help::strings::simple_trim(varval.at(1),varval.at(1));
 
-        std::cout << varval.at(0) << " is " << varval.at(1) << std::endl;
+        log_test("%s is %s",varval.at(0).c_str(),varval.at(1).c_str());
 
         if(help::is::isInt(varval.at(1))){
             //m_options[varval[0]] = (uint64)(help::convert::toInt(varval[1]));
@@ -94,7 +94,7 @@ int Config::parseData(){
             //m_options[varval[0]] = (uint64)(help::convert::toBool(varval[1]));
             m_options[varval[0]] = new proxy<bool>(help::convert::toBool(varval[1]));
         }else if(help::is::isString(varval.at(1))){
-            std::cout << "varval.at(1).substr(1)" << std::endl;
+            log_test("varval.at(1).substr(1)");
             std::string s = (varval.at(1).substr(1));//,varval.at(1).size()-1));
             //m_options[varval[0]] = reinterpret_cast<uint64>(&s);
             m_options[varval[0]] = new proxy<std::string>(s);

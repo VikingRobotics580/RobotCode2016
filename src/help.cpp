@@ -101,16 +101,16 @@ int strings::split(std::string& str, char delim, int limit, std::vector<std::str
 
     while(i!=std::string::npos && n2!=limit){
         nstr = fstr.substr(0,i); // Get the next bit of the string
-        std::cout << "store.push_back(nstr)" << std::endl;
+        log_test("store.push_back(nstr)");
         store.push_back(nstr);
         fstr = fstr.substr(i+1);
         i=fstr.find(delim,0);
         n2++;
     }
 
-    std::cout << "store.push_back(fstr);" << std::endl;
+    log_test("store.push_back(fstr);");
     store.push_back(fstr); // Put whatever the last value is into store. This kills the off-by-one error.
-    std::cout << "split(...) END" << std::endl;
+    log_test("split(...) END");
     return 0;
 }
 
@@ -125,7 +125,7 @@ int convert::toInt(std::string& str){
     int s=1; // sign
     int t=0; // total
     int p=1; // place
-    std::cout << "str=" << str << std::endl;
+    log_test("str=%s",str.c_str());
     if(str.at(0)=='-'){
         i=1;
         s=-1;
