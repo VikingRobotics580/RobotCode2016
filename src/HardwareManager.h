@@ -84,6 +84,8 @@ class HardwareManager: public BaseManager {
             this->addTalon(id,(std::string&)identifier);
         }
 
+        inline bool hasWinchBeenActivated(){ return this->m_servos["WinchActivate"]->GetAngle() == 360; };
+
     private:
         bool m_finished;
         talon_map m_talons;

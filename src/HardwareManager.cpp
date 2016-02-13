@@ -29,13 +29,22 @@ int HardwareManager::Init(){
     this->m_talons["frontRight"] = new CANTalon(2);
     log_info("Adding CANTalon backRight at ID=3");
     this->m_talons["backRight"] = new CANTalon(3);
+
+    log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
+
+    log_info("Adding Servo WinchActive at ID=1");
+    this->m_servos["WinchActivate"] = new Servo(1);
 
     log_info("Constructing RobotDrive");
     m_drive = new RobotDrive(
             this->m_talons["frontLeft"],this->m_talons["backLeft"],
             this->m_talons["frontRight"],this->m_talons["backRight"]);
+
+    log_info("Setting default Servo values to 0.");
+    this->m_servos["TESTSERVO"]->SetAngle(0);
+    this->m_servos["WinchActivate"]->SetAngle(0);
 
     log_info("Done Initializing HardwareManager.");
     return 0;
@@ -59,6 +68,7 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
+    // TODO: Add code here to check if we are close to the bar and if so, move the wheels forwards at 10% constantly
     float rawX = m_jman->GetAxis(0);
     float rawY = m_jman->GetAxis(1);
     float x=rawX;
@@ -94,8 +104,7 @@ int HardwareManager::suck(){
 
 int HardwareManager::climb(){
     if(m_jman->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
-        // TODO: Somehow move the correct motors
-        //       I'd do it myself but I haven't implemented that yet.
+        this->m_servos["WinchActivate"]->SetAngle(360);
     }
     return 0;
 }
