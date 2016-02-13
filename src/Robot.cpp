@@ -79,5 +79,11 @@ void Robot::DisabledPeriodic(){
 
 }
 
+void Robot::End(){
+    if(this->m_hw_man->End()) log_err("A problem occurred during m_hw_man::End()!");
+    if(this->m_auto_man->End()) log_err("A problem occurred during m_auto_man::End()!");
+    if(this->m_joy_man->End()) log_err("A problem occurred during m_joy_man::End()!");
+}
+
 START_ROBOT_CLASS(Robot);
 

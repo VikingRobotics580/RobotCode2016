@@ -109,6 +109,14 @@ class Robot: public IterativeRobot{
          * Is run periodically during Disabled mode
          */
         void DisabledPeriodic() override;
+
+        /*
+         * End
+         * Accepts nothing
+         * Returns nothing
+         * Runs when the robot is done
+         */
+        void End();// override;
     private:
         HardwareManager* m_hw_man;
         JoystickManager* m_joy_man;
