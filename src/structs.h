@@ -17,5 +17,11 @@ typedef struct instruction_struct {
     command** commands;
 } instruction;
 
+template<typename T>
+struct proxy {
+    proxy_struct(T& d){ data=d; };
+    T data;
+};
+
 #endif
 
