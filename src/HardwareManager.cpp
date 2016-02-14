@@ -29,6 +29,16 @@ int HardwareManager::Init(){
     this->m_talons["frontRight"] = new CANTalon(2);
     log_info("Adding CANTalon backRight at ID=3");
     this->m_talons["backRight"] = new CANTalon(3);
+    log_info("Adding CANTalon intake at ID=4");
+    this->m_talons["intake"] = new CANTalon(4);
+    
+    log_info("Adding Talon leftShoot at ID=9");
+    this->m_talons["leftShoot"] = new Talon(9);
+    log_info("Adding Talon rightShoot at ID=8");
+    this->m_talons["rightShoot"] = new Talon(8);
+
+    log_info("Adding Talon TESTTALON at ID=3");
+    this->m_talons["TESTTALON"] = new Talon(3);
 
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
@@ -88,16 +98,15 @@ int HardwareManager::move(){
 
 int HardwareManager::launch(){
     if(m_jman->Get(HardwareManager::HW_LAUNCH_BUTTON_IDX)){
-        //TODO: Somehow move the correct motors
-        //      I'd do it myself, but I haven't implemented that yet.
+        this->m_talons["leftShoot"]->Set(1);
+        this->m_talons["rightShoot"]->Set(1);
     }
     return 0;
 }
 
 int HardwareManager::suck(){
     if(m_jman->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
-        // TODO: Somehow move the correct motors
-        //       I'd do it myself, but I haven't implemented that yet.
+        this->m_talons["intake"]->Set(1);
     }
     return 0;
 }
