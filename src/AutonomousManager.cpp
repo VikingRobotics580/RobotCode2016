@@ -10,6 +10,7 @@
 #include <istream>
 #include <fstream>
 #include "AutonomousManager.h"
+#include "HardwareManager.h"
 #include "macros.h"
 
 //AutonomousManager::AUTO_MAGIC_NUMBER::0x4155544f;
@@ -19,11 +20,13 @@ AutonomousManager::AutonomousManager(JoystickManager* jman) :
     m_filename(""),
     m_current_instruction(0),
     m_instruction_amt(0),
-    m_useHardcodedAuto(false)
+    m_useHardcodedAuto(false),
+    m_finished(false)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
     this->m_jman = jman;
+    this->m_timer = new Timer();
 }
 
 AutonomousManager::AutonomousManager(std::string& fname, JoystickManager* jman) :
@@ -31,11 +34,13 @@ AutonomousManager::AutonomousManager(std::string& fname, JoystickManager* jman) 
     m_filename(fname),
     m_current_instruction(0),
     m_instruction_amt(0),
-    m_useHardcodedAuto(false)
+    m_useHardcodedAuto(false),
+    m_finished(false)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
     this->m_jman = jman;
+    this->m_timer = new Timer();
 }
 
 AutonomousManager::~AutonomousManager(){
@@ -59,28 +64,19 @@ int AutonomousManager::Init(){
         log_info("Falling back to hardcoded Autonomous code.");
         this->m_useHardcodedAuto = true;
     }
+    m_timer->Start();
     return 0;
 }
 
 int AutonomousManager::Update(){
-    /*
-    command** c_list = this->m_instructions[m_current_instruction]->commands;
-    int c_list_length = this->m_instructions[m_current_instruction]->num_commands;
-    */
     if(!this->m_useHardcodedAuto){
         log_info("Executing instruction %d",m_current_instruction);
         if(this->executeInstruction(this->m_instructions[m_current_instruction]))
             return 1;
-        /*
-        command* com = NULL;
-        if(c_list_length != 0) 
-            com = c_list[0];
-        for(int i=1; i < c_list_length; i++){
-            com = c_list[i];
-        }
-        */
         if(this->m_current_instruction < this->m_instruction_amt)
             this->m_current_instruction++;
+        else
+            this->m_finished = true;
         return 0;
     }else{
         return this->mode();
@@ -88,7 +84,7 @@ int AutonomousManager::Update(){
 }
 
 bool AutonomousManager::IsFinished(){
-    return true;
+    return this->m_finished;
 }
 
 int AutonomousManager::End(){
@@ -101,7 +97,11 @@ void AutonomousManager::Interrupted(){
 */
 
 int AutonomousManager::mode(){
-    return 1;
+    if(this->HasTimePassed(10))
+        this->m_jman->FakePressButton(HardwareManager::HW_LAUNCH_BUTTON_IDX,1);
+    else
+        this->m_jman->FakeJoystickX(1);
+    return 0;
 }
 
 int AutonomousManager::executeInstruction(instruction* instr){
