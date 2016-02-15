@@ -66,6 +66,9 @@ void Robot::AutonomousPeriodic(){
         this->m_autonomo_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_auto_man->Update();
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
+
+    if(!this->m_autonomo_disabled && this->m_auto_man->IsFinished())
+        this->m_auto_man->End();
 }
 
 void Robot::TeleopPeriodic(){
@@ -91,6 +94,10 @@ void Robot::End(){
     if(this->m_hw_man->End()) log_err("A problem occurred during m_hw_man::End()!");
     if(this->m_auto_man->End()) log_err("A problem occurred during m_auto_man::End()!");
     if(this->m_joy_man->End()) log_err("A problem occurred during m_joy_man::End()!");
+}
+
+bool Robot::IsFinished(){
+    return this->m_hw_man->IsFinished() && this->m_auto_man->IsFinished() && this->m_joy_man->IsFinished();
 }
 
 START_ROBOT_CLASS(Robot);

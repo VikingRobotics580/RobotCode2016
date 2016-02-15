@@ -117,6 +117,14 @@ class Robot: public IterativeRobot{
          * Runs when the robot is done
          */
         void End();// override;
+
+        /*
+         * IsFinished
+         * Accepts nothing
+         * Returns true if the Robot class is finished, false otherwise
+         * Does exactly what I just said
+         */
+        bool IsFinished();
     private:
         HardwareManager* m_hw_man;
         JoystickManager* m_joy_man;
