@@ -12,7 +12,6 @@ VisionManager::VisionManager():
 }
 
 VisionManager::~VisionManager(){
-    // TODO: Figure out why this is throwing a warning
     delete[] m_lastPos;
     delete[] m_currPos;
 }
@@ -35,6 +34,8 @@ int VisionManager::Update(){
         log_test("Unable to find any significant artifacts.");
     
     // Update position variables
+    delete[] m_lastPos; // Since all positions are pointers, we need to delete the last array before we over-write it.
+                        // If we don't, we could cause a memory leak, and we don't want that now do we?
     this->m_lastPos = this->m_currPos;
     this->m_currPos = pos;
     return 0;
@@ -71,21 +72,23 @@ int* VisionManager::compareImgFrom(Image* img,int x,int y){
                 p2.y=h;
 
                 // Generate pixel objects
-                PixelValue pixel1;
-                PixelValue pixel2; 
+                PixelValue* pixel1 = new PixelValue();
+                PixelValue* pixel2 = new PixelValue(); 
 
                 // NOTE: I'm taking the address of the value here, watch out for seg-faults!
                 // Get the pixels at p1 and p2
                 // If either throw an error, count this as a failure
-                if(frcGetPixelValue(img,p1,&pixel1) || frcGetPixelValue(img,p2,&pixel2)){
+                if(frcGetPixelValue(img,p1,pixel1) || frcGetPixelValue(img,p2,pixel2)){
                     err_succ[0]++;
                     continue;
                 }
                 // Only R should still be in existance
-                if(pixel1.rgb.R != pixel2.rgb.R)
+                if(pixel1->rgb.R != pixel2->rgb.R)
                     err_succ[0]++;
                 else
                     err_succ[1]++;
+                delete pixel1; // Same as what I wrote above in Update()
+                delete pixel2; // We don't need them anymore, so we need to wipe them from existence now that they have served their purpose
             }else{
                 err_succ[0]++;
             }
