@@ -97,9 +97,10 @@ void AutonomousManager::Interrupted(){
 */
 
 int AutonomousManager::mode(){
-    if(this->HasTimePassed(10))
+    if(this->HasTimePassed(10)){
         this->m_jman->FakePressButton(HardwareManager::HW_LAUNCH_BUTTON_IDX,1);
-    else
+        log_test("Beep Boop launching.")
+    }else
         this->m_jman->FakeJoystickX(1);
     return 0;
 }

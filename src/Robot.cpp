@@ -86,6 +86,7 @@ void Robot::TestPeriodic(){
 }
 
 void Robot::DisabledPeriodic(){
+    // TODO: Add something here to hold the robot in place until we can get it down.
     if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
         log_warn("WARNING! NOT IMPLEMENTED YET!");
 }
