@@ -78,36 +78,39 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
-    // TODO: Add code here to check if we are close to the bar and if so, move the wheels forwards at 10% constantly
-    float rawX = m_jman->GetAxis(0);
-    float rawY = m_jman->GetAxis(1);
-    float x=rawX;
-    float y=rawY;
-    if(y>90){
-        x=1;
-        y=-1;
-    }else if(y<-90){
-        x=-1;
-        y=1;
-    }
-    float left=x-y;
-    float right=x+y;
-    this->m_drive->TankDrive(left,right);
-    return 0;
+    log_warn("WARNING! I have removed all driving functionality while we rework Joystick Manager to hold two joysticks.");
+    //this->m_drive->TankDrive(m_jman->GetAxis(0),m_jman->GetAxis(1));
 }
 
 int HardwareManager::launch(){
+    // TODO: Add launch initialization stuff and Post-launch stuff
     if(m_jman->GetButtonByIndex(1)->Get()){//HardwareManager::HW_LAUNCH_BUTTON_IDX)){
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(1);
     }else{
-        this->m_talons["leftShoot"]->Set(0);
-        this->m_talons["rightShoot"]->Set(0);
+        // Move the launchers backwards constantly to keep the ball from falling out
+        // NOTE: May be too strong of a speed (maybe 10%?)
+        this->m_talons["leftShoot"]->Set(-0.2);
+        this->m_talons["rightShoot"]->Set(-0.2);
     }
     return 0;
 }
 
+int HardwareManager::release(){
+    if(m_jman->Get(HardwareManager::HW_RELEASE_BUTTON_IDX)){
+        this->m_talons["leftShoot"]->Set(0.2);
+        this->m_talons["rightShoot"]->Set(0.2);
+    }
+    return 0;
+}
+
+int HardwareManager::init_climb(){
+    this->m_servos["WinchActivate"]->SetAngle(360);
+    return 0;
+}
+
 int HardwareManager::suck(){
+    // TODO: Add pre-suck and post-suck stuff
     if(m_jman->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
         this->m_talons["intake"]->Set(1);
     }
@@ -115,9 +118,15 @@ int HardwareManager::suck(){
 }
 
 int HardwareManager::climb(){
+    // TODO: Add pre-climb and post-climb stuff
     if(m_jman->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
-        this->m_servos["WinchActivate"]->SetAngle(360);
+        return this->init_climb() && this->extend_arm();
     }
     return 0;
+}
+
+int HardwareManager::extend_arm(){
+    // TODO: Finish this method
+    return 1;
 }
 

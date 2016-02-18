@@ -20,9 +20,10 @@ typedef std::map<std::string,Servo*> servo_map;
 class HardwareManager: public BaseManager {
     public:
         // TODO: Replace these with the actual buttons
-        const static int HW_LAUNCH_BUTTON_IDX = 1;
-        const static int HW_SUCK_BUTTON_IDX = 2;
-        const static int HW_CLIMB_BUTTON_IDX = 3;
+        const static int HW_LAUNCH_BUTTON_IDX = 0;
+        const static int HW_SUCK_BUTTON_IDX = 1;
+        const static int HW_CLIMB_BUTTON_IDX = 2;
+        const static int HW_RELEASE_BUTTON_IDX = 3;
 
         // TODO: Actually define these
         const static float WHEEL_RPM_FULL_SPEED;
@@ -39,6 +40,9 @@ class HardwareManager: public BaseManager {
         int launch();
         int suck();
         int climb();
+        int release();
+        int init_climb();
+        int extend_arm();
 
         /*
          * getAllTalons
