@@ -97,7 +97,7 @@ int HardwareManager::move(){
 }
 
 int HardwareManager::launch(){
-    if(m_jman->Get(HardwareManager::HW_LAUNCH_BUTTON_IDX)){
+    if(m_jman->GetButtonByIndex(1)->Get()){//HardwareManager::HW_LAUNCH_BUTTON_IDX)){
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(1);
     }else{
