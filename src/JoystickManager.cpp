@@ -18,7 +18,7 @@ JoystickManager::JoystickManager(Joystick* j):
     m_joystick = j;
     m_buttons = new JoystickButton*[NUM_BUTTS];
     for(int i=0; i <  NUM_BUTTS; i++)
-        m_buttons[i] = new JoystickButton(j,i);
+        m_buttons[i] = new JoystickButton(j,i+1);
     m_timer = new Timer();
     m_fakeJoystickX = 0;
     m_fakeJoystickY = 0;
