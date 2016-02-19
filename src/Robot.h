@@ -9,7 +9,7 @@
 #define ROBOT_H_
 
 #include "HardwareManager.h"
-#include "JoystickManager.h"
+#include "JoystickManagerManager.h"
 #include "AutonomousManager.h"
 
 class IterativeRobot;
@@ -127,7 +127,7 @@ class Robot: public IterativeRobot{
         bool IsFinished();
     private:
         HardwareManager* m_hw_man;
-        JoystickManager* m_joy_man;
+        JoystickManagerManager* m_joy_man;
         AutonomousManager* m_auto_man;
 
         // Disable various managers if they fail to initialize

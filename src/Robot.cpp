@@ -6,6 +6,7 @@
 
 #include "WPILib.h"
 #include "Robot.h"
+#include "JoystickManager.h"
 #include "macros.h"
 
 Robot::Robot():
@@ -14,8 +15,9 @@ Robot::Robot():
     m_joystick_disabled(false),
     m_autonomo_disabled(false)
 {
-    Joystick* j = new Joystick(0);
-    this->m_joy_man = new JoystickManager(j);
+    //Joystick* j = new Joystick(0);
+    //this->m_joy_man = new JoystickManager(j);
+    this->m_joy_man = new JoystickManagerManager();
     this->m_hw_man = new HardwareManager(m_joy_man);
     this->m_auto_man = new AutonomousManager(m_joy_man);
 }
@@ -27,6 +29,14 @@ Robot::~Robot(){
 }
 
 void Robot::RobotInit(){
+    log_info("Registering JoystickManagers.");
+    // HOLY SHIT
+    m_joystick_disabled = this->m_joy_man->registerJM(new JoystickManager(new Joystick(0)));
+    m_joystick_disabled = this->m_joy_man->registerJM(new JoystickManager(new Joystick(1)));
+    m_joystick_disabled = this->m_joy_man->registerJM(new JoystickManager(new Joystick(2)));
+
+    m_joystick_disabled = this->m_joy_man->Init();
+
     m_hardware_disabled = this->m_hw_man->Init();
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
@@ -42,10 +52,14 @@ void Robot::RobotInit(){
 }
 
 void Robot::AutonomousInit(){
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->init_arm();
     m_autonomo_disabled = this->m_auto_man->Init();
 }
 
 void Robot::TeleopInit(){
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->init_arm();
 }
 
 void Robot::TestInit(){
@@ -59,6 +73,8 @@ void Robot::DisabledInit(){
 }
 
 void Robot::AutonomousPeriodic(){
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->uninit_arm();
     // If anything is disabled, don't use it
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
@@ -72,6 +88,8 @@ void Robot::AutonomousPeriodic(){
 }
 
 void Robot::TeleopPeriodic(){
+    if(!this->m_hardware_disabled)
+        this->m_hw_man->uninit_arm();
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
     if(!this->m_hardware_disabled)
