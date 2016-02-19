@@ -5,7 +5,7 @@
 const float HardwareManager::WHEEL_RPM_FULL_SPEED = 0.0;
 const float HardwareManager::WHEEL_RADIUS = 0.0;
 
-HardwareManager::HardwareManager(JoystickManager* jman):
+HardwareManager::HardwareManager(JoystickManagerManager* jman):
     BaseManager(),
     m_finished(false),
     m_talons(),
@@ -47,6 +47,9 @@ int HardwareManager::Init(){
     log_info("Adding Servo WinchActive at ID=1");
     this->m_servos["WinchActivate"] = new Servo(1);
 
+    log_info("Adding Servo IntakeArmActivate at ID=2");
+    this->m_servo["IntakeArmActivate"] = new Servo(2);
+
     log_info("Constructing RobotDrive");
     m_drive = new RobotDrive(
             this->m_talons["frontLeft"],this->m_talons["backLeft"],
@@ -79,27 +82,35 @@ int HardwareManager::End(){
 
 int HardwareManager::move(){
     log_warn("WARNING! I have removed all driving functionality while we rework Joystick Manager to hold two joysticks.");
-    //this->m_drive->TankDrive(m_jman->GetAxis(0),m_jman->GetAxis(1));
+    log_warn("Actually, I've re-enabled it, but I'm not sure if it works yet. Let's just assume it does for now.");
+    this->m_drive->TankDrive(m_jman->getJoystickManager(0)->GetJoystickX(),m_jman->getJoystickManager(1)->GetJoystickX());
+    return 0;
 }
 
 int HardwareManager::launch(){
-    // TODO: Add launch initialization stuff and Post-launch stuff
-    if(m_jman->GetButtonByIndex(1)->Get()){//HardwareManager::HW_LAUNCH_BUTTON_IDX)){
+    if(m_jman->getJoystickManager(1)->GetButtonByIndex(1)->Get()){//HardwareManager::HW_LAUNCH_BUTTON_IDX)){
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(1);
+        // TODO: Add the shit here that pops the thing up
+        // I don't know how it connects to the roboRIO for now, so fuck it
     }else{
         // Move the launchers backwards constantly to keep the ball from falling out
         // NOTE: May be too strong of a speed (maybe 10%?)
         this->m_talons["leftShoot"]->Set(-0.2);
         this->m_talons["rightShoot"]->Set(-0.2);
+        // TODO: Add the shit here that pops the thing down
+        // I don't know how it connects to the roboRIO for now, so fuck it
     }
     return 0;
 }
 
 int HardwareManager::release(){
-    if(m_jman->Get(HardwareManager::HW_RELEASE_BUTTON_IDX)){
+    if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_RELEASE_BUTTON_IDX)){
         this->m_talons["leftShoot"]->Set(0.2);
         this->m_talons["rightShoot"]->Set(0.2);
+        // TODO: Add the shit here that pops the thing down
+        // I don't know how it connects to the roboRIO for now, so fuck it
+        // Also, should it be before or after the motors start up?
     }
     return 0;
 }
@@ -109,9 +120,19 @@ int HardwareManager::init_climb(){
     return 0;
 }
 
+int HardwareManager::init_arm(){
+    this->m_servos["IntakeArmActivate"]->SetAngle(360);
+    return 0;
+}
+
+int HardwareManager::uninit_arm(){
+    this->m_servos["IntakeArmActivate"]->SetAngle(0);
+    return 0;
+}
+
 int HardwareManager::suck(){
     // TODO: Add pre-suck and post-suck stuff
-    if(m_jman->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
+    if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
         this->m_talons["intake"]->Set(1);
     }
     return 0;
@@ -119,7 +140,7 @@ int HardwareManager::suck(){
 
 int HardwareManager::climb(){
     // TODO: Add pre-climb and post-climb stuff
-    if(m_jman->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
+    if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
         return this->init_climb() && this->extend_arm();
     }
     return 0;

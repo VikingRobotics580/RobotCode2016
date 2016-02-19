@@ -8,7 +8,7 @@
 
 #include "WPILib.h"
 
-#include "JoystickManager.h"
+#include "JoystickManagerManager.h"
 #include "BaseManager.h"
 #include "structs.h"
 #include "macros.h"
@@ -29,7 +29,7 @@ class HardwareManager: public BaseManager {
         const static float WHEEL_RPM_FULL_SPEED;
         const static float WHEEL_RADIUS;
 
-        HardwareManager(JoystickManager*);
+        HardwareManager(JoystickManagerManager*);
         virtual ~HardwareManager();
 
         int Init() override;
@@ -43,6 +43,8 @@ class HardwareManager: public BaseManager {
         int release();
         int init_climb();
         int extend_arm();
+        int init_arm();
+        int uninit_arm();
 
         /*
          * getAllTalons
@@ -96,7 +98,7 @@ class HardwareManager: public BaseManager {
         servo_map m_servos; // :(
         //sensor_map m_sensors;
         RobotDrive* m_drive;
-        JoystickManager* m_jman;
+        JoystickManagerManager* m_jman;
 };
 
 #endif
