@@ -8,6 +8,7 @@
 #ifndef JOYSTICKMANAGER_H_
 #define JOYSTICKMANAGER_H_
 
+#include "WPILib.h"
 #include "BaseManager.h"
 
 class JoystickManager : public BaseManager{
