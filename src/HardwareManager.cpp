@@ -38,20 +38,26 @@ int HardwareManager::Init(){
     this->m_talons["rightShoot"] = new Talon(8);
 
     log_info("Adding Talon TESTTALON at ID=3");
-    this->m_talons["TESTTALON"] = new Talon(3);
+    this->m_talons["TESTTALON"] = new Talon(1);
+
+    log_info("Adding Talon ArmRaiseMotor at ID=4");
+    this->m_talons["ArmRaiseMotor"] = new Talon(1);
+
+    log_info("Adding Talon ArmExtendMotor at ID=4");
+    this->m_talons["ArmExtendMotor"] = new Talon(1);
 
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
 
     log_info("Adding Servo WinchActive at ID=1");
-    this->m_servos["WinchActivate"] = new Servo(1);
+    this->m_servos["WinchActivate"] = new Servo(5);
 
     log_info("Adding Servo IntakeArmActivate at ID=2");
-    this->m_servos["IntakeArmActivate"] = new Servo(2);
+    this->m_servos["IntakeArmActivate"] = new Servo(6);
 
     log_info("Adding Servo flap thing at ID=3");
-    this->m_servos["flap thing"] = new Servo(3);
+    this->m_servos["flap thing"] = new Servo(7);
 
     log_info("Constructing RobotDrive");
     m_drive = new RobotDrive(
@@ -122,12 +128,12 @@ int HardwareManager::init_climb(){
     return 0;
 }
 
-int HardwareManager::init_arm(){
+int HardwareManager::init_suck(){
     this->m_servos["IntakeArmActivate"]->SetAngle(360);
     return 0;
 }
 
-int HardwareManager::uninit_arm(){
+int HardwareManager::uninit_suck(){
     this->m_servos["IntakeArmActivate"]->SetAngle(0);
     return 0;
 }
@@ -142,22 +148,27 @@ int HardwareManager::suck(){
 }
 
 int HardwareManager::climb(){
-    // TODO: Add pre-climb and post-climb stuff
     if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
-        log_info("Yeah, I'm not implementing this shit right now. Maybe later when I'm not so god damn tired.");
-        log_info("Also, I've disabled everything. Fite me.");
-        return 0;
-        return this->init_climb() && this->extend_arm();
+        if(this->m_servos["WinchActivate"]->GetAngle() == 360)
+            this->m_talons["ArmExtendMotor"]->Set(-1);
+        else
+            this->init_climb();
     }
     return 0;
 }
 
-int HardwareManager::extend_arm(){
-    // TODO: Finish this method
-    return 0;
-}
+// The arm is moved by that arcade stick thing that is basically buttons rather than axes
+int HardwareManager::move_arm(){
+    if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_RAISE_BUTTON_IDX))
+        this->m_talons["ArmRaiseMotor"]->Set(1);
+    else if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_RAISE_BUTTON_IDX+1))
+        this->m_talons["ArmRaiseMotor"]->Set(-1);
 
-int HardwareManager::raise_arm(){
+    if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_EXTEND_BUTTON_IDX))
+        this->m_talons["ArmExtendMotor"]->Set(1);
+    else if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_EXTEND_BUTTON_IDX+1))
+        this->m_talons["ArmExtendMotor"]->Set(-1);
+
     return 0;
 }
 

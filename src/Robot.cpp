@@ -53,13 +53,13 @@ void Robot::RobotInit(){
 
 void Robot::AutonomousInit(){
     if(!this->m_hardware_disabled)
-        this->m_hw_man->init_arm();
+        this->m_hw_man->init_suck();
     m_autonomo_disabled = this->m_auto_man->Init();
 }
 
 void Robot::TeleopInit(){
     if(!this->m_hardware_disabled)
-        this->m_hw_man->init_arm();
+        this->m_hw_man->init_suck();
 }
 
 void Robot::TestInit(){
@@ -74,7 +74,7 @@ void Robot::DisabledInit(){
 
 void Robot::AutonomousPeriodic(){
     if(!this->m_hardware_disabled)
-        this->m_hw_man->uninit_arm();
+        this->m_hw_man->uninit_suck();
     // If anything is disabled, don't use it
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
@@ -89,7 +89,7 @@ void Robot::AutonomousPeriodic(){
 
 void Robot::TeleopPeriodic(){
     if(!this->m_hardware_disabled)
-        this->m_hw_man->uninit_arm();
+        this->m_hw_man->uninit_suck();
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
     if(!this->m_hardware_disabled)
