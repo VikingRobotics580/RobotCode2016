@@ -48,7 +48,7 @@ int HardwareManager::Init(){
     this->m_servos["WinchActivate"] = new Servo(1);
 
     log_info("Adding Servo IntakeArmActivate at ID=2");
-    this->m_servo["IntakeArmActivate"] = new Servo(2);
+    this->m_servos["IntakeArmActivate"] = new Servo(2);
 
     log_info("Constructing RobotDrive");
     m_drive = new RobotDrive(
