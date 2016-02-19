@@ -45,6 +45,7 @@ class HardwareManager: public BaseManager {
         int extend_arm();
         int init_arm();
         int uninit_arm();
+        int raise_arm();
 
         /*
          * getAllTalons
