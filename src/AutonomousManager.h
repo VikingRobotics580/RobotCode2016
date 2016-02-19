@@ -14,7 +14,7 @@
 #include "WPILib.h"
 
 #include "BaseManager.h"
-#include "JoystickManager.h"
+#include "JoystickManagerManager.h"
 #include "structs.h"
 
 enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
@@ -35,14 +35,14 @@ class AutonomousManager: public BaseManager{
          * Accepts no parameters
          * Constructs AutonomousManager
          */
-        AutonomousManager(JoystickManager*);
+        AutonomousManager(JoystickManagerManager*);
 
         /*
          * AutonomousManager - Constructor
          * Accepts no parameters
          * Constructs AutonomousManager
          */
-        AutonomousManager(std::string&,JoystickManager*);
+        AutonomousManager(std::string&,JoystickManagerManager*);
 
         /*
          * AutonomousManager - Destructor
@@ -92,7 +92,7 @@ class AutonomousManager: public BaseManager{
         //void Interrupted() override;
         
         // What do you think this does
-        inline JoystickManager* getJoystickManager(){ return this->m_jman; };
+        inline JoystickManagerManager* getJoystickManagerManager(){ return this->m_jman; };
 
         inline void setFilename(std::string& fname){ this->m_filename = fname; };
         inline void setFilename(const char* fname){ this->m_filename = fname; };
@@ -148,7 +148,7 @@ class AutonomousManager: public BaseManager{
         int m_instruction_amt;
         std::ifstream::pos_type m_raw_data_size;
         char* m_auto_raw_data;
-        JoystickManager* m_jman;
+        JoystickManagerManager* m_jman;
 
         bool m_useHardcodedAuto;
         bool m_finished;

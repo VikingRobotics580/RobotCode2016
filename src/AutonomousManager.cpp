@@ -15,7 +15,7 @@
 
 //AutonomousManager::AUTO_MAGIC_NUMBER::0x4155544f;
 
-AutonomousManager::AutonomousManager(JoystickManager* jman) :
+AutonomousManager::AutonomousManager(JoystickManagerManager* jman) :
     BaseManager(),
     m_filename(""),
     m_current_instruction(0),
@@ -29,7 +29,7 @@ AutonomousManager::AutonomousManager(JoystickManager* jman) :
     this->m_timer = new Timer();
 }
 
-AutonomousManager::AutonomousManager(std::string& fname, JoystickManager* jman) :
+AutonomousManager::AutonomousManager(std::string& fname, JoystickManagerManager* jman) :
     BaseManager(),
     m_filename(fname),
     m_current_instruction(0),
@@ -98,10 +98,10 @@ void AutonomousManager::Interrupted(){
 
 int AutonomousManager::mode(){
     if(this->HasTimePassed(10)){
-        this->m_jman->FakePressButton(HardwareManager::HW_LAUNCH_BUTTON_IDX,1);
-        log_test("Beep Boop launching.")
+        this->m_jman->getJoystickManager(0)->FakePressButton(HardwareManager::HW_LAUNCH_BUTTON_IDX,1);
+        log_test("Beep Boop launching.");
     }else
-        this->m_jman->FakeJoystickX(1);
+        this->m_jman->getJoystickManager(0)->FakeJoystickX(1);
     return 0;
 }
 
@@ -119,7 +119,7 @@ int AutonomousManager::executeInstruction(instruction* instr){
         float val = ((int)val_param)/1000.0F;
         float dur = ((int)dur_param)/1000.0F;
         int id = (*(com->com))&AutonomousManager::AUTO_ID_MASK;
-        m_jman->FakeAxisInput(id,val,dur);
+        m_jman->getJoystickManager(0)->FakeAxisInput(id,val,dur);
     }else if(type == AutonomousManager::AUTO_BUTT_ID){
         // Button
         if(com_count < 2) return 1; // INSTR:DURATION
@@ -127,7 +127,7 @@ int AutonomousManager::executeInstruction(instruction* instr){
         // Convert char to int and then to float
         float dur = ((int)dur_param)/1000.0F;
         int id = (*(com->com))&AutonomousManager::AUTO_ID_MASK;
-        m_jman->FakePressButton(id,dur);
+        m_jman->getJoystickManager(0)->FakePressButton(id,dur);
     }else if(type == AutonomousManager::AUTO_MOVE_ID){
         // NOTE: NOT IMPLEMENTED
         // Generic movement
