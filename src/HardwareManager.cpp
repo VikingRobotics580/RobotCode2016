@@ -172,3 +172,12 @@ int HardwareManager::move_arm(){
     return 0;
 }
 
+int HardwareManager::stop_suck(){
+    // TODO: Somehow get the button thing here
+    // Is it Digital IO, Analog, or something else
+    if(false){
+        this->m_talons["intake"]->Set(0);
+    }
+    return 0;
+}
+

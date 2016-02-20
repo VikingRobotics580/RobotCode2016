@@ -47,6 +47,7 @@ class HardwareManager: public BaseManager {
         int init_suck();
         int uninit_suck();
         int move_arm();
+        int stop_suck();
 
         /*
          * getAllTalons
