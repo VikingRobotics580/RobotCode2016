@@ -88,6 +88,7 @@ void Robot::AutonomousPeriodic(){
 }
 
 void Robot::TeleopPeriodic(){
+    SmartDashboard::PutNumber("Distance",m_hw_man->getDistanceSensorValue());
     if(!this->m_hardware_disabled)
         this->m_hw_man->uninit_suck();
     if(!this->m_joystick_disabled)
