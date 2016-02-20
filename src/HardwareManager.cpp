@@ -9,7 +9,9 @@ HardwareManager::HardwareManager(JoystickManagerManager* jman):
     BaseManager(),
     m_finished(false),
     m_talons(),
-    m_servos()
+    m_servos(),
+    m_anaios(),
+    m_digios()
 {
     m_drive = NULL;
     m_jman = jman;
@@ -58,6 +60,14 @@ int HardwareManager::Init(){
 
     log_info("Adding Servo flap thing at ID=3");
     this->m_servos["flap thing"] = new Servo(7);
+
+    log_info("Registering Analog Channels.");
+    log_info("Adding AnalogChannel dist_sensor at ID=0");
+    this->m_anaios["dist_sensor"] = new AnalogInput(0);
+
+    log_info("Registering Digital Inputs.");
+    log_info("Adding DigitalInput ballDetector at ID=0");
+    this->m_digios["ballDetector"] = new DigitalInput(0);
 
     log_info("Constructing RobotDrive");
     m_drive = new RobotDrive(
@@ -173,11 +183,13 @@ int HardwareManager::move_arm(){
 }
 
 int HardwareManager::stop_suck(){
-    // TODO: Somehow get the button thing here
-    // Is it Digital IO, Analog, or something else
-    if(false){
+    if(this->m_digios["ballDetector"]->Get()){
         this->m_talons["intake"]->Set(0);
     }
     return 0;
+}
+
+int HardwareManager::getDistanceSensorValue(){
+    return this->m_anaios["dist_sensor"]->GetValue();
 }
 
