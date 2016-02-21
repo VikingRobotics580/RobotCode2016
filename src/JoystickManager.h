@@ -22,6 +22,7 @@ class JoystickManager : public BaseManager{
         virtual ~JoystickManager();
         JoystickButton* GetButtonByIndex(int);
         JoystickButton* GetButtonByID(int);
+        inline Joystick* GetJoystick(){ return this->m_joystick; };
         bool Get(int);
         float GetAxis(int);
         float GetJoystickX(void);
