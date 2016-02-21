@@ -102,18 +102,18 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
-    log_warn("WARNING! I have removed all driving functionality while we rework Joystick Manager to hold two joysticks.");
-    log_warn("Actually, I've re-enabled it, but I'm not sure if it works yet. Let's just assume it does for now.");
-    this->m_drive->TankDrive(m_jman->getJoystickManager(0)->GetJoystick()->GetY(),m_jman->getJoystickManager(1)->GetJoystick()->GetY());
+    this->m_drive->TankDrive(-m_jman->getJoystickManager(0)->GetJoystick()->GetY(),-m_jman->getJoystickManager(1)->GetJoystick()->GetY());
     return 0;
 }
 
 int HardwareManager::launch(){
-    if(m_jman->getJoystickManager(1)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
+        SmartDashboard::PutBoolean("Shooting",true);
         this->m_talons["leftShoot"]->Set(-1);
         this->m_talons["rightShoot"]->Set(1);
         this->m_servos["flap thing"]->Set(360);
     }else{
+        SmartDashboard::PutBoolean("Shooting",false);
         // DO NOTHING BECAUSE THIS IS A STUPID THING TO DO
         // Move the launchers backwards constantly to keep the ball from falling out
         // NOTE: May be too strong of a speed (maybe 10%?)
@@ -132,8 +132,10 @@ int HardwareManager::release(){
         this->m_talons["leftShoot"]->Set(0.2);
         this->m_talons["rightShoot"]->Set(0.2);
         this->m_servos["flap thing"]->Set(360);
+        SmartDashboard::PutBoolean("Releasing",true);
         // Also, should it be before or after the motors start up?
     }else{
+        SmartDashboard::PutBoolean("Releasing",false);
         this->m_servos["flap thing"]->Set(0);
     }
     return 0;
@@ -158,9 +160,14 @@ int HardwareManager::suck(){
     // TODO: Add pre-suck and post-suck stuff
     // Actually, is there anything it init and post init?
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_SUCK_BUTTON_IDX)->Get()){
+        SmartDashboard::PutBoolean("Sucking",true);
         this->m_talons["intake"]->Set(1);
+    }else{
+        SmartDashboard::PutBoolean("Sucking",false);
+        this->m_talons["intake"]->Set(0);
     }
-    return this->stop_suck();
+    //return this->stop_suck();
+    return 0;
 }
 
 int HardwareManager::climb(){
@@ -171,10 +178,13 @@ int HardwareManager::climb(){
 
     // Winch stuff
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_WINCH_BUTTON_IDX)){
+        SmartDashboard::PutBoolean("Climbing",true);
         //if(this->m_servos["WinchActivate"]->GetAngle() == 360)
             //this->m_talons["ArmExtendMotor"]->Set(-1);
         //else
         this->init_climb();
+    }else{
+        SmartDashboard::PutBoolean("Climbing",false);
     }
     return 0;
 }
@@ -182,9 +192,9 @@ int HardwareManager::climb(){
 // The arm is moved by that arcade stick thing that is basically buttons rather than axes
 int HardwareManager::move_arm(){
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get())
-        this->m_talons["ArmRaiseMotor"]->Set(1);
+        this->m_servos["ArmRaiseMotor"]->Set(1);
     else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get())
-        this->m_talons["ArmRaiseMotor"]->Set(-1);
+        this->m_servos["ArmRaiseMotor"]->Set(-1);
 
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_EXTND_BUTTON_IDX)->Get())
         this->m_talons["ArmExtendMotor"]->Set(1);
