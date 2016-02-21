@@ -44,23 +44,25 @@ int HardwareManager::Init(){
     log_info("Adding Talon TESTTALON at ID=3");
     this->m_talons["TESTTALON"] = new Talon(1);
 
-    log_info("Adding Talon ArmExtendMotor at ID=4");
+    log_info("Adding Talon ArmExtendMotor at ID=1");
     this->m_talons["ArmExtendMotor"] = new Talon(1);
 
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
 
-    log_info("Adding Servo ArmRaiseMotor at ID=2");
-    this->m_servos["ArmRaiseMotor"] = new Servo(1);
+    log_info("Adding Servo ArmRaiseServo at ID=2");
+    this->m_servos["ArmRaiseServo"] = new Servo(2);
 
-    log_info("Adding Servo WinchActive at ID=1");
+    log_info("Adding Servo WinchActive at ID=5");
     this->m_servos["WinchActivate"] = new Servo(5);
 
+    /*
     log_info("Adding Servo IntakeArmActivate at ID=2");
     this->m_servos["IntakeArmActivate"] = new Servo(6);
+    */
 
-    log_info("Adding Servo flap thing at ID=3");
+    log_info("Adding Servo flap thing at ID=7");
     this->m_servos["flap thing"] = new Servo(7);
 
     log_info("Registering Analog Channels.");
@@ -109,18 +111,16 @@ int HardwareManager::move(){
 int HardwareManager::launch(){
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
         SmartDashboard::PutBoolean("Shooting",true);
-        this->m_talons["leftShoot"]->Set(-1);
-        this->m_talons["rightShoot"]->Set(1);
+        this->m_talons["leftShoot"]->Set(1);
+        this->m_talons["rightShoot"]->Set(-1);
         this->m_servos["flap thing"]->Set(360);
     }else{
         SmartDashboard::PutBoolean("Shooting",false);
         // DO NOTHING BECAUSE THIS IS A STUPID THING TO DO
         // Move the launchers backwards constantly to keep the ball from falling out
         // NOTE: May be too strong of a speed (maybe 10%?)
-        /*
-        this->m_talons["leftShoot"]->Set(-0.2);
-        this->m_talons["rightShoot"]->Set(-0.2);
-        */
+        this->m_talons["leftShoot"]->Set(0);
+        this->m_talons["rightShoot"]->Set(0);
         // EXCEPT FOR THIS
         this->m_servos["flap thing"]->Set(0);
     }
@@ -162,6 +162,8 @@ int HardwareManager::suck(){
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_SUCK_BUTTON_IDX)->Get()){
         SmartDashboard::PutBoolean("Sucking",true);
         this->m_talons["intake"]->Set(1);
+        this->m_talons["leftShoot"]->Set(-0.6);
+        this->m_talons["rightShoot"]->Set(0.6);
     }else{
         SmartDashboard::PutBoolean("Sucking",false);
         this->m_talons["intake"]->Set(0);
@@ -191,15 +193,25 @@ int HardwareManager::climb(){
 
 // The arm is moved by that arcade stick thing that is basically buttons rather than axes
 int HardwareManager::move_arm(){
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get())
-        this->m_servos["ArmRaiseMotor"]->Set(1);
-    else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get())
-        this->m_servos["ArmRaiseMotor"]->Set(-1);
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get()){
+        SmartDashboard::PutString("Arm Y: ","UP");
+        log_test("ARM Y:UP");
+        this->m_servos["ArmRaiseServo"]->SetAngle(360);
+    }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get()){
+        SmartDashboard::PutString("Arm Y: ","DOWN");
+        log_test("ARM Y:DWN");
+        this->m_servos["ArmRaiseServo"]->SetAngle(0);
+    }
 
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_EXTND_BUTTON_IDX)->Get())
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_EXTND_BUTTON_IDX)->Get()){
+        SmartDashboard::PutString("Arm Extend: ","FWD");
+        log_test("ARM EXT:FWD");
         this->m_talons["ArmExtendMotor"]->Set(1);
-    else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RETRCT_BUTTON_IDX)->Get())
+    }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RETRCT_BUTTON_IDX)->Get()){
+        SmartDashboard::PutString("Arm Extend: ","REV");
+        log_test("ARM EXT:REV");
         this->m_talons["ArmExtendMotor"]->Set(-1);
+    }
 
     return 0;
 }
