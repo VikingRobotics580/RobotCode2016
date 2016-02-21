@@ -13,7 +13,7 @@
 
 class JoystickManager : public BaseManager{
     private:
-        const static int NUM_BUTTS = 6; //lol butts
+        const static int NUM_BUTTS = 9; //lol butts
         const static int NUM_AXES = 6; // Axe me a question
     public:
         JoystickManager(Joystick* j);
