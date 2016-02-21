@@ -22,16 +22,22 @@ typedef std::map<std::string,DigitalInput*> digitalio_map;
 class HardwareManager: public BaseManager {
     public:
         // TODO: Replace these with the actual buttons
-        const static int HW_LAUNCH_BUTTON_IDX = 1;
-        const static int HW_SUCK_BUTTON_IDX = 2;
-        const static int HW_CLIMB_BUTTON_IDX = 3;
-        const static int HW_RELEASE_BUTTON_IDX = 4;
-        const static int HW_RAISE_BUTTON_IDX = 5;
-        const static int HW_EXTEND_BUTTON_IDX = 7;
+        // These 4 are actually just for the arcade-controller thing
+        const static int HW_RAISE_BUTTON_IDX = 1;
+        const static int HW_LOWER_BUTTON_IDX = 2;
+        const static int HW_EXTND_BUTTON_IDX = 3;
+        const static int HW_RETRCT_BUTTON_IDX = 4;
+
+        const static int HW_SUCK_BUTTON_IDX = 5;
+        const static int HW_LAUNCH_BUTTON_IDX = 6;
+        const static int HW_WINCH_BUTTON_IDX = 7;
+        const static int HW_RELEASE_BUTTON_IDX = 8;
+        const static int HW_MISSILE_BUTTON_IDX = 9;
 
         // TODO: Actually define these
         const static float WHEEL_RPM_FULL_SPEED;
         const static float WHEEL_RADIUS;
+        const static float DIST_SENSOR_CONST;
 
         HardwareManager(JoystickManagerManager*);
         virtual ~HardwareManager();
@@ -51,7 +57,7 @@ class HardwareManager: public BaseManager {
         int move_arm();
         int stop_suck();
 
-        int getDistanceSensorValue();
+        float getDistanceSensorValue();
 
         /*
          * getAllTalons

@@ -4,6 +4,8 @@
 
 const float HardwareManager::WHEEL_RPM_FULL_SPEED = 0.0;
 const float HardwareManager::WHEEL_RADIUS = 0.0;
+// What the hell is this constant Max?
+const float HardwareManager::DIST_SENSOR_CONST = 0.0048828125;
 
 HardwareManager::HardwareManager(JoystickManagerManager* jman):
     BaseManager(),
@@ -42,15 +44,15 @@ int HardwareManager::Init(){
     log_info("Adding Talon TESTTALON at ID=3");
     this->m_talons["TESTTALON"] = new Talon(1);
 
-    log_info("Adding Talon ArmRaiseMotor at ID=4");
-    this->m_talons["ArmRaiseMotor"] = new Talon(1);
-
     log_info("Adding Talon ArmExtendMotor at ID=4");
     this->m_talons["ArmExtendMotor"] = new Talon(1);
 
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
+
+    log_info("Adding Servo ArmRaiseMotor at ID=2");
+    this->m_servos["ArmRaiseMotor"] = new Servo(1);
 
     log_info("Adding Servo WinchActive at ID=1");
     this->m_servos["WinchActivate"] = new Servo(5);
@@ -102,27 +104,31 @@ int HardwareManager::End(){
 int HardwareManager::move(){
     log_warn("WARNING! I have removed all driving functionality while we rework Joystick Manager to hold two joysticks.");
     log_warn("Actually, I've re-enabled it, but I'm not sure if it works yet. Let's just assume it does for now.");
-    this->m_drive->TankDrive(m_jman->getJoystickManager(0)->GetJoystickX(),m_jman->getJoystickManager(1)->GetJoystickX());
+    this->m_drive->TankDrive(m_jman->getJoystickManager(0)->GetJoystick()->GetY(),m_jman->getJoystickManager(1)->GetJoystick()->GetY());
     return 0;
 }
 
 int HardwareManager::launch(){
-    if(m_jman->getJoystickManager(1)->GetButtonByIndex(1)->Get()){//HardwareManager::HW_LAUNCH_BUTTON_IDX)){
-        this->m_talons["leftShoot"]->Set(1);
+    if(m_jman->getJoystickManager(1)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
+        this->m_talons["leftShoot"]->Set(-1);
         this->m_talons["rightShoot"]->Set(1);
         this->m_servos["flap thing"]->Set(360);
     }else{
+        // DO NOTHING BECAUSE THIS IS A STUPID THING TO DO
         // Move the launchers backwards constantly to keep the ball from falling out
         // NOTE: May be too strong of a speed (maybe 10%?)
+        /*
         this->m_talons["leftShoot"]->Set(-0.2);
         this->m_talons["rightShoot"]->Set(-0.2);
+        */
+        // EXCEPT FOR THIS
         this->m_servos["flap thing"]->Set(0);
     }
     return 0;
 }
 
 int HardwareManager::release(){
-    if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_RELEASE_BUTTON_IDX)){
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RELEASE_BUTTON_IDX)->Get()){
         this->m_talons["leftShoot"]->Set(0.2);
         this->m_talons["rightShoot"]->Set(0.2);
         this->m_servos["flap thing"]->Set(360);
@@ -139,44 +145,50 @@ int HardwareManager::init_climb(){
 }
 
 int HardwareManager::init_suck(){
-    this->m_servos["IntakeArmActivate"]->SetAngle(360);
+    //this->m_servos["IntakeArmActivate"]->SetAngle(360);
     return 0;
 }
 
 int HardwareManager::uninit_suck(){
-    this->m_servos["IntakeArmActivate"]->SetAngle(0);
+    //this->m_servos["IntakeArmActivate"]->SetAngle(0);
     return 0;
 }
 
 int HardwareManager::suck(){
     // TODO: Add pre-suck and post-suck stuff
     // Actually, is there anything it init and post init?
-    if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_SUCK_BUTTON_IDX)){
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_SUCK_BUTTON_IDX)->Get()){
         this->m_talons["intake"]->Set(1);
     }
-    return 0;
+    return this->stop_suck();
 }
 
 int HardwareManager::climb(){
-    if(m_jman->getJoystickManager(2)->Get(HardwareManager::HW_CLIMB_BUTTON_IDX)){
-        if(this->m_servos["WinchActivate"]->GetAngle() == 360)
-            this->m_talons["ArmExtendMotor"]->Set(-1);
-        else
-            this->init_climb();
+    // move_arm is handled by climb().
+    // If it fails, then so does climb
+    // When the rose XXX, so too will you XXX away
+    if(this->move_arm()) return 1;
+
+    // Winch stuff
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_WINCH_BUTTON_IDX)){
+        //if(this->m_servos["WinchActivate"]->GetAngle() == 360)
+            //this->m_talons["ArmExtendMotor"]->Set(-1);
+        //else
+        this->init_climb();
     }
     return 0;
 }
 
 // The arm is moved by that arcade stick thing that is basically buttons rather than axes
 int HardwareManager::move_arm(){
-    if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_RAISE_BUTTON_IDX))
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get())
         this->m_talons["ArmRaiseMotor"]->Set(1);
-    else if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_RAISE_BUTTON_IDX+1))
+    else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get())
         this->m_talons["ArmRaiseMotor"]->Set(-1);
 
-    if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_EXTEND_BUTTON_IDX))
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_EXTND_BUTTON_IDX)->Get())
         this->m_talons["ArmExtendMotor"]->Set(1);
-    else if(m_jman->getJoystickManager(3)->Get(HardwareManager::HW_EXTEND_BUTTON_IDX+1))
+    else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RETRCT_BUTTON_IDX)->Get())
         this->m_talons["ArmExtendMotor"]->Set(-1);
 
     return 0;
@@ -189,7 +201,15 @@ int HardwareManager::stop_suck(){
     return 0;
 }
 
-int HardwareManager::getDistanceSensorValue(){
-    return this->m_anaios["dist_sensor"]->GetValue();
+float HardwareManager::getDistanceSensorValue(){
+    float val = this->m_anaios["dist_sensor"]->GetValue()*HardwareManager::DIST_SENSOR_CONST;
+    // HOLY SHIT! WHY ON EARTH WOULD THIS VALUE BE LIKE THIS
+    // WHAT DID YOU DO?!
+    if(val >= 4.98){
+        log_warn("Distance sensor is returning a value of 4.98 or higher.\nWhat the hell did you do?!\
+                Don't worry, I'll set it to 4.98 just for you bby ;)");
+        val = 4.98;
+    }
+    return val;
 }
 
