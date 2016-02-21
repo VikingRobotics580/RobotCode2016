@@ -107,9 +107,11 @@ void Robot::TeleopPeriodic(){
 
 void Robot::TestPeriodic(){
     if(!this->m_hardware_disabled)
-        this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(360);
+        this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(0);
+    /*
     if(!this->m_hardware_disabled)
         this->m_hw_man->getAllTalons()["TESTTALON"]->Set(1);
+        */
 }
 
 void Robot::DisabledPeriodic(){
