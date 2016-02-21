@@ -58,8 +58,10 @@ void Robot::AutonomousInit(){
 }
 
 void Robot::TeleopInit(){
+    /*
     if(!this->m_hardware_disabled)
         this->m_hw_man->init_suck();
+        */
 }
 
 void Robot::TestInit(){
@@ -89,8 +91,14 @@ void Robot::AutonomousPeriodic(){
 
 void Robot::TeleopPeriodic(){
     SmartDashboard::PutNumber("Distance",m_hw_man->getDistanceSensorValue());
+    SmartDashboard::PutBoolean("Hardware Disabled",this->m_hardware_disabled);
+    SmartDashboard::PutBoolean("Joystick Disabled",this->m_joystick_disabled);
+    SmartDashboard::PutBoolean("Autonomous Disabled",this->m_autonomo_disabled);
+
+    /*
     if(!this->m_hardware_disabled)
         this->m_hw_man->uninit_suck();
+        */
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
     if(!this->m_hardware_disabled)
