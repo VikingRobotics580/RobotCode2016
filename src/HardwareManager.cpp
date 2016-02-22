@@ -78,6 +78,7 @@ int HardwareManager::Init(){
             this->m_talons["frontLeft"],this->m_talons["backLeft"],
             this->m_talons["frontRight"],this->m_talons["backRight"]);
 
+    // NOTE: THIS MIGHT BE THE PROBLEM
     log_info("Setting default Servo values to 0.");
     this->m_servos["TESTSERVO"]->SetAngle(0);
     this->m_servos["WinchActivate"]->SetAngle(0);
@@ -113,7 +114,7 @@ int HardwareManager::launch(){
         SmartDashboard::PutBoolean("Shooting",true);
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(-1);
-        this->m_servos["flap thing"]->Set(360);
+        this->m_servos["flap thing"]->Set(0);
     }else{
         SmartDashboard::PutBoolean("Shooting",false);
         // DO NOTHING BECAUSE THIS IS A STUPID THING TO DO
@@ -122,7 +123,7 @@ int HardwareManager::launch(){
         this->m_talons["leftShoot"]->Set(0);
         this->m_talons["rightShoot"]->Set(0);
         // EXCEPT FOR THIS
-        this->m_servos["flap thing"]->Set(0);
+        this->m_servos["flap thing"]->Set(180);
     }
     return 0;
 }
@@ -131,23 +132,23 @@ int HardwareManager::release(){
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RELEASE_BUTTON_IDX)->Get()){
         this->m_talons["leftShoot"]->Set(0.2);
         this->m_talons["rightShoot"]->Set(0.2);
-        this->m_servos["flap thing"]->Set(360);
+        this->m_servos["flap thing"]->Set(0);
         SmartDashboard::PutBoolean("Releasing",true);
         // Also, should it be before or after the motors start up?
     }else{
         SmartDashboard::PutBoolean("Releasing",false);
-        this->m_servos["flap thing"]->Set(0);
+        this->m_servos["flap thing"]->Set(180);
     }
     return 0;
 }
 
 int HardwareManager::init_climb(){
-    this->m_servos["WinchActivate"]->SetAngle(360);
+    this->m_servos["WinchActivate"]->SetAngle(180);
     return 0;
 }
 
 int HardwareManager::init_suck(){
-    //this->m_servos["IntakeArmActivate"]->SetAngle(360);
+    //this->m_servos["IntakeArmActivate"]->SetAngle(180);
     return 0;
 }
 
@@ -181,7 +182,7 @@ int HardwareManager::climb(){
     // Winch stuff
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_WINCH_BUTTON_IDX)){
         SmartDashboard::PutBoolean("Climbing",true);
-        //if(this->m_servos["WinchActivate"]->GetAngle() == 360)
+        //if(this->m_servos["WinchActivate"]->GetAngle() == 180)
             //this->m_talons["ArmExtendMotor"]->Set(-1);
         //else
         this->init_climb();
@@ -196,7 +197,7 @@ int HardwareManager::move_arm(){
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get()){
         SmartDashboard::PutString("Arm Y: ","UP");
         log_test("ARM Y:UP");
-        this->m_servos["ArmRaiseServo"]->SetAngle(360);
+        this->m_servos["ArmRaiseServo"]->SetAngle(180);
     }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get()){
         SmartDashboard::PutString("Arm Y: ","DOWN");
         log_test("ARM Y:DWN");
