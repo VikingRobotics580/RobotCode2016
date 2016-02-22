@@ -33,6 +33,7 @@ class HardwareManager: public BaseManager {
         const static int HW_WINCH_BUTTON_IDX = 7;
         const static int HW_RELEASE_BUTTON_IDX = 8;
         const static int HW_MISSILE_BUTTON_IDX = 9;
+        const static int HW_LAUNCH_INIT_BUTTON_IDX = 10;
 
         // TODO: Actually define these
         const static float WHEEL_RPM_FULL_SPEED;

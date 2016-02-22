@@ -91,6 +91,7 @@ int HardwareManager::Update(){
     int ret = 0;
     ret |= this->move();
     ret |= this->launch();
+    ret |= this->release();
     ret |= this->suck();
     ret |= this->climb();
     return ret;
@@ -110,19 +111,22 @@ int HardwareManager::move(){
 }
 
 int HardwareManager::launch(){
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
-        SmartDashboard::PutBoolean("Shooting",true);
+    // Just put this shit here for now
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_INIT_BUTTON_IDX)->Get()){
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(-1);
+    }else{
+        this->m_talons["leftShoot"]->Set(0);
+        this->m_talons["rightShoot"]->Set(0);
+    }
+
+    // Don't shoot it until the driver is ready.
+    // They most likely won't be ready until leftShoot and rightShoot are done
+    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
+        SmartDashboard::PutBoolean("Shooting",true);
         this->m_servos["flap thing"]->Set(0);
     }else{
         SmartDashboard::PutBoolean("Shooting",false);
-        // DO NOTHING BECAUSE THIS IS A STUPID THING TO DO
-        // Move the launchers backwards constantly to keep the ball from falling out
-        // NOTE: May be too strong of a speed (maybe 10%?)
-        this->m_talons["leftShoot"]->Set(0);
-        this->m_talons["rightShoot"]->Set(0);
-        // EXCEPT FOR THIS
         this->m_servos["flap thing"]->Set(180);
     }
     return 0;
