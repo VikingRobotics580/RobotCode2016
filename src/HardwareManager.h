@@ -115,6 +115,7 @@ class HardwareManager: public BaseManager {
         //sensor_map m_sensors;
         RobotDrive* m_drive;
         JoystickManagerManager* m_jman;
+        Timer* m_internal_timer;
 };
 
 #endif

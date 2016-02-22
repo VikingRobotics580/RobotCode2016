@@ -1,3 +1,6 @@
+// TODO: Find out why the SmartDashboard values aren't being put to the SmartDashboard
+
+
 
 #include "HardwareManager.h"
 
@@ -91,7 +94,7 @@ int HardwareManager::Update(){
     int ret = 0;
     ret |= this->move();
     ret |= this->launch();
-    ret |= this->release();
+    //ret |= this->release();
     ret |= this->suck();
     ret |= this->climb();
     return ret;
@@ -124,24 +127,24 @@ int HardwareManager::launch(){
     // They most likely won't be ready until leftShoot and rightShoot are done
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
         SmartDashboard::PutBoolean("Shooting",true);
-        this->m_servos["flap thing"]->Set(0);
+        this->m_servos["flap thing"]->SetAngle(180);
     }else{
         SmartDashboard::PutBoolean("Shooting",false);
-        this->m_servos["flap thing"]->Set(180);
+        this->m_servos["flap thing"]->SetAngle(0);
     }
     return 0;
 }
 
 int HardwareManager::release(){
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RELEASE_BUTTON_IDX)->Get()){
-        this->m_talons["leftShoot"]->Set(0.2);
-        this->m_talons["rightShoot"]->Set(0.2);
-        this->m_servos["flap thing"]->Set(0);
+        this->m_talons["leftShoot"]->Set(0.4);
+        this->m_talons["rightShoot"]->Set(-0.4);
+        this->m_servos["flap thing"]->SetAngle(180);
         SmartDashboard::PutBoolean("Releasing",true);
         // Also, should it be before or after the motors start up?
     }else{
         SmartDashboard::PutBoolean("Releasing",false);
-        this->m_servos["flap thing"]->Set(180);
+        this->m_servos["flap thing"]->SetAngle(0);
     }
     return 0;
 }
