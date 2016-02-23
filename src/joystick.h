@@ -24,6 +24,7 @@ class joystick {
 
     public:
         joystick(int,int,int,HardwareManager*);
+        joystick(Joystick*,int,int,HardwareManager*);
         ~joystick();
         int Init(void);
         float GetButton(int);

@@ -1,4 +1,5 @@
 #include "joystick.h"
+#include "macros.h"
 
 joystick::joystick(int id, int num_buttons, int num_axes, HardwareManager* hwm):
     m_id(id),
@@ -9,6 +10,19 @@ joystick::joystick(int id, int num_buttons, int num_axes, HardwareManager* hwm):
     m_axis_fakes()
 {
     m_joystick = new Joystick(id);
+    m_hardware_manager = hwm;
+}
+
+joystick::joystick(Joystick* joy,int num_buttons,int num_axes,HardwareManager* hwm):
+    m_id(0),
+    m_button_amt(num_buttons),
+    m_axis_amt(num_axes),
+    m_joybuttons(),
+    m_button_fakes(),
+    m_axis_fakes()
+{
+    log_warn("DO NOT USE THIS CONSTRUCTOR!");
+    m_joystick = joy;
     m_hardware_manager = hwm;
 }
 
