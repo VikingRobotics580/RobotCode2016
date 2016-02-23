@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "WPILib.h"
 
@@ -12,6 +13,8 @@
 #include "BaseManager.h"
 #include "structs.h"
 #include "macros.h"
+
+class joystick;
 
 typedef std::map<std::string,SpeedController*> talon_map;
 typedef std::map<std::string,Servo*> servo_map;
@@ -41,6 +44,7 @@ class HardwareManager: public BaseManager {
         const static float DIST_SENSOR_CONST;
 
         HardwareManager(JoystickManagerManager*);
+        HardwareManager(std::vector<joystick*>&);
         virtual ~HardwareManager();
 
         int Init() override;
@@ -125,6 +129,7 @@ class HardwareManager: public BaseManager {
         RobotDrive* m_drive;
         JoystickManagerManager* m_jman;
         Timer* m_internal_timer;
+        std::vector<joystick*> m_joysticks;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 
 #include "HardwareManager.h"
+#include "joystick.h"
 
 
 const float HardwareManager::WHEEL_RPM_FULL_SPEED = 0.0;
@@ -16,10 +17,24 @@ HardwareManager::HardwareManager(JoystickManagerManager* jman):
     m_talons(),
     m_servos(),
     m_anaios(),
-    m_digios()
+    m_digios(),
+    m_joysticks()
 {
     m_drive = NULL;
     m_jman = jman;
+}
+
+HardwareManager::HardwareManager(std::vector<joystick*>& joysticks):
+    BaseManager(),
+    m_finished(false),
+    m_talons(),
+    m_servos(),
+    m_anaios(),
+    m_digios(),
+    m_joysticks(joysticks)
+{
+    m_drive = NULL;
+    m_jman = NULL;
 }
 
 HardwareManager::~HardwareManager(){
