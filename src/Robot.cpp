@@ -19,7 +19,7 @@ Robot::Robot():
     //Joystick* j = new Joystick(0);
     //this->m_joy_man = new JoystickManager(j);
     this->m_joy_man = new JoystickManagerManager();
-    this->m_hw_man = new HardwareManager(m_joy_man);
+    this->m_hw_man = new HardwareManager(m_joysticks);
     this->m_auto_man = new AutonomousManager(m_joy_man);
 }
 
@@ -49,6 +49,17 @@ void Robot::RobotInit(){
     // The button box
     m_joysticks.push_back(new joystick(2,13,1,this->m_hw_man));
 
+    // Just in case ;)
+    try{
+        for(auto& j : m_joysticks){
+            if(j->Init()){
+                m_joystick_disabled = true;
+                break;
+            }
+        }
+    }catch(...){
+        m_joystick_disabled = true;
+    }
 
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
