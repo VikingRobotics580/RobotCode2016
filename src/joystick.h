@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "WPILib.h"
+#include "buttons.h"
 #include "HardwareManager.h"
 
 class joystick {
