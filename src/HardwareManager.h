@@ -106,6 +106,15 @@ class HardwareManager: public BaseManager {
 
         inline bool hasWinchBeenActivated(){ return this->m_servos["WinchActivate"]->GetAngle() == 360; };
 
+        // Has a certain amount of time passed since start
+        inline bool hasPassed(float start, float duration){
+            return (start+duration) < m_internal_timer->Get();
+        }
+
+        inline float getCurrentTime(){
+            return m_internal_timer->Get();
+        };
+
     private:
         bool m_finished;
         talon_map m_talons;
