@@ -11,6 +11,7 @@
 
 Robot::Robot():
     IterativeRobot(),
+    m_joysticks(),
     m_hardware_disabled(false),
     m_joystick_disabled(false),
     m_autonomo_disabled(false)
@@ -37,7 +38,18 @@ void Robot::RobotInit(){
 
     m_joystick_disabled = this->m_joy_man->Init();
 
+
     m_hardware_disabled = this->m_hw_man->Init();
+
+
+    log_info("Registering joystick objects.");
+    // The driver sticks
+    m_joysticks.push_back(new joystick(0,1,8,this->m_hw_man));
+    m_joysticks.push_back(new joystick(1,1,8,this->m_hw_man));
+    // The button box
+    m_joysticks.push_back(new joystick(2,13,1,this->m_hw_man));
+
+
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
     this->m_auto_man->setFilename("auto_1.joy");

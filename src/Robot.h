@@ -8,9 +8,11 @@
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
+#include <vector>
 #include "HardwareManager.h"
 #include "JoystickManagerManager.h"
 #include "AutonomousManager.h"
+#include "joystick.h"
 
 class IterativeRobot;
 
@@ -130,12 +132,12 @@ class Robot: public IterativeRobot{
         JoystickManagerManager* m_joy_man;
         AutonomousManager* m_auto_man;
 
+        std::vector<joystick*> m_joysticks;
+
         // Disable various managers if they fail to initialize
         bool m_hardware_disabled;
         bool m_joystick_disabled;
         bool m_autonomo_disabled;
 };
-
-
 
 #endif
