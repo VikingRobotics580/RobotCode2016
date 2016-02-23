@@ -124,13 +124,13 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
-    this->m_drive->TankDrive(-m_jman->getJoystickManager(0)->GetJoystick()->GetY(),-m_jman->getJoystickManager(1)->GetJoystick()->GetY());
+    this->m_drive->TankDrive(-m_joysticks[0]->GetAxis(2),-m_joysticks[1]->GetAxis(2));
     return 0;
 }
 
 int HardwareManager::launch(){
     // Just put this shit here for now
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_INIT_BUTTON_IDX)->Get()){
+    if(m_joysticks[2]->GetButton(LAUNCH_INIT_BUTTON)){
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(-1);
     }else{
@@ -140,7 +140,7 @@ int HardwareManager::launch(){
 
     // Don't shoot it until the driver is ready.
     // They most likely won't be ready until leftShoot and rightShoot are done
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
+    if(m_joysticks[2]->GetButton(LAUNCH_BUTTON)){
         SmartDashboard::PutBoolean("Shooting",true);
         this->m_servos["flap thing"]->SetAngle(180);
     }else{
@@ -151,7 +151,7 @@ int HardwareManager::launch(){
 }
 
 int HardwareManager::release(){
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RELEASE_BUTTON_IDX)->Get()){
+    if(m_joysticks[2]->GetButton(RELEASE_BUTTON)){
         this->m_talons["leftShoot"]->Set(0.4);
         this->m_talons["rightShoot"]->Set(-0.4);
         this->m_servos["flap thing"]->SetAngle(180);
@@ -182,7 +182,7 @@ int HardwareManager::uninit_suck(){
 int HardwareManager::suck(){
     // TODO: Add pre-suck and post-suck stuff
     // Actually, is there anything it init and post init?
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_SUCK_BUTTON_IDX)->Get()){
+    if(m_joysticks[2]->GetButton(SUCK_BUTTON)){
         SmartDashboard::PutBoolean("Sucking",true);
         this->m_talons["intake"]->Set(1);
         this->m_talons["leftShoot"]->Set(-0.6);
@@ -202,7 +202,7 @@ int HardwareManager::climb(){
     if(this->move_arm()) return 1;
 
     // Winch stuff
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_WINCH_BUTTON_IDX)){
+    if(m_joysticks[2]->GetButton(WINCH_BUTTON)){
         SmartDashboard::PutBoolean("Climbing",true);
         //if(this->m_servos["WinchActivate"]->GetAngle() == 180)
             //this->m_talons["ArmExtendMotor"]->Set(-1);
@@ -216,21 +216,21 @@ int HardwareManager::climb(){
 
 // The arm is moved by that arcade stick thing that is basically buttons rather than axes
 int HardwareManager::move_arm(){
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get()){
+    if(m_joysticks[2]->GetButton(RAISE_BUTTON)){
         SmartDashboard::PutString("Arm Y: ","UP");
         log_test("ARM Y:UP");
         this->m_servos["ArmRaiseServo"]->SetAngle(180);
-    }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get()){
+    }else if(m_joysticks[2]->GetButton(LOWER_BUTTON)){
         SmartDashboard::PutString("Arm Y: ","DOWN");
         log_test("ARM Y:DWN");
         this->m_servos["ArmRaiseServo"]->SetAngle(0);
     }
 
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_EXTND_BUTTON_IDX)->Get()){
+    if(m_joysticks[2]->GetButton(EXTEND_BUTTON)){
         SmartDashboard::PutString("Arm Extend: ","FWD");
         log_test("ARM EXT:FWD");
         this->m_talons["ArmExtendMotor"]->Set(1);
-    }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RETRCT_BUTTON_IDX)->Get()){
+    }else if(m_joysticks[2]->GetButton(RETRACT_BUTTON)){
         SmartDashboard::PutString("Arm Extend: ","REV");
         log_test("ARM EXT:REV");
         this->m_talons["ArmExtendMotor"]->Set(-1);
