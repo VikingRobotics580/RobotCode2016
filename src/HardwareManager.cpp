@@ -142,7 +142,7 @@ int HardwareManager::launch(){
     // They most likely won't be ready until leftShoot and rightShoot are done
     if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
         SmartDashboard::PutBoolean("Shooting",true);
-        this->m_servos["flap thing"]->SetAngle(180);
+        this->m_servos["flap thing"]->SetAngle(45);
     }else{
         SmartDashboard::PutBoolean("Shooting",false);
         this->m_servos["flap thing"]->SetAngle(0);
