@@ -39,9 +39,6 @@ void Robot::RobotInit(){
     m_joystick_disabled = this->m_joy_man->Init();
 
 
-    m_hardware_disabled = this->m_hw_man->Init();
-
-
     log_info("Registering joystick objects.");
     // The driver sticks
     m_joysticks.push_back(new joystick(0,1,8,this->m_hw_man));
@@ -58,8 +55,13 @@ void Robot::RobotInit(){
             }
         }
     }catch(...){
+        log_err("Initialization of one of the joysticks failed. Disabling joysticks.");
         m_joystick_disabled = true;
     }
+
+    this->m_hw_man->setJoystickVector(m_joysticks);
+
+    m_hardware_disabled = this->m_hw_man->Init();
 
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
@@ -88,10 +90,14 @@ void Robot::TeleopInit(){
 }
 
 void Robot::TestInit(){
-    /*
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->getAllTalons()["TESTSERVO"]->Set(0.5);
-        */
+    for(int j=0; j<3; j++){
+        for(int a=0; a<m_joysticks[j]->getAAmt(); a++){
+            printf("Joystick(%d) - Axis(%d)",j,a);
+            printf("-%f\n",m_joysticks[j]->GetAxis(a));
+        }
+        for(int b=0; b<m_joysticks[j]->getBAmt(); b++)
+            log_test("Joystick(%d) - Button(%d)-%d",j,b,m_joysticks[j]->GetButton(b));
+    }
 }
 
 void Robot::DisabledInit(){
@@ -122,8 +128,10 @@ void Robot::TeleopPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hw_man->uninit_suck();
         */
+    /*
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
+        */
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
 }
@@ -131,10 +139,6 @@ void Robot::TeleopPeriodic(){
 void Robot::TestPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(0);
-    /*
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->getAllTalons()["TESTTALON"]->Set(1);
-        */
 }
 
 void Robot::DisabledPeriodic(){
