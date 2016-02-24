@@ -119,6 +119,8 @@ class HardwareManager: public BaseManager {
             return m_internal_timer->Get();
         };
 
+        inline void setJoystickVector(std::vector<joystick*>& joy){ this->m_joysticks = joy; };
+
     private:
         bool m_finished;
         talon_map m_talons;

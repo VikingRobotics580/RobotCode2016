@@ -22,6 +22,7 @@ HardwareManager::HardwareManager(JoystickManagerManager* jman):
 {
     m_drive = NULL;
     m_jman = jman;
+    m_internal_timer = new Timer();
 }
 
 HardwareManager::HardwareManager(std::vector<joystick*>& joysticks):
@@ -35,6 +36,7 @@ HardwareManager::HardwareManager(std::vector<joystick*>& joysticks):
 {
     m_drive = NULL;
     m_jman = NULL;
+    m_internal_timer = new Timer();
 }
 
 HardwareManager::~HardwareManager(){
@@ -101,6 +103,9 @@ int HardwareManager::Init(){
     this->m_servos["TESTSERVO"]->SetAngle(0);
     this->m_servos["WinchActivate"]->SetAngle(0);
 
+    log_info("Starting Timer.");
+    this->m_internal_timer->Start();
+
     log_info("Done Initializing HardwareManager.");
     return 0;
 }
@@ -124,13 +129,24 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
+    /*
+    log_test("Checking Axes.");
+    try{
+        log_test("joy=%f",m_joysticks[0]->GetAxis(2));
+    }catch(...){
+        log_test("a normal error occurred.");
+    }
+    log_test("Calling HardwareManager::move()");
+    */
     this->m_drive->TankDrive(-m_joysticks[0]->GetAxis(2),-m_joysticks[1]->GetAxis(2));
+    //log_test("Done calling HardwareManager::move()");
     return 0;
 }
 
 int HardwareManager::launch(){
     // Just put this shit here for now
     if(m_joysticks[2]->GetButton(LAUNCH_INIT_BUTTON)){
+        log_test("Initializing Launch Mechanism...");
         this->m_talons["leftShoot"]->Set(1);
         this->m_talons["rightShoot"]->Set(-1);
     }else{
@@ -141,6 +157,7 @@ int HardwareManager::launch(){
     // Don't shoot it until the driver is ready.
     // They most likely won't be ready until leftShoot and rightShoot are done
     if(m_joysticks[2]->GetButton(LAUNCH_BUTTON)){
+        log_test("Launching..."); // pew pew
         SmartDashboard::PutBoolean("Shooting",true);
         this->m_servos["flap thing"]->SetAngle(180);
     }else{
