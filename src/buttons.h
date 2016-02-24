@@ -14,5 +14,9 @@
 #define MISSILE_BUTTON       9
 #define LAUNCH_INIT_BUTTON   10
 
+#define AUTO_SWITCH_1		 11
+#define AUTO_SWITCH_2		 12
+#define AUTO_SWITCH_3		 13
+
 #endif
 
