@@ -9,6 +9,7 @@ joystick::joystick(int id, int num_buttons, int num_axes, HardwareManager* hwm):
     m_button_fakes(),
     m_axis_fakes()
 {
+    log_test("joystick %d constructed.",id);
     m_joystick = new Joystick(id);
     m_hardware_manager = hwm;
 }
@@ -37,18 +38,22 @@ int joystick::Init(){
         m_joybuttons.push_back(new JoystickButton(m_joystick,i+1));
         m_button_fakes.push_back({0.0,0.0,0.0});
     }
+    for(int i=0; i<m_axis_amt;i++){
+        m_axis_fakes.push_back({0.0,0.0,0.0});
+    }
+    log_info("joystick %d initialized with %d buttons and %d axes.",m_id,m_button_amt,m_axis_amt);
     return 0;
 }
 
-float joystick::GetButton(int id){
-    if(m_hardware_manager->hasPassed(m_button_fakes[id][0],m_button_fakes[id][1]))
+int joystick::GetButton(int id){
+    if(m_hardware_manager->hasPassed(m_button_fakes.at(id).at(0),m_button_fakes[id][1])){
         return m_joybuttons[id]->Get();
-    else
-        return m_button_fakes[id][2];
+    }else
+        return (int)(m_button_fakes[id][2]);
 }
 
 float joystick::GetAxis(int id){
-    if(m_hardware_manager->hasPassed(m_axis_fakes[id][0],m_axis_fakes[id][1]))
+    if(m_hardware_manager->hasPassed(m_axis_fakes.at(id).at(0),m_axis_fakes[id][1]))
         return m_joystick->GetRawAxis(id);
     else
         return m_axis_fakes[id][2];

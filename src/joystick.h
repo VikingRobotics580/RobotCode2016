@@ -28,13 +28,17 @@ class joystick {
         joystick(Joystick*,int,int,HardwareManager*);
         ~joystick();
         int Init(void);
-        float GetButton(int);
+        int GetButton(int);
         float GetAxis(int);
         void FakeButton(int,float,float);
         void FakeAxis(int,float,float);
 
         inline Joystick* GetJoystick(){ return m_joystick; };
         inline JoystickButton* GetJoystickButton(int id){ return m_joybuttons[id]; };
+
+        inline int getID(){ return m_id; };
+        inline int getBAmt(){ return m_button_amt; };
+        inline int getAAmt(){ return m_axis_amt; };
 };
 
 #endif
