@@ -14,10 +14,14 @@
 #include "AutonomousManager.h"
 #include "joystick.h"
 
+enum class RModes { TELEOP=0, AUTO=1, TEST=2, DISABLED=3 };
+
 class IterativeRobot;
 
 class Robot: public IterativeRobot{
     public:
+        static RModes s_mode;
+
         /*
          * Robot - Constructor
          * Accepts nothing
@@ -130,6 +134,7 @@ class Robot: public IterativeRobot{
     private:
         HardwareManager* m_hw_man;
         JoystickManagerManager* m_joy_man;
+        JoystickManager* m_jman;
         AutonomousManager* m_auto_man;
 
         std::vector<joystick*> m_joysticks;

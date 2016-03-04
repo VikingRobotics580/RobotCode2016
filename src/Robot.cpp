@@ -9,6 +9,8 @@
 #include "JoystickManager.h"
 #include "macros.h"
 
+RModes Robot::s_mode = RModes::DISABLED;
+
 Robot::Robot():
     IterativeRobot(),
     m_joysticks(),
@@ -21,6 +23,8 @@ Robot::Robot():
     this->m_joy_man = new JoystickManagerManager();
     this->m_hw_man = new HardwareManager(m_joysticks);
     this->m_auto_man = new AutonomousManager(m_joy_man);
+
+    this->m_jman = new joystickManager(m_hw_man);
 }
 
 Robot::~Robot(){
@@ -82,12 +86,16 @@ void Robot::RobotInit(){
 }
 
 void Robot::AutonomousInit(){
+    Robot::s_mode = RModes::AUTO;
+
     if(!this->m_hardware_disabled)
         this->m_hw_man->init_suck();
     m_autonomo_disabled = this->m_auto_man->Init();
 }
 
 void Robot::TeleopInit(){
+    Robot::s_mode = RModes::TELEOP;
+
     /*
     if(!this->m_hardware_disabled)
         this->m_hw_man->init_suck();
@@ -95,6 +103,8 @@ void Robot::TeleopInit(){
 }
 
 void Robot::TestInit(){
+    Robot::s_mode = RModes::TEST;
+
     for(int j=0; j<3; j++){
         for(int a=0; a<m_joysticks[j]->getAAmt(); a++){
             printf("Joystick(%d) - Axis(%d)",j,a);
@@ -106,6 +116,7 @@ void Robot::TestInit(){
 }
 
 void Robot::DisabledInit(){
+    Robot::s_mode = RModes::DISABLED;
 }
 
 void Robot::AutonomousPeriodic(){
@@ -114,6 +125,10 @@ void Robot::AutonomousPeriodic(){
     // If anything is disabled, don't use it
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
+
+    if(!this->m_joystick_disabled)
+        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
+
     if(!this->m_autonomo_disabled)
         this->m_autonomo_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_auto_man->Update();
     if(!this->m_hardware_disabled)
@@ -139,17 +154,25 @@ void Robot::TeleopPeriodic(){
         */
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
+    if(!this->m_joystick_disabled)
+        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 }
 
 void Robot::TestPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(0);
+
+    if(!this->m_joystick_disabled)
+        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 }
 
 void Robot::DisabledPeriodic(){
     // TODO: Add something here to hold the robot in place until we can get it down.
     if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
         log_warn("WARNING! NOT IMPLEMENTED YET!");
+
+    if(!this->m_joystick_disabled)
+        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 }
 
 void Robot::End(){
