@@ -51,6 +51,7 @@ class HardwareManager: public BaseManager {
         int Update() override;
         bool IsFinished() override;
         int End() override;
+
         int move();
         int launch();
         int suck();
@@ -61,6 +62,13 @@ class HardwareManager: public BaseManager {
         int uninit_suck();
         int move_arm();
         int stop_suck();
+
+        int init_launch();
+        int reset_launch();
+        int raise();
+        int lower();
+        int extend();
+        int retract();
 
         float getDistanceSensorValue();
 
