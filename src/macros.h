@@ -34,7 +34,7 @@
 
 // Whether or not to enable button faking in joystick objects
 // Comment out the following line to disable
-#define ENABLE_JOYSTICK_FAKING
+//#define ENABLE_JOYSTICK_FAKING
 
 /*
  * LOGGING FUNCTIONS
