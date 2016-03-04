@@ -45,18 +45,27 @@ int joystick::Init(){
     return 0;
 }
 
+// :)
 int joystick::GetButton(int id){
+#ifdef ENABLE_JOYSTICK_FAKING
     if(m_hardware_manager->hasPassed(m_button_fakes.at(id).at(0),m_button_fakes[id][1])){
+#endif
         return m_joybuttons[id]->Get();
+#ifdef ENABLE_JOYSTICK_FAKING
     }else
         return (int)(m_button_fakes[id][2]);
+#endif
 }
 
 float joystick::GetAxis(int id){
+#ifdef ENABLE_JOYSTICK_FAKING
     if(m_hardware_manager->hasPassed(m_axis_fakes.at(id).at(0),m_axis_fakes[id][1]))
+#endif
         return m_joystick->GetRawAxis(id);
+#ifdef ENABLE_JOYSTICK_FAKING
     else
         return m_axis_fakes[id][2];
+#endif
 }
 
 void joystick::FakeButton(int id, float value, float duration){

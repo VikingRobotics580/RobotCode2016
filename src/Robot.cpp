@@ -46,6 +46,11 @@ void Robot::RobotInit(){
     // The button box
     m_joysticks.push_back(new joystick(2,13,1,this->m_hw_man));
 
+#ifndef ENABLE_JOYSTICK_FAKING
+    log_warn("Joystick faking has been disabled!\n \
+            If you feel that this is incorrect, please talk to a programmer.");
+#endif
+
     // Just in case ;)
     try{
         for(auto& j : m_joysticks){

@@ -32,6 +32,9 @@
 // Whether to hold a funeral for a manager that has failed.
 #define MANAGER_FUNERAL true
 
+// Whether or not to enable button faking in joystick objects
+// Comment out the following line to disable
+#define ENABLE_JOYSTICK_FAKING
 
 /*
  * LOGGING FUNCTIONS
