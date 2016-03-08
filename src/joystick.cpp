@@ -14,6 +14,8 @@ joystick::joystick(int id, int num_buttons, int num_axes, HardwareManager* hwm):
     m_hardware_manager = hwm;
 }
 
+// NOTE: This constructor is unable to set m_id properly
+// Please do not use it, and call the other one instead
 joystick::joystick(Joystick* joy,int num_buttons,int num_axes,HardwareManager* hwm):
     m_id(0),
     m_button_amt(num_buttons),
