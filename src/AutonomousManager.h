@@ -97,6 +97,9 @@ class AutonomousManager: public BaseManager{
         inline void setFilename(std::string& fname){ this->m_filename = fname; };
         inline void setFilename(const char* fname){ this->m_filename = fname; };
 
+        inline void setMode(int mode){ this->m_mode = mode; };
+        inline int getMode(){ return this->m_mode; };
+
     protected:
         /*
          * mode
