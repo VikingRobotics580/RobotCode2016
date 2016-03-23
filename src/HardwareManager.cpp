@@ -133,6 +133,11 @@ int HardwareManager::move(){
     return 0;
 }
 
+int HardwareManager::move(float left,float right){
+    this->m_drive->TankDrive(-left,right);
+    return 0;
+}
+
 int HardwareManager::launch(){
     SmartDashboard::PutBoolean("Shooting",true);
     log_test("Launching..."); // pew pew

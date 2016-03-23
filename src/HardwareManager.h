@@ -53,6 +53,7 @@ class HardwareManager: public BaseManager {
         int End() override;
 
         int move();
+        int move(float,float);
         int launch();
         int suck();
         int climb();
