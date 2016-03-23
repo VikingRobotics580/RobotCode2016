@@ -34,8 +34,7 @@ int joystickManager::Update(){
     RModes mode = Robot::s_mode;
     switch(mode){
         case RModes::TELEOP:
-            m_hardware_manager->move();
-            return this->checkTeleopButtons();
+            return m_hardware_manager->move() | this->checkTeleopButtons();
         case RModes::AUTO:
             return this->checkAutoButtons();
         case RModes::TEST:
@@ -105,6 +104,16 @@ int joystickManager::checkTestButtons(){
 }
 
 int joystickManager::checkAutoButtons(){
+    int auto_mode = 0;
+
+    auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_1);
+    auto_mode <<= 1;
+    auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_2);
+    auto_mode <<= 1;
+    auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_3);
+
+    // TODO: Find a way to send this to AutonomousManager
+
     return 0;
 }
 
