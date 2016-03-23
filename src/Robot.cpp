@@ -131,7 +131,7 @@ void Robot::AutonomousPeriodic(){
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 
     if(!this->m_autonomo_disabled)
-        this->m_autonomo_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_auto_man->Update();
+        this->m_autonomo_disabled = DISABLE_MANAGER_ON_FAILURE && (this->m_auto_man->Update()==1); // Update will always return 1 upon failure, 2 on not implemented, and 0 upon success
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
 
@@ -145,14 +145,6 @@ void Robot::TeleopPeriodic(){
     SmartDashboard::PutBoolean("Joystick Disabled",this->m_joystick_disabled);
     SmartDashboard::PutBoolean("Autonomous Disabled",this->m_autonomo_disabled);
 
-    /*
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->uninit_suck();
-        */
-    /*
-    if(!this->m_joystick_disabled)
-        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
-        */
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
     if(!this->m_joystick_disabled)
@@ -170,7 +162,7 @@ void Robot::TestPeriodic(){
 void Robot::DisabledPeriodic(){
     // TODO: Add something here to hold the robot in place until we can get it down.
     if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
-        log_warn("WARNING! NOT IMPLEMENTED YET!");
+        log_warn("WARNING! NOT IMPLEMENTED YET!\nNote to Tyler: Remember to ask Rick if we need to do something here.");
 
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
