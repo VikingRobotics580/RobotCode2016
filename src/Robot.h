@@ -11,6 +11,7 @@
 #include <vector>
 #include "HardwareManager.h"
 #include "JoystickManagerManager.h"
+#include "joystickManager.h"
 #include "AutonomousManager.h"
 #include "joystick.h"
 
@@ -134,7 +135,7 @@ class Robot: public IterativeRobot{
     private:
         HardwareManager* m_hw_man;
         JoystickManagerManager* m_joy_man;
-        JoystickManager* m_jman;
+        joystickManager* m_jman;
         AutonomousManager* m_auto_man;
 
         std::vector<joystick*> m_joysticks;
