@@ -21,7 +21,8 @@ AutonomousManager::AutonomousManager(JoystickManagerManager* jman) :
     m_current_instruction(0),
     m_instruction_amt(0),
     m_useHardcodedAuto(false),
-    m_finished(false)
+    m_finished(false),
+    m_mode(0)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
@@ -50,6 +51,7 @@ AutonomousManager::~AutonomousManager(){
 
 int AutonomousManager::Init(){
     log_info("AutonomousManager::Init()");
+#ifdef USE_EXPERIMENTAL_AUTO_METHOD
     this->m_current_instruction = 0;
     // Don't initialize if the filename hasn't been set yet
     // Print an error as well
@@ -65,6 +67,10 @@ int AutonomousManager::Init(){
         this->m_useHardcodedAuto = true;
     }
     m_timer->Start();
+#else
+    log_info("USE_EXPERIMENTAL_AUTO_METHOD=true");
+    this->m_useHardcodedAuto = true;
+#endif
     return 0;
 }
 
@@ -97,12 +103,55 @@ void AutonomousManager::Interrupted(){
 */
 
 int AutonomousManager::mode(){
-    if(this->HasTimePassed(10)){
-        this->m_jman->getJoystickManager(0)->FakePressButton(HardwareManager::HW_LAUNCH_BUTTON_IDX,1);
-        log_test("Beep Boop launching.");
-    }else
-        this->m_jman->getJoystickManager(0)->FakeJoystickX(1);
+    switch(this->m_mode){
+        case 0:
+            return this->mode0();
+        case 1:
+            return this->mode1();
+        case 2:
+            return this->mode2();
+        case 3:
+            return this->mode3();
+        case 4:
+            return this->mode4();
+        case 5:
+            return this->mode5();
+        case 6:
+            return this->mode6();
+        case 7:
+            return this->mode7();
+        default:
+            log_err("For some reason m_mode is some value other than the allowed value. How that is possible is beyond me. The value is %d. Please tell a programmer and promptly panic whenever it is most convenient for you.",m_mode);
+            return 1;
+    }
+}
+
+// mode0 should be left blank, as a way to do nothing
+int AutonomousManager::mode0(){
     return 0;
+}
+
+// TODO: Define the rest of these
+int AutonomousManager::mode1(){
+    return 2;
+}
+int AutonomousManager::mode2(){
+    return 2;
+}
+int AutonomousManager::mode3(){
+    return 2;
+}
+int AutonomousManager::mode4(){
+    return 2;
+}
+int AutonomousManager::mode5(){
+    return 2;
+}
+int AutonomousManager::mode6(){
+    return 2;
+}
+int AutonomousManager::mode7(){
+    return 2;
 }
 
 int AutonomousManager::executeInstruction(instruction* instr){

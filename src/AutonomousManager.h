@@ -102,9 +102,25 @@ class AutonomousManager: public BaseManager{
          * mode
          * Accepts nothing
          * Returns 0 upon success and 1 upon failure
-         * Executes a hardcoded autonomous mode. Should only run if Init fails.
+         * Executes a hardcoded autonomous mode. Should only run if Init fails or if USE_EXPERIMENTAL_AUTO_METHOD is not defined
          */
         int mode();
+
+
+        /*
+         * modeN (where N is any number from 1 to the maximum possible Autonomous value)
+         * Accepts nothing
+         * A series of methods that each return 0 upon success and 1 upon failure
+         * A series of methods that perform hardcoded autonomous modes.
+         */
+        int mode0();
+        int mode1();
+        int mode2();
+        int mode3();
+        int mode4();
+        int mode5();
+        int mode6();
+        int mode7();
 
         /*
          * executeInstruction
@@ -154,6 +170,8 @@ class AutonomousManager: public BaseManager{
         bool m_finished;
 
         Timer* m_timer;
+
+        int m_mode;
 };
 
 
