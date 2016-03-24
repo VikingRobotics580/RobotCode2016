@@ -29,18 +29,23 @@ int joystickManager::Init(){
 
 int joystickManager::Update(){
     RModes mode = Robot::s_mode;
-    switch(mode){
-        case RModes::TELEOP:
-            return m_hardware_manager->move() | this->checkTeleopButtons();
-        case RModes::AUTO:
-            return this->checkAutoButtons();
-        case RModes::TEST:
-            return this->checkTestButtons();
-        case RModes::DISABLED:
-            return this->checkDisabledButtons();
-        default:
-            log_err("Unknown mode %d. Please contact a programmer.",mode);
-            return 1;
+    try{
+        switch(mode){
+            case RModes::TELEOP:
+                return m_hardware_manager->move(m_joysticks["leftHand"]->GetAxis(1),m_joysticks["rightHand"]->GetAxis(1)) | this->checkTeleopButtons();
+            case RModes::AUTO:
+                return this->checkAutoButtons();
+            case RModes::TEST:
+                return this->checkTestButtons();
+            case RModes::DISABLED:
+                return this->checkDisabledButtons();
+            default:
+                log_err("Unknown mode %d. Please contact a programmer.",mode);
+                return 1;
+        }
+    }catch(...){
+        // Catch all.
+        return 1;
     }
 }
 
@@ -91,7 +96,6 @@ int joystickManager::checkTeleopButtons(){
         ret |= m_hardware_manager->suck();
     else
         ret |= m_hardware_manager->stop_suck();
-
 
     return ret;
 }
