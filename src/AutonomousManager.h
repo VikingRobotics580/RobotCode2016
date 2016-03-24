@@ -33,23 +33,9 @@ class AutonomousManager: public BaseManager{
         /*
          * AutonomousManager - Constructor
          * Accepts no parameters
-         * Constructs AutonomousManager
-         */
-        AutonomousManager(JoystickManagerManager*);
-
-        /*
-         * AutonomousManager - Constructor
-         * Accepts no parameters
          * Constructs AutonomousManager 
          */
         AutonomousManager(HardwareManager*);
-
-        /*
-         * AutonomousManager - Constructor
-         * Accepts no parameters
-         * Constructs AutonomousManager
-         */
-        AutonomousManager(std::string&,JoystickManagerManager*);
 
         /*
          * AutonomousManager - Destructor
@@ -98,12 +84,6 @@ class AutonomousManager: public BaseManager{
          */
         //void Interrupted() override;
         
-        // What do you think this does
-        inline JoystickManagerManager* getJoystickManagerManager(){ return this->m_jman; };
-
-        inline void setFilename(std::string& fname){ this->m_filename = fname; };
-        inline void setFilename(const char* fname){ this->m_filename = fname; };
-
         inline void setMode(int mode){ this->m_mode = mode; };
         inline int getMode(){ return this->m_mode; };
 
@@ -132,39 +112,7 @@ class AutonomousManager: public BaseManager{
         int mode6();
         int mode7();
 
-        /*
-         * executeInstruction
-         * Accepts a command_struct (aka command) pointer
-         * Returns 0 upon success and 1 upon failure
-         * Executes the command
-         */
-        int executeInstruction(instruction*);
-
     private:
-        /*
-         * parseAutoSyntax
-         * Accepts nothing
-         * Returns 0 upon success and 1 upon failure
-         * Parses the contents of m_auto_raw_data into an array of instruction structs.
-         */
-        int parseAutoSyntax();
-
-        /*
-         * readFile
-         * Accepts nothing
-         * Returns 0 upon success and 1 upon error
-         * Reads the contents of m_filename into m_auto_raw_data
-         */
-        int readFile();
-
-        instruction** m_instructions;
-        std::string m_filename;
-
-        int m_current_instruction;
-        int m_instruction_amt;
-        std::ifstream::pos_type m_raw_data_size;
-        char* m_auto_raw_data;
-        JoystickManagerManager* m_jman;
         HardwareManager* m_hw_man;
 
         bool m_useHardcodedAuto;
