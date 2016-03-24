@@ -3,21 +3,18 @@
 #include "Robot.h"
 #include "buttons.h"
 
-joystickManager::joystickManager(HardwareManager* hw):
+joystickManager::joystickManager(HardwareManager* hw,Robot* robot):
     BaseManager(),
     m_joysticks()
 {
     this->m_hardware_manager = hw;
+    this->m_robot = robot;
     m_joysticks["leftHand"] = new joystick(0,1,5,hw);
     m_joysticks["rightHand"] = new joystick(1,1,5,hw);
     m_joysticks["buttonBox"] = new joystick(2,13,1,hw);
 }
 
 joystickManager::~joystickManager(){
-    /*
-    for(auto& joy : this->m_joysticks)
-        delete joy;
-        */
     delete m_joysticks["leftHand"];
     delete m_joysticks["rightHand"];
     delete m_joysticks["buttonBox"];
@@ -112,7 +109,8 @@ int joystickManager::checkAutoButtons(){
     auto_mode <<= 1;
     auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_3);
 
-    // TODO: Find a way to send this to AutonomousManager
+    if(this->m_robot->getAutoMan()->getMode() != auto_mode)
+        this->m_robot->getAutoMan()->setMode(auto_mode);
 
     return 0;
 }

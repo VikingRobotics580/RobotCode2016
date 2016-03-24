@@ -10,11 +10,13 @@
 #include "BaseManager.h"
 #include "HardwareManager.h"
 
+class Robot;
+
 typedef std::map<std::string,joystick*> jmap;
 
 class joystickManager: public BaseManager {
     public:
-        joystickManager(HardwareManager*);
+        joystickManager(HardwareManager*,Robot*);
         virtual ~joystickManager();
 
         int Init(void) override;
@@ -33,6 +35,7 @@ class joystickManager: public BaseManager {
         //std::vector<joystick*> m_joysticks;
         jmap m_joysticks;
         HardwareManager* m_hardware_manager;
+        Robot* m_robot;
 };
 
 #endif
