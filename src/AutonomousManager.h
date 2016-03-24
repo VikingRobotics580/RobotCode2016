@@ -187,6 +187,5 @@ class AutonomousManager: public BaseManager{
         float m_mode_start;
 };
 
-
-
 #endif
+
