@@ -13,6 +13,7 @@
 #include <fstream>
 #include "WPILib.h"
 
+#include "HardwareManager.h"
 #include "BaseManager.h"
 #include "JoystickManagerManager.h"
 #include "structs.h"
@@ -36,6 +37,13 @@ class AutonomousManager: public BaseManager{
          * Constructs AutonomousManager
          */
         AutonomousManager(JoystickManagerManager*);
+
+        /*
+         * AutonomousManager - Constructor
+         * Accepts no parameters
+         * Constructs AutonomousManager 
+         */
+        AutonomousManager(HardwareManager*);
 
         /*
          * AutonomousManager - Constructor
@@ -168,6 +176,7 @@ class AutonomousManager: public BaseManager{
         std::ifstream::pos_type m_raw_data_size;
         char* m_auto_raw_data;
         JoystickManagerManager* m_jman;
+        HardwareManager* m_hw_man;
 
         bool m_useHardcodedAuto;
         bool m_finished;
@@ -175,6 +184,7 @@ class AutonomousManager: public BaseManager{
         Timer* m_timer;
 
         int m_mode;
+        float m_mode_start;
 };
 
 

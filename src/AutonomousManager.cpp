@@ -22,10 +22,12 @@ AutonomousManager::AutonomousManager(JoystickManagerManager* jman) :
     m_instruction_amt(0),
     m_useHardcodedAuto(false),
     m_finished(false),
-    m_mode(0)
+    m_mode(0),
+    m_mode_start(0)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
+    this->m_hw_man = NULL;
     this->m_jman = jman;
     this->m_timer = new Timer();
 }
@@ -36,12 +38,31 @@ AutonomousManager::AutonomousManager(std::string& fname, JoystickManagerManager*
     m_current_instruction(0),
     m_instruction_amt(0),
     m_useHardcodedAuto(false),
-    m_finished(false)
+    m_finished(false),
+    m_mode_start(0)
 {
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
+    this->m_hw_man = NULL;
     this->m_jman = jman;
     this->m_timer = new Timer();
+}
+
+AutonomousManager::AutonomousManager(HardwareManager* hwman):
+    BaseManager(),
+    m_filename(""),
+    m_current_instruction(0),
+    m_instruction_amt(0),
+    m_useHardcodedAuto(false),
+    m_finished(false),
+    m_mode(0),
+    m_mode_start(0)
+{
+    this->m_instructions=NULL;
+    this->m_auto_raw_data=NULL;
+    this->m_jman = NULL;
+    this->m_timer = new Timer();
+    this->m_hw_man = hwman;
 }
 
 AutonomousManager::~AutonomousManager(){
@@ -68,9 +89,11 @@ int AutonomousManager::Init(){
     }
     m_timer->Start();
 #else
-    log_info("USE_EXPERIMENTAL_AUTO_METHOD=true");
+    log_info("USE_EXPERIMENTAL_AUTO_METHOD is not defined");
     this->m_useHardcodedAuto = true;
 #endif
+
+    this->m_mode_start = m_hw_man->getCurrentTime();
     return 0;
 }
 
@@ -131,13 +154,18 @@ int AutonomousManager::mode0(){
     return 0;
 }
 
-// TODO: Define the rest of these
 int AutonomousManager::mode1(){
-    return 2;
+    if(m_hw_man->hasPassed(m_mode_start,3)){
+        m_hw_man->move(0,0);
+    }else{
+        m_hw_man->move(0.5,0.5);
+    }
+    return 0;
 }
 int AutonomousManager::mode2(){
     return 2;
 }
+// TODO: Define the rest of these
 int AutonomousManager::mode3(){
     return 2;
 }
