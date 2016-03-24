@@ -23,7 +23,8 @@ Robot::Robot():
     //this->m_joy_man = new JoystickManager(j);
     this->m_joy_man = new JoystickManagerManager();
     this->m_hw_man = new HardwareManager(m_joysticks);
-    this->m_auto_man = new AutonomousManager(m_joy_man);
+    //this->m_auto_man = new AutonomousManager(m_joy_man);
+    this->m_auto_man = new AutonomousManager(m_hw_man);
 
     this->m_jman = new joystickManager(m_hw_man);
 }
