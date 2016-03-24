@@ -134,6 +134,7 @@ int HardwareManager::move(){
 }
 
 int HardwareManager::move(float left,float right){
+    // Reverse left
     this->m_drive->TankDrive(-left,right);
     return 0;
 }
