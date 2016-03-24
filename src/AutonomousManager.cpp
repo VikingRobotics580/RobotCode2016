@@ -29,7 +29,6 @@ AutonomousManager::AutonomousManager(JoystickManagerManager* jman) :
     this->m_auto_raw_data=NULL;
     this->m_hw_man = NULL;
     this->m_jman = jman;
-    this->m_timer = new Timer();
 }
 
 AutonomousManager::AutonomousManager(std::string& fname, JoystickManagerManager* jman) :
@@ -45,7 +44,6 @@ AutonomousManager::AutonomousManager(std::string& fname, JoystickManagerManager*
     this->m_auto_raw_data=NULL;
     this->m_hw_man = NULL;
     this->m_jman = jman;
-    this->m_timer = new Timer();
 }
 
 AutonomousManager::AutonomousManager(HardwareManager* hwman):
@@ -61,7 +59,6 @@ AutonomousManager::AutonomousManager(HardwareManager* hwman):
     this->m_instructions=NULL;
     this->m_auto_raw_data=NULL;
     this->m_jman = NULL;
-    this->m_timer = new Timer();
     this->m_hw_man = hwman;
 }
 
@@ -87,7 +84,6 @@ int AutonomousManager::Init(){
         log_info("Falling back to hardcoded Autonomous code.");
         this->m_useHardcodedAuto = true;
     }
-    m_timer->Start();
 #else
     log_info("USE_EXPERIMENTAL_AUTO_METHOD is not defined");
     this->m_useHardcodedAuto = true;

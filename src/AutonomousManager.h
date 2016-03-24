@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "WPILib.h"
 
 #include "HardwareManager.h"
 #include "BaseManager.h"
@@ -141,16 +140,6 @@ class AutonomousManager: public BaseManager{
          */
         int executeInstruction(instruction*);
 
-        /*
-         * HasTimePassed
-         * Accepts a float and an optional float
-         * Returns true if the time has passed, false otherwise
-         * Checks whether the passed amount of time has passed.
-         */
-        inline bool HasTimePassed(float sec,float offset=0){
-            return (m_timer->Get()-offset) >= sec;
-        }
-
     private:
         /*
          * parseAutoSyntax
@@ -180,8 +169,6 @@ class AutonomousManager: public BaseManager{
 
         bool m_useHardcodedAuto;
         bool m_finished;
-
-        Timer* m_timer;
 
         int m_mode;
         float m_mode_start;
