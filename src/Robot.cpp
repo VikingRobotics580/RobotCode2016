@@ -21,7 +21,6 @@ Robot::Robot():
 {
     this->m_hw_man = new HardwareManager(m_joysticks);
     this->m_auto_man = new AutonomousManager(m_hw_man);
-
     this->m_jman = new joystickManager(m_hw_man,this);
 }
 
@@ -63,7 +62,7 @@ void Robot::RobotInit(){
 
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
-    this->m_auto_man->setFilename("auto_1.joy");
+    //this->m_auto_man->setFilename("auto_1.joy");
     m_autonomo_disabled = this->m_auto_man->Init();
 
     log_test("Current Manager Status:");
