@@ -6,7 +6,6 @@
 
 #include "WPILib.h"
 #include "Robot.h"
-#include "JoystickManager.h"
 #include "joystickManager.h"
 #include "macros.h"
 
