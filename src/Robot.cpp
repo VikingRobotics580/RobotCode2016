@@ -135,9 +135,6 @@ void Robot::TeleopPeriodic(){
 }
 
 void Robot::TestPeriodic(){
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->getAllServos()["TESTSERVO"]->SetAngle(0);
-
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 }
