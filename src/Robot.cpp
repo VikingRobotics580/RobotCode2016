@@ -19,32 +19,19 @@ Robot::Robot():
     m_joystick_disabled(false),
     m_autonomo_disabled(false)
 {
-    //Joystick* j = new Joystick(0);
-    //this->m_joy_man = new JoystickManager(j);
-    this->m_joy_man = new JoystickManagerManager();
     this->m_hw_man = new HardwareManager(m_joysticks);
-    //this->m_auto_man = new AutonomousManager(m_joy_man);
     this->m_auto_man = new AutonomousManager(m_hw_man);
 
-    this->m_jman = new joystickManager(m_hw_man);
+    this->m_jman = new joystickManager(m_hw_man,this);
 }
 
 Robot::~Robot(){
     delete this->m_hw_man;
-    delete this->m_joy_man;
     delete this->m_auto_man;
+    delete this->m_jman;
 }
 
 void Robot::RobotInit(){
-    log_info("Registering JoystickManagers.");
-    // HOLY SHIT
-    m_joystick_disabled = this->m_joy_man->registerJM(new JoystickManager(new Joystick(0)));
-    m_joystick_disabled = this->m_joy_man->registerJM(new JoystickManager(new Joystick(1)));
-    m_joystick_disabled = this->m_joy_man->registerJM(new JoystickManager(new Joystick(2)));
-
-    m_joystick_disabled = this->m_joy_man->Init();
-
-
     log_info("Registering joystick objects.");
     // The driver sticks
     m_joysticks.push_back(new joystick(0,1,8,this->m_hw_man));
@@ -124,9 +111,6 @@ void Robot::DisabledInit(){
 void Robot::AutonomousPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hw_man->uninit_suck();
-    // If anything is disabled, don't use it
-    if(!this->m_joystick_disabled)
-        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_joy_man->Update();
 
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
@@ -172,11 +156,11 @@ void Robot::DisabledPeriodic(){
 void Robot::End(){
     if(this->m_hw_man->End()) log_err("A problem occurred during m_hw_man::End()!");
     if(this->m_auto_man->End()) log_err("A problem occurred during m_auto_man::End()!");
-    if(this->m_joy_man->End()) log_err("A problem occurred during m_joy_man::End()!");
+    if(this->m_jman->End()) log_err("A problem occurred during m_jman::End()!");
 }
 
 bool Robot::IsFinished(){
-    return this->m_hw_man->IsFinished() && this->m_auto_man->IsFinished() && this->m_joy_man->IsFinished();
+    return this->m_hw_man->IsFinished() && this->m_auto_man->IsFinished() && this->m_jman->IsFinished();
 }
 
 START_ROBOT_CLASS(Robot);
