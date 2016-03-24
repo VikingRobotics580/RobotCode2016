@@ -33,7 +33,7 @@
 #define MANAGER_FUNERAL true
 
 // A macro that enables experimental autonomous scripts. If this is commented out, then the same method as last year (hardcoded methods) is used
-#define USE_EXPERIMENTAL_AUTO_METHOD
+//#define USE_EXPERIMENTAL_AUTO_METHOD
 
 // Whether or not to enable button faking in joystick objects
 // Comment out the following line to disable
