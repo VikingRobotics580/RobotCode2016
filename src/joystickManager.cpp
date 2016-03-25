@@ -22,8 +22,9 @@ joystickManager::~joystickManager(){
 
 int joystickManager::Init(){
     int ret = 0;
-    for(auto& set : this->m_joysticks)
+    for(auto& set : this->m_joysticks){
         ret |= set.second->Init();
+    }
     return ret;
 }
 
@@ -63,39 +64,45 @@ int joystickManager::checkTeleopButtons(){
     // ALL THE STUFF GOES HERE ! :D
 
     // Initialize launcher
-    if(m_joysticks["buttonBox"]->GetButton(LAUNCH_INIT_BUTTON))
+    if(m_joysticks["buttonBox"]->GetButton(LAUNCH_INIT_BUTTON)){
         ret |= m_hardware_manager->init_launch();
+    }
 
     // Launch, release or reset
     // Order is important here, because launch takes precedence
-    if(m_joysticks["buttonBox"]->GetButton(LAUNCH_BUTTON))
+    if(m_joysticks["buttonBox"]->GetButton(LAUNCH_BUTTON)){
         ret |= m_hardware_manager->launch();
-    else if(m_joysticks["buttonBox"]->GetButton(RELEASE_BUTTON))
+    }else if(m_joysticks["buttonBox"]->GetButton(RELEASE_BUTTON)){
         ret |= m_hardware_manager->release();
-    else
+    }else{
         ret |= m_hardware_manager->reset_launch();
+    }
 
     // Do raise stuff
-    if(m_joysticks["buttonBox"]->GetButton(RAISE_BUTTON))
+    if(m_joysticks["buttonBox"]->GetButton(RAISE_BUTTON)){
         ret |= m_hardware_manager->raise();
-    else if(m_joysticks["buttonBox"]->GetButton(LOWER_BUTTON))
+    }else if(m_joysticks["buttonBox"]->GetButton(LOWER_BUTTON)){
         ret |= m_hardware_manager->lower();
+    }
 
     // Do Extend stuff
-    if(m_joysticks["buttonBox"]->GetButton(EXTEND_BUTTON))
+    if(m_joysticks["buttonBox"]->GetButton(EXTEND_BUTTON)){
         ret |= m_hardware_manager->extend();
-    else if(m_joysticks["buttonBox"]->GetButton(RETRACT_BUTTON))
+    }else if(m_joysticks["buttonBox"]->GetButton(RETRACT_BUTTON)){
         ret |= m_hardware_manager->retract();
+    }
 
     // Do winch stuff
-    if(m_joysticks["buttonBox"]->GetButton(WINCH_BUTTON))
+    if(m_joysticks["buttonBox"]->GetButton(WINCH_BUTTON)){
         ret |= m_hardware_manager->init_climb();
+    }
 
     // Do suck stuff
-    if(m_joysticks["buttonBox"]->GetButton(SUCK_BUTTON))
+    if(m_joysticks["buttonBox"]->GetButton(SUCK_BUTTON)){
         ret |= m_hardware_manager->suck();
-    else
+    }else{
         ret |= m_hardware_manager->stop_suck();
+    }
 
     return ret;
 }
@@ -120,6 +127,14 @@ int joystickManager::checkAutoButtons(){
 }
 
 int joystickManager::checkDisabledButtons(){
+    return 0;
+}
+
+int joystickManager::checkSanity(){
+    for(auto& set : m_joysticks){
+        if(set.second == NULL) return 1;
+        if(!set.second->checkSanity()) return 1;
+    }
     return 0;
 }
 

@@ -28,6 +28,7 @@ class joystickManager: public BaseManager {
         int checkTestButtons();
         int checkAutoButtons();
         int checkDisabledButtons();
+        int checkSanity();
 
         inline joystick* getJoystick(std::string& str){ return m_joysticks[str]; };
 
