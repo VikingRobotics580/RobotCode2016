@@ -140,8 +140,6 @@ class Robot: public IterativeRobot{
         joystickManager* m_jman;
         AutonomousManager* m_auto_man;
 
-        std::vector<joystick*> m_joysticks;
-
         // Disable various managers if they fail to initialize
         bool m_hardware_disabled;
         bool m_joystick_disabled;

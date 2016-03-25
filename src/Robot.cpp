@@ -13,12 +13,11 @@ RModes Robot::s_mode = RModes::DISABLED;
 
 Robot::Robot():
     IterativeRobot(),
-    m_joysticks(),
     m_hardware_disabled(false),
     m_joystick_disabled(false),
     m_autonomo_disabled(false)
 {
-    this->m_hw_man = new HardwareManager(m_joysticks);
+    this->m_hw_man = new HardwareManager();
     this->m_auto_man = new AutonomousManager(m_hw_man);
     this->m_jman = new joystickManager(m_hw_man,this);
 }
@@ -31,17 +30,13 @@ Robot::~Robot(){
 
 void Robot::RobotInit(){
     log_info("Registering joystick objects.");
-    // The driver sticks
-    m_joysticks.push_back(new joystick(0,1,8,this->m_hw_man));
-    m_joysticks.push_back(new joystick(1,1,8,this->m_hw_man));
-    // The button box
-    m_joysticks.push_back(new joystick(2,13,1,this->m_hw_man));
 
 #ifndef ENABLE_JOYSTICK_FAKING
     log_warn("Joystick faking has been disabled!\n \
             If you feel that this is incorrect, please talk to a programmer.");
 #endif
 
+    /*
     // Just in case ;)
     try{
         for(auto& j : m_joysticks){
@@ -56,8 +51,10 @@ void Robot::RobotInit(){
     }
 
     this->m_hw_man->setJoystickVector(m_joysticks);
+    */
 
     m_hardware_disabled = this->m_hw_man->Init();
+    m_joystick_disabled = this->m_jman->Init();
 
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
@@ -83,6 +80,13 @@ void Robot::AutonomousInit(){
 void Robot::TeleopInit(){
     Robot::s_mode = RModes::TELEOP;
 
+    if(m_hw_man == NULL){
+        log_warn("OH GOD! HardwareManager is NULL! D:");
+        m_hardware_disabled = true;
+    }
+
+    m_joystick_disabled = m_jman->checkSanity();
+
     /*
     if(!this->m_hardware_disabled)
         this->m_hw_man->init_suck();
@@ -92,6 +96,7 @@ void Robot::TeleopInit(){
 void Robot::TestInit(){
     Robot::s_mode = RModes::TEST;
 
+    /*
     for(int j=0; j<3; j++){
         for(int a=0; a<m_joysticks[j]->getAAmt(); a++){
             printf("Joystick(%d) - Axis(%d)",j,a);
@@ -100,6 +105,7 @@ void Robot::TestInit(){
         for(int b=0; b<m_joysticks[j]->getBAmt(); b++)
             log_test("Joystick(%d) - Button(%d)-%d",j,b,m_joysticks[j]->GetButton(b));
     }
+    */
 }
 
 void Robot::DisabledInit(){
@@ -123,10 +129,12 @@ void Robot::AutonomousPeriodic(){
 }
 
 void Robot::TeleopPeriodic(){
+    /*
     SmartDashboard::PutNumber("Distance",m_hw_man->getDistanceSensorValue());
     SmartDashboard::PutBoolean("Hardware Disabled",this->m_hardware_disabled);
     SmartDashboard::PutBoolean("Joystick Disabled",this->m_joystick_disabled);
     SmartDashboard::PutBoolean("Autonomous Disabled",this->m_autonomo_disabled);
+    */
 
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
@@ -135,8 +143,16 @@ void Robot::TeleopPeriodic(){
 }
 
 void Robot::TestPeriodic(){
+    /*
     if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
+        */
+
+    std::string str = "buttonBox";
+    //log_test("BAmt()=%d",stick->getBAmt());
+    log_test("Calling GetButton");
+    log_test("BAmt()=%d",m_jman->getJoystick(str)->getBAmt());
+    m_jman->getJoystick(str)->GetButton(1);
 }
 
 void Robot::DisabledPeriodic(){
