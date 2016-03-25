@@ -67,7 +67,9 @@ class HardwareManager: public BaseManager {
         int init_launch();
         int reset_launch();
         int raise();
+        int stop_raise();
         int lower();
+        int stop_lower();
         int extend();
         int retract();
 
