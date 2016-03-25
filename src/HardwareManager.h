@@ -44,7 +44,7 @@ class HardwareManager: public BaseManager {
         const static float DIST_SENSOR_CONST;
 
         HardwareManager(JoystickManagerManager*);
-        HardwareManager(std::vector<joystick*>&);
+        HardwareManager();
         virtual ~HardwareManager();
 
         int Init() override;

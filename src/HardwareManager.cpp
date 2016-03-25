@@ -25,14 +25,14 @@ HardwareManager::HardwareManager(JoystickManagerManager* jman):
     m_internal_timer = new Timer();
 }
 
-HardwareManager::HardwareManager(std::vector<joystick*>& joysticks):
+HardwareManager::HardwareManager():
     BaseManager(),
     m_finished(false),
     m_talons(),
     m_servos(),
     m_anaios(),
     m_digios(),
-    m_joysticks(joysticks)
+    m_joysticks()
 {
     m_drive = NULL;
     m_jman = NULL;
@@ -113,9 +113,11 @@ int HardwareManager::Init(){
 int HardwareManager::Update(){
     int ret = 0;
 
+    /*
     if(this->m_digios["ballDetector"]->Get()){
         ret |= this->stop_suck();
     }
+    */
 
     return ret;
 }
