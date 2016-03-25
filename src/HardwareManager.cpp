@@ -218,7 +218,7 @@ int HardwareManager::reset_launch(){
 int HardwareManager::raise(){
     SmartDashboard::PutString("Arm Y: ","UP");
     log_test("ARM Y:UP");
-    this->m_talons["armUpDown"]->Set(-0.5);
+    this->m_talons["armUpDown"]->Set(-0.3);
     return 0;
 }
 
@@ -230,7 +230,7 @@ int HardwareManager::stop_raise(){
 int HardwareManager::lower(){
     SmartDashboard::PutString("Arm Y: ","DOWN");
     log_test("ARM Y:DWN");
-    this->m_talons["armUpDown"]->Set(0.5);
+    this->m_talons["armUpDown"]->Set(0.3);
     return 0;
 }
 
@@ -242,14 +242,19 @@ int HardwareManager::stop_lower(){
 int HardwareManager::extend(){
     SmartDashboard::PutString("Arm Extend: ","FWD");
     log_test("ARM EXT:FWD");
-    this->m_talons["ArmExtendMotor"]->Set(1);
+    this->m_talons["armExtRet"]->Set(0.5);
+    return 0;
+}
+
+int HardwareManager::stopExtRet(){
+    this->m_talons["armExtRet"]->Set(0);
     return 0;
 }
 
 int HardwareManager::retract(){
     SmartDashboard::PutString("Arm Extend: ","REV");
     log_test("ARM EXT:REV");
-    this->m_talons["ArmExtendMotor"]->Set(-1);
+    this->m_talons["armExtRet"]->Set(-0.5);
     return 0;
 }
 

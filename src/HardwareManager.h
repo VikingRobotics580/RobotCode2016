@@ -72,6 +72,7 @@ class HardwareManager: public BaseManager {
         int stop_lower();
         int extend();
         int retract();
+        int stopExtRet();
 
         float getDistanceSensorValue();
 
@@ -100,6 +101,8 @@ class HardwareManager: public BaseManager {
         inline SpeedController* getTalon(const char* iden){
             return this->getTalon((std::string&)iden);
         }
+
+        inline RobotDrive* getDrive(){ return this->m_drive; };
 
         /*
          * addTalon
