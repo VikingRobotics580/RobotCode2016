@@ -74,7 +74,7 @@ int joystickManager::checkTeleopButtons(){
         ret |= m_hardware_manager->launch();
     }else if(m_joysticks["buttonBox"]->GetButton(RELEASE_BUTTON)){
         ret |= m_hardware_manager->release();
-    }else{
+    }else if(!m_joysticks["buttonBox"]->GetButton(LAUNCH_INIT_BUTTON)){
         ret |= m_hardware_manager->reset_launch();
     }
 
@@ -83,6 +83,8 @@ int joystickManager::checkTeleopButtons(){
         ret |= m_hardware_manager->raise();
     }else if(m_joysticks["buttonBox"]->GetButton(LOWER_BUTTON)){
         ret |= m_hardware_manager->lower();
+    }else{
+        ret |= m_hardware_manager->stop_raise();
     }
 
     // Do Extend stuff
