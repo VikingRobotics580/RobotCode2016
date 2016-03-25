@@ -40,6 +40,10 @@ class joystick {
         void FakeButton(int,float,float);
         void FakeAxis(int,float,float);
 
+        // Sanity check, make sure everything is not null
+        // Return true on success, false otherwise
+        bool checkSanity();
+
         inline Joystick* GetJoystick(){ return m_joystick; };
         inline JoystickButton* GetJoystickButton(int id){ return m_joybuttons[id]; };
 

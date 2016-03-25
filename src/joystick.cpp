@@ -1,4 +1,5 @@
 #include "joystick.h"
+#include <iostream>
 #include "macros.h"
 
 joystick::joystick(int id, int num_buttons, int num_axes, HardwareManager* hwm):
@@ -52,7 +53,18 @@ int joystick::GetButton(int id){
 #ifdef ENABLE_JOYSTICK_FAKING
     if(m_hardware_manager->hasPassed(m_button_fakes.at(id).at(0),m_button_fakes[id][1])){
 #endif
-        return m_joybuttons[id]->Get();
+        try{
+            if(m_joybuttons.at(id) == NULL){
+                log_err("NULL BUTTON FOUND!");
+                return -1;
+            }else{
+                return m_joybuttons[id]->Get();
+            }
+        }catch(const char* e){
+            log_err("Some error happened.");
+            log_err("%s",e);
+            return -1;
+        }
 #ifdef ENABLE_JOYSTICK_FAKING
     }else
         return (int)(m_button_fakes[id][2]);
@@ -80,5 +92,12 @@ void joystick::FakeAxis(int id, float value, float duration){
     m_axis_fakes[id][0] = m_hardware_manager->getCurrentTime();
     m_axis_fakes[id][1] = duration;
     m_axis_fakes[id][2] = value;
+}
+
+bool joystick::checkSanity(){
+    for(auto& b : m_joybuttons){
+        if(b == NULL) return false;
+    }
+    return m_joystick != NULL;
 }
 
