@@ -54,7 +54,7 @@ void Robot::RobotInit(){
     */
 
     m_hardware_disabled = this->m_hw_man->Init();
-    m_joystick_disabled = this->m_jman->Init();
+    /*m_joystick_disabled = */this->m_jman->Init();
 
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
@@ -65,6 +65,9 @@ void Robot::RobotInit(){
     log_test("(int)m_hardware_disabled=%d",(int)m_hardware_disabled);
     log_test("(int)m_joystick_disabled=%d",(int)m_joystick_disabled);
     log_test("(int)m_autonomo_disabled=%d",(int)m_autonomo_disabled);
+
+    // Because fuck it
+    m_hw_man->getDrive()->SetSafetyEnabled(false);
 
     return;
 }
@@ -85,7 +88,7 @@ void Robot::TeleopInit(){
         m_hardware_disabled = true;
     }
 
-    m_joystick_disabled = m_jman->checkSanity();
+    /*m_joystick_disabled =*/ m_jman->checkSanity();
 
     /*
     if(!this->m_hardware_disabled)
@@ -113,33 +116,23 @@ void Robot::DisabledInit(){
 }
 
 void Robot::AutonomousPeriodic(){
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->uninit_suck();
-
-    if(!this->m_joystick_disabled)
-        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
-
     if(!this->m_autonomo_disabled)
         this->m_autonomo_disabled = DISABLE_MANAGER_ON_FAILURE && (this->m_auto_man->Update()==1); // Update will always return 1 upon failure, 2 on not implemented, and 0 upon success
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
-
-    if(!this->m_autonomo_disabled && this->m_auto_man->IsFinished())
-        this->m_auto_man->End();
 }
 
 void Robot::TeleopPeriodic(){
-    /*
     SmartDashboard::PutNumber("Distance",m_hw_man->getDistanceSensorValue());
     SmartDashboard::PutBoolean("Hardware Disabled",this->m_hardware_disabled);
     SmartDashboard::PutBoolean("Joystick Disabled",this->m_joystick_disabled);
     SmartDashboard::PutBoolean("Autonomous Disabled",this->m_autonomo_disabled);
-    */
 
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
-    if(!this->m_joystick_disabled)
-        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
+    //if(!this->m_joystick_disabled)
+    this->m_jman->Update();
+    printf("");
 }
 
 void Robot::TestPeriodic(){
@@ -160,7 +153,7 @@ void Robot::DisabledPeriodic(){
     if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
         log_warn("WARNING! NOT IMPLEMENTED YET!\nNote to Tyler: Remember to ask Rick if we need to do something here.");
 
-    if(!this->m_joystick_disabled)
+    //if(!this->m_joystick_disabled)
         this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 }
 
