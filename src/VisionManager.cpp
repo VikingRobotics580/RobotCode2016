@@ -30,8 +30,9 @@ int VisionManager::Update(){
 
     // Find most significant artifact (biggest artifact closest to the top-left corner)
     int pos[2] = {-1,-1};
-    if(this->findMostSignificantArtifact((Image*)masked,pos))
+    if(this->findMostSignificantArtifact((Image*)masked,pos)){
         log_test("Unable to find any significant artifacts.");
+    }
     
     // Update position variables
     delete[] m_lastPos; // Since all positions are pointers, we need to delete the last array before we over-write it.
