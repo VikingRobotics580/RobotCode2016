@@ -104,6 +104,7 @@ int AutonomousManager::mode1(){
     }else{
         m_hw_man->move(0.5,0.5);
     }
+    //printf("");
     return 0;
 }
 int AutonomousManager::mode2(){
