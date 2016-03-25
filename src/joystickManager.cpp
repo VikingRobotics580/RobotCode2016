@@ -30,10 +30,15 @@ int joystickManager::Init(){
 
 int joystickManager::Update(){
     RModes mode = Robot::s_mode;
+    int ret = 0;
     try{
         switch(mode){
             case RModes::TELEOP:
-                return m_hardware_manager->move(m_joysticks["leftHand"]->GetAxis(1),m_joysticks["rightHand"]->GetAxis(1)) | this->checkTeleopButtons();
+                ret |= m_hardware_manager->move(m_joysticks["leftHand"]->GetAxis(1),
+                        -m_joysticks["rightHand"]->GetAxis(1));
+                //log_test("I don't know why, but the wheels don't move if this line isn't here.");
+                printf(" ");
+                return ret | this->checkTeleopButtons();
             case RModes::AUTO:
                 return this->checkAutoButtons();
             case RModes::TEST:
@@ -89,9 +94,11 @@ int joystickManager::checkTeleopButtons(){
 
     // Do Extend stuff
     if(m_joysticks["buttonBox"]->GetButton(EXTEND_BUTTON)){
-        ret |= m_hardware_manager->extend();
+        //ret |= m_hardware_manager->extend();
     }else if(m_joysticks["buttonBox"]->GetButton(RETRACT_BUTTON)){
-        ret |= m_hardware_manager->retract();
+        //ret |= m_hardware_manager->retract();
+    }else{
+        ret |= m_hardware_manager->stopExtRet();
     }
 
     // Do winch stuff
