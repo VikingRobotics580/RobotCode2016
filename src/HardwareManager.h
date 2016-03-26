@@ -44,14 +44,16 @@ class HardwareManager: public BaseManager {
         const static float DIST_SENSOR_CONST;
 
         HardwareManager(JoystickManagerManager*);
-        HardwareManager(std::vector<joystick*>&);
+        HardwareManager();
         virtual ~HardwareManager();
 
         int Init() override;
         int Update() override;
         bool IsFinished() override;
         int End() override;
+
         int move();
+        int move(float,float);
         int launch();
         int suck();
         int climb();
@@ -61,6 +63,16 @@ class HardwareManager: public BaseManager {
         int uninit_suck();
         int move_arm();
         int stop_suck();
+
+        int init_launch();
+        int reset_launch();
+        int raise();
+        int stop_raise();
+        int lower();
+        int stop_lower();
+        int extend();
+        int retract();
+        int stopExtRet();
 
         float getDistanceSensorValue();
 
@@ -90,6 +102,8 @@ class HardwareManager: public BaseManager {
             return this->getTalon((std::string&)iden);
         }
 
+        inline RobotDrive* getDrive(){ return this->m_drive; };
+
         /*
          * addTalon
          * Accepts an int and std::string&
@@ -118,6 +132,8 @@ class HardwareManager: public BaseManager {
         inline float getCurrentTime(){
             return m_internal_timer->Get();
         };
+
+        inline void setJoystickVector(std::vector<joystick*>& joy){ this->m_joysticks = joy; };
 
     private:
         bool m_finished;

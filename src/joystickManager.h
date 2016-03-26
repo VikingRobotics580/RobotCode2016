@@ -2,14 +2,21 @@
 #ifndef _NEW_JOYSTICK_MANAGER_H_
 #define _NEW_JOYSTICK_MANAGER_H_
 
+#include <string>
+#include <map>
+
 #include "WPILib.h"
 #include "joystick.h"
 #include "BaseManager.h"
 #include "HardwareManager.h"
 
+class Robot;
+
+typedef std::map<std::string,joystick*> jmap;
+
 class joystickManager: public BaseManager {
     public:
-        joystickManager(HardwareManager*,int);
+        joystickManager(HardwareManager*,Robot*);
         virtual ~joystickManager();
 
         int Init(void) override;
@@ -17,16 +24,19 @@ class joystickManager: public BaseManager {
         int End(void) override;
         bool IsFinished(void) override;
 
-        void registerJoystick(int,int,int);
-        void registerJoystick(int,int);
-        void registerJoystick(joystick*);
-        void registerJoystick(Joystick*,int,int);
+        int checkTeleopButtons();
+        int checkTestButtons();
+        int checkAutoButtons();
+        int checkDisabledButtons();
+        int checkSanity();
 
-        inline joystick* getJoystick(int id){ return m_joysticks[id-1]; };
+        inline joystick* getJoystick(std::string& str){ return m_joysticks[str]; };
 
     private:
-        std::vector<joystick*> m_joysticks;
+        //std::vector<joystick*> m_joysticks;
+        jmap m_joysticks;
         HardwareManager* m_hardware_manager;
+        Robot* m_robot;
 };
 
 #endif

@@ -11,8 +11,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "WPILib.h"
 
+#include "HardwareManager.h"
 #include "BaseManager.h"
 #include "JoystickManagerManager.h"
 #include "structs.h"
@@ -33,16 +33,9 @@ class AutonomousManager: public BaseManager{
         /*
          * AutonomousManager - Constructor
          * Accepts no parameters
-         * Constructs AutonomousManager
+         * Constructs AutonomousManager 
          */
-        AutonomousManager(JoystickManagerManager*);
-
-        /*
-         * AutonomousManager - Constructor
-         * Accepts no parameters
-         * Constructs AutonomousManager
-         */
-        AutonomousManager(std::string&,JoystickManagerManager*);
+        AutonomousManager(HardwareManager*);
 
         /*
          * AutonomousManager - Destructor
@@ -91,71 +84,43 @@ class AutonomousManager: public BaseManager{
          */
         //void Interrupted() override;
         
-        // What do you think this does
-        inline JoystickManagerManager* getJoystickManagerManager(){ return this->m_jman; };
-
-        inline void setFilename(std::string& fname){ this->m_filename = fname; };
-        inline void setFilename(const char* fname){ this->m_filename = fname; };
+        inline void setMode(int mode){ this->m_mode = mode; };
+        inline int getMode(){ return this->m_mode; };
 
     protected:
         /*
          * mode
          * Accepts nothing
          * Returns 0 upon success and 1 upon failure
-         * Executes a hardcoded autonomous mode. Should only run if Init fails.
+         * Executes a hardcoded autonomous mode. Should only run if Init fails or if USE_EXPERIMENTAL_AUTO_METHOD is not defined
          */
         int mode();
 
-        /*
-         * executeInstruction
-         * Accepts a command_struct (aka command) pointer
-         * Returns 0 upon success and 1 upon failure
-         * Executes the command
-         */
-        int executeInstruction(instruction*);
 
         /*
-         * HasTimePassed
-         * Accepts a float and an optional float
-         * Returns true if the time has passed, false otherwise
-         * Checks whether the passed amount of time has passed.
+         * modeN (where N is any number from 1 to the maximum possible Autonomous value)
+         * Accepts nothing
+         * A series of methods that each return 0 upon success and 1 upon failure
+         * A series of methods that perform hardcoded autonomous modes.
          */
-        inline bool HasTimePassed(float sec,float offset=0){
-            return (m_timer->Get()-offset) >= sec;
-        }
+        int mode0();
+        int mode1();
+        int mode2();
+        int mode3();
+        int mode4();
+        int mode5();
+        int mode6();
+        int mode7();
 
     private:
-        /*
-         * parseAutoSyntax
-         * Accepts nothing
-         * Returns 0 upon success and 1 upon failure
-         * Parses the contents of m_auto_raw_data into an array of instruction structs.
-         */
-        int parseAutoSyntax();
-
-        /*
-         * readFile
-         * Accepts nothing
-         * Returns 0 upon success and 1 upon error
-         * Reads the contents of m_filename into m_auto_raw_data
-         */
-        int readFile();
-
-        instruction** m_instructions;
-        std::string m_filename;
-
-        int m_current_instruction;
-        int m_instruction_amt;
-        std::ifstream::pos_type m_raw_data_size;
-        char* m_auto_raw_data;
-        JoystickManagerManager* m_jman;
+        HardwareManager* m_hw_man;
 
         bool m_useHardcodedAuto;
         bool m_finished;
 
-        Timer* m_timer;
+        int m_mode;
+        float m_mode_start;
 };
 
-
-
 #endif
+

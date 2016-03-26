@@ -10,14 +10,18 @@
 
 #include <vector>
 #include "HardwareManager.h"
-#include "JoystickManagerManager.h"
+#include "joystickManager.h"
 #include "AutonomousManager.h"
 #include "joystick.h"
+
+enum class RModes { TELEOP=0, AUTO=1, TEST=2, DISABLED=3 };
 
 class IterativeRobot;
 
 class Robot: public IterativeRobot{
     public:
+        static RModes s_mode;
+
         /*
          * Robot - Constructor
          * Accepts nothing
@@ -38,6 +42,10 @@ class Robot: public IterativeRobot{
         inline bool isHardwareDisabled(){ return m_hardware_disabled; };
         inline bool isJoystickDisabled(){ return m_joystick_disabled; };
         inline bool isAutonomoDisabled(){ return m_autonomo_disabled; };
+
+        inline AutonomousManager* getAutoMan(){ return m_auto_man; };
+        inline HardwareManager* getHardMan(){ return m_hw_man; };
+        inline joystickManager* getJoyMan(){ return m_jman; };
 
     protected:
         /*
@@ -129,10 +137,8 @@ class Robot: public IterativeRobot{
         bool IsFinished();
     private:
         HardwareManager* m_hw_man;
-        JoystickManagerManager* m_joy_man;
+        joystickManager* m_jman;
         AutonomousManager* m_auto_man;
-
-        std::vector<joystick*> m_joysticks;
 
         // Disable various managers if they fail to initialize
         bool m_hardware_disabled;

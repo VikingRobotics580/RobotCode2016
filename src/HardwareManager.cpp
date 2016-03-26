@@ -22,19 +22,21 @@ HardwareManager::HardwareManager(JoystickManagerManager* jman):
 {
     m_drive = NULL;
     m_jman = jman;
+    m_internal_timer = new Timer();
 }
 
-HardwareManager::HardwareManager(std::vector<joystick*>& joysticks):
+HardwareManager::HardwareManager():
     BaseManager(),
     m_finished(false),
     m_talons(),
     m_servos(),
     m_anaios(),
     m_digios(),
-    m_joysticks(joysticks)
+    m_joysticks()
 {
     m_drive = NULL;
     m_jman = NULL;
+    m_internal_timer = new Timer();
 }
 
 HardwareManager::~HardwareManager(){
@@ -58,19 +60,17 @@ int HardwareManager::Init(){
     this->m_talons["leftShoot"] = new Talon(9);
     log_info("Adding Talon rightShoot at ID=8");
     this->m_talons["rightShoot"] = new Talon(8);
+    log_info("Adding Talon armExtRet at ID=1");
+    this->m_talons["armExtRet"] = new Talon(1);
+    log_info("Adding Talon armUpDown at ID=2");
+    this->m_talons["armUpDown"] = new Talon(2);
 
     log_info("Adding Talon TESTTALON at ID=3");
-    this->m_talons["TESTTALON"] = new Talon(1);
-
-    log_info("Adding Talon ArmExtendMotor at ID=1");
-    this->m_talons["ArmExtendMotor"] = new Talon(1);
+    this->m_talons["TESTTALON"] = new Talon(3);
 
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
-
-    log_info("Adding Servo ArmRaiseServo at ID=2");
-    this->m_servos["ArmRaiseServo"] = new Servo(2);
 
     log_info("Adding Servo WinchActive at ID=5");
     this->m_servos["WinchActivate"] = new Servo(5);
@@ -101,17 +101,22 @@ int HardwareManager::Init(){
     this->m_servos["TESTSERVO"]->SetAngle(0);
     this->m_servos["WinchActivate"]->SetAngle(0);
 
+    log_info("Starting Timer.");
+    this->m_internal_timer->Start();
+
     log_info("Done Initializing HardwareManager.");
     return 0;
 }
 
 int HardwareManager::Update(){
     int ret = 0;
-    ret |= this->move();
-    ret |= this->launch();
-    //ret |= this->release();
-    ret |= this->suck();
-    ret |= this->climb();
+
+    /*
+    if(this->m_digios["ballDetector"]->Get()){
+        ret |= this->stop_suck();
+    }
+    */
+
     return ret;
 }
 
@@ -124,43 +129,29 @@ int HardwareManager::End(){
 }
 
 int HardwareManager::move(){
-    this->m_drive->TankDrive(-m_jman->getJoystickManager(0)->GetJoystick()->GetY(),-m_jman->getJoystickManager(1)->GetJoystick()->GetY());
+    this->m_drive->TankDrive(-m_joysticks[0]->GetAxis(2),-m_joysticks[1]->GetAxis(2));
+    return 0;
+}
+
+int HardwareManager::move(float left,float right){
+    // Reverse left
+    this->m_drive->TankDrive(-left,right);
     return 0;
 }
 
 int HardwareManager::launch(){
-    // Just put this shit here for now
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_INIT_BUTTON_IDX)->Get()){
-        this->m_talons["leftShoot"]->Set(1);
-        this->m_talons["rightShoot"]->Set(-1);
-    }else{
-        this->m_talons["leftShoot"]->Set(0);
-        this->m_talons["rightShoot"]->Set(0);
-    }
-
-    // Don't shoot it until the driver is ready.
-    // They most likely won't be ready until leftShoot and rightShoot are done
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LAUNCH_BUTTON_IDX)->Get()){
-        SmartDashboard::PutBoolean("Shooting",true);
-        this->m_servos["flap thing"]->SetAngle(45);
-    }else{
-        SmartDashboard::PutBoolean("Shooting",false);
-        this->m_servos["flap thing"]->SetAngle(0);
-    }
+    SmartDashboard::PutBoolean("Shooting",true);
+    log_test("Launching..."); // pew pew
+    this->m_servos["flap thing"]->SetAngle(180);
     return 0;
 }
 
 int HardwareManager::release(){
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RELEASE_BUTTON_IDX)->Get()){
-        this->m_talons["leftShoot"]->Set(0.4);
-        this->m_talons["rightShoot"]->Set(-0.4);
-        this->m_servos["flap thing"]->SetAngle(180);
-        SmartDashboard::PutBoolean("Releasing",true);
-        // Also, should it be before or after the motors start up?
-    }else{
-        SmartDashboard::PutBoolean("Releasing",false);
-        this->m_servos["flap thing"]->SetAngle(0);
-    }
+    SmartDashboard::PutBoolean("Releasing",true);
+    this->m_talons["leftShoot"]->Set(0.4);
+    this->m_talons["rightShoot"]->Set(-0.4);
+    this->m_servos["flap thing"]->SetAngle(180);
+
     return 0;
 }
 
@@ -182,67 +173,88 @@ int HardwareManager::uninit_suck(){
 int HardwareManager::suck(){
     // TODO: Add pre-suck and post-suck stuff
     // Actually, is there anything it init and post init?
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_SUCK_BUTTON_IDX)->Get()){
-        SmartDashboard::PutBoolean("Sucking",true);
-        this->m_talons["intake"]->Set(1);
-        this->m_talons["leftShoot"]->Set(-0.6);
-        this->m_talons["rightShoot"]->Set(0.6);
-    }else{
-        SmartDashboard::PutBoolean("Sucking",false);
-        this->m_talons["intake"]->Set(0);
-    }
-    //return this->stop_suck();
+    SmartDashboard::PutBoolean("Sucking",true);
+    this->m_talons["intake"]->Set(1);
+    this->m_talons["leftShoot"]->Set(-0.6);
+    this->m_talons["rightShoot"]->Set(0.6);
+
     return 0;
 }
 
 int HardwareManager::climb(){
-    // move_arm is handled by climb().
-    // If it fails, then so does climb
-    // When the rose XXX, so too will you XXX away
-    if(this->move_arm()) return 1;
-
-    // Winch stuff
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_WINCH_BUTTON_IDX)){
-        SmartDashboard::PutBoolean("Climbing",true);
-        //if(this->m_servos["WinchActivate"]->GetAngle() == 180)
-            //this->m_talons["ArmExtendMotor"]->Set(-1);
-        //else
-        this->init_climb();
-    }else{
-        SmartDashboard::PutBoolean("Climbing",false);
-    }
-    return 0;
+    log_err("Somebody called climb(). This method is deprecated. Do not call it.");
+    return 2;
 }
 
-// The arm is moved by that arcade stick thing that is basically buttons rather than axes
 int HardwareManager::move_arm(){
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RAISE_BUTTON_IDX)->Get()){
-        SmartDashboard::PutString("Arm Y: ","UP");
-        log_test("ARM Y:UP");
-        this->m_servos["ArmRaiseServo"]->SetAngle(180);
-    }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_LOWER_BUTTON_IDX)->Get()){
-        SmartDashboard::PutString("Arm Y: ","DOWN");
-        log_test("ARM Y:DWN");
-        this->m_servos["ArmRaiseServo"]->SetAngle(0);
-    }
-
-    if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_EXTND_BUTTON_IDX)->Get()){
-        SmartDashboard::PutString("Arm Extend: ","FWD");
-        log_test("ARM EXT:FWD");
-        this->m_talons["ArmExtendMotor"]->Set(1);
-    }else if(m_jman->getJoystickManager(2)->GetButtonByID(HardwareManager::HW_RETRCT_BUTTON_IDX)->Get()){
-        SmartDashboard::PutString("Arm Extend: ","REV");
-        log_test("ARM EXT:REV");
-        this->m_talons["ArmExtendMotor"]->Set(-1);
-    }
-
+    log_err("Somebody called move_arm(). This method is deprecated. Do not call it.");
     return 0;
 }
 
 int HardwareManager::stop_suck(){
-    if(this->m_digios["ballDetector"]->Get()){
-        this->m_talons["intake"]->Set(0);
-    }
+    SmartDashboard::PutBoolean("Sucking",false);
+    this->m_talons["intake"]->Set(0);
+    /*
+    this->m_talons["leftShoot"]->Set(0);
+    this->m_talons["rightShoot"]->Set(0);
+    */
+    return 0;
+}
+
+int HardwareManager::init_launch(){
+    this->m_talons["leftShoot"]->Set(1.0);
+    this->m_talons["rightShoot"]->Set(-1.0);
+    return 0;
+}
+
+int HardwareManager::reset_launch(){
+    SmartDashboard::PutBoolean("Shooting",false);
+    this->m_talons["leftShoot"]->Set(0);
+    this->m_talons["rightShoot"]->Set(0);
+    this->m_servos["flap thing"]->SetAngle(0);
+    return 0;
+}
+
+int HardwareManager::raise(){
+    SmartDashboard::PutString("Arm Y: ","UP");
+    log_test("ARM Y:UP");
+    this->m_talons["armUpDown"]->Set(-0.3);
+    return 0;
+}
+
+int HardwareManager::stop_raise(){
+    this->m_talons["armUpDown"]->Set(0);
+    return 0;
+}
+
+int HardwareManager::lower(){
+    SmartDashboard::PutString("Arm Y: ","DOWN");
+    log_test("ARM Y:DWN");
+    this->m_talons["armUpDown"]->Set(0.3);
+    return 0;
+}
+
+int HardwareManager::stop_lower(){
+    this->m_talons["armUpDown"]->Set(0);
+    return 0;
+}
+
+int HardwareManager::extend(){
+    SmartDashboard::PutString("Arm Extend: ","FWD");
+    log_test("ARM EXT:FWD");
+    this->m_talons["armExtRet"]->Set(0.5);
+    return 0;
+}
+
+int HardwareManager::stopExtRet(){
+    this->m_talons["armExtRet"]->Set(0);
+    return 0;
+}
+
+int HardwareManager::retract(){
+    SmartDashboard::PutString("Arm Extend: ","REV");
+    log_test("ARM EXT:REV");
+    this->m_talons["armExtRet"]->Set(-0.5);
     return 0;
 }
 
