@@ -59,7 +59,7 @@ void Robot::RobotInit(){
     // TODO: Change this hardcoded filename
     //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
     //this->m_auto_man->setFilename("auto_1.joy");
-    m_autonomo_disabled = this->m_auto_man->Init();
+    //m_autonomo_disabled = this->m_auto_man->Init();
 
     log_test("Current Manager Status:");
     log_test("(int)m_hardware_disabled=%d",(int)m_hardware_disabled);
@@ -75,9 +75,9 @@ void Robot::RobotInit(){
 void Robot::AutonomousInit(){
     Robot::s_mode = RModes::AUTO;
 
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->init_suck();
     m_autonomo_disabled = this->m_auto_man->Init();
+    if(m_autonomo_disabled)
+        log_warn("Autonomous got disabled! D:");
     m_jman->checkAutoButtons();
     log_test("Current Auto mode = %d",m_auto_man->getMode());
 }
