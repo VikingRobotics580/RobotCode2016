@@ -104,25 +104,30 @@ int AutonomousManager::mode1(){
     }else{
         m_hw_man->move(0.5,0.5);
     }
-    //printf("");
     return 0;
 }
+
 int AutonomousManager::mode2(){
     return 2;
 }
+
 // TODO: Define the rest of these
 int AutonomousManager::mode3(){
     return 2;
 }
+
 int AutonomousManager::mode4(){
     return 2;
 }
+
 int AutonomousManager::mode5(){
     return 2;
 }
+
 int AutonomousManager::mode6(){
     return 2;
 }
+
 int AutonomousManager::mode7(){
     return 2;
 }
