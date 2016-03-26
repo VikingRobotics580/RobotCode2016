@@ -80,6 +80,7 @@ void Robot::AutonomousInit(){
         log_warn("Autonomous got disabled! D:");
     m_jman->checkAutoButtons();
     log_test("Current Auto mode = %d",m_auto_man->getMode());
+    SmartDashboard::PutNumber("Autonomous Mode",m_auto_man->getMode());
 }
 
 void Robot::TeleopInit(){
