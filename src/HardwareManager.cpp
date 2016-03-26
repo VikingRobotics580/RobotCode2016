@@ -80,7 +80,8 @@ int HardwareManager::Init(){
 
     // NOTE: THIS MIGHT BE THE PROBLEM
     log_info("Setting default Servo values to 0.");
-    this->m_servos["TESTSERVO"]->SetAngle(0);
+    this->m_servos["TESTSERVO"]->SetAngle(10);
+    this->m_servos["flap thing"]->SetAngle(10);
     this->m_servos["WinchActivate"]->SetAngle(0);
 
     log_info("Starting Timer.");
@@ -124,7 +125,7 @@ int HardwareManager::move(float left,float right){
 int HardwareManager::launch(){
     SmartDashboard::PutBoolean("Shooting",true);
     log_test("Launching..."); // pew pew
-    this->m_servos["flap thing"]->SetAngle(180);
+    this->m_servos["flap thing"]->SetAngle(170);
     return 0;
 }
 
@@ -138,7 +139,7 @@ int HardwareManager::release(){
 }
 
 int HardwareManager::init_climb(){
-    this->m_servos["WinchActivate"]->SetAngle(180);
+    this->m_servos["WinchActivate"]->SetAngle(60);
     return 0;
 }
 
@@ -193,7 +194,7 @@ int HardwareManager::reset_launch(){
     SmartDashboard::PutBoolean("Shooting",false);
     this->m_talons["leftShoot"]->Set(0);
     this->m_talons["rightShoot"]->Set(0);
-    this->m_servos["flap thing"]->SetAngle(0);
+    this->m_servos["flap thing"]->SetAngle(10);
     return 0;
 }
 
