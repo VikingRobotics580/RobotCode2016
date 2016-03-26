@@ -79,7 +79,8 @@ int joystickManager::checkTeleopButtons(){
         ret |= m_hardware_manager->launch();
     }else if(m_joysticks["buttonBox"]->GetButton(RELEASE_BUTTON)){
         ret |= m_hardware_manager->release();
-    }else if(!m_joysticks["buttonBox"]->GetButton(LAUNCH_INIT_BUTTON)){
+    }else if(!m_joysticks["buttonBox"]->GetButton(LAUNCH_INIT_BUTTON)
+            && !m_joysticks["buttonBox"]->GetButton(SUCK_BUTTON)){
         ret |= m_hardware_manager->reset_launch();
     }
 
@@ -123,11 +124,18 @@ int joystickManager::checkTestButtons(){
 int joystickManager::checkAutoButtons(){
     int auto_mode = 0;
 
+    // TODO: I've disabled the binary-switch thing for now, but let us make sure we fix it later okay?
+    // Also note, the system that has been put in place temporarily while I figure out the binary thing only allows for 3 modes, not 8, so be careful about that.
+    /*
     auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_1);
     auto_mode <<= 1;
     auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_2);
     auto_mode <<= 1;
     auto_mode |= m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_3);
+    */
+    if(m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_1)) auto_mode = 1;
+    if(m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_2)) auto_mode = 2;
+    if(m_joysticks["buttonBox"]->GetButton(AUTO_SWITCH_3)) auto_mode = 3;
 
     if(this->m_robot->getAutoMan()->getMode() != auto_mode)
         this->m_robot->getAutoMan()->setMode(auto_mode);
