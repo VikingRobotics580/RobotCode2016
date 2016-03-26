@@ -9,7 +9,6 @@
 
 #include "WPILib.h"
 
-#include "JoystickManagerManager.h"
 #include "BaseManager.h"
 #include "structs.h"
 #include "macros.h"
@@ -43,7 +42,6 @@ class HardwareManager: public BaseManager {
         const static float WHEEL_RADIUS;
         const static float DIST_SENSOR_CONST;
 
-        HardwareManager(JoystickManagerManager*);
         HardwareManager();
         virtual ~HardwareManager();
 
@@ -143,7 +141,6 @@ class HardwareManager: public BaseManager {
         digitalio_map m_digios;
         //sensor_map m_sensors;
         RobotDrive* m_drive;
-        JoystickManagerManager* m_jman;
         Timer* m_internal_timer;
         std::vector<joystick*> m_joysticks;
 };

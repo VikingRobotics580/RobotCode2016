@@ -1,16 +1,14 @@
 #include "AimAssist.h"
 #include "HardwareManager.h"
-#include "JoystickManager.h"
 #include "macros.h"
 
 const float AimAssist::APPROPRIATE_DIST = 0.0;
 const float AimAssist::TOLERANCE = 0.0;
 
-AimAssist::AimAssist(HardwareManager* hwman,JoystickManager*jyman):
+AimAssist::AimAssist(HardwareManager* hwman):
     m_enabled(true)
 {
     this->m_hwman = hwman;
-    this->m_jyman = jyman;
 }
 
 // Don't do anything because we want Robot::~Robot() to deal with it
@@ -22,12 +20,13 @@ int AimAssist::assist(){
     float dist = 0; //m_hwman->getSensor("distSensor")->Get();
     float adist = dist-AimAssist::APPROPRIATE_DIST;
     // TODO: Change the ID's for the axes
-    if(adist > AimAssist::TOLERANCE)
-        m_jyman->FakeAxisInput(0,0.5,this->distToTime(0.5,adist));
-    else if(adist < -AimAssist::TOLERANCE)
-        m_jyman->FakeAxisInput(0,-0.5,this->distToTime(0.5,adist));
-    else
+    if(adist > AimAssist::TOLERANCE){
+        //m_jyman->FakeAxisInput(0,0.5,this->distToTime(0.5,adist));
+    }else if(adist < -AimAssist::TOLERANCE){
+        //m_jyman->FakeAxisInput(0,-0.5,this->distToTime(0.5,adist));
+    }else{
         return 0;
+    }
     return 1;
 }
 

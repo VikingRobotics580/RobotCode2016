@@ -1,29 +1,12 @@
 // TODO: Find out why the SmartDashboard values aren't being put to the SmartDashboard
 
-
-
 #include "HardwareManager.h"
 #include "joystick.h"
-
 
 const float HardwareManager::WHEEL_RPM_FULL_SPEED = 0.0;
 const float HardwareManager::WHEEL_RADIUS = 0.0;
 // What the hell is this constant Max?
 const float HardwareManager::DIST_SENSOR_CONST = 0.0048828125;
-
-HardwareManager::HardwareManager(JoystickManagerManager* jman):
-    BaseManager(),
-    m_finished(false),
-    m_talons(),
-    m_servos(),
-    m_anaios(),
-    m_digios(),
-    m_joysticks()
-{
-    m_drive = NULL;
-    m_jman = jman;
-    m_internal_timer = new Timer();
-}
 
 HardwareManager::HardwareManager():
     BaseManager(),
@@ -35,7 +18,6 @@ HardwareManager::HardwareManager():
     m_joysticks()
 {
     m_drive = NULL;
-    m_jman = NULL;
     m_internal_timer = new Timer();
 }
 

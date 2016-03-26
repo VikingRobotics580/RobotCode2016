@@ -14,7 +14,6 @@
 
 #include "HardwareManager.h"
 #include "BaseManager.h"
-#include "JoystickManagerManager.h"
 #include "structs.h"
 
 enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
