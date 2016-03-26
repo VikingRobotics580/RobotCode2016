@@ -102,7 +102,7 @@ int AutonomousManager::mode1(){
     if(m_hw_man->hasPassed(m_mode_start,3)){
         m_hw_man->move(0,0);
     }else{
-        m_hw_man->move(0.5,0.5);
+        m_hw_man->move(-0.8,0.8);
     }
     return 0;
 }
