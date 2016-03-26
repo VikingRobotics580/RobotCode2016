@@ -78,6 +78,8 @@ void Robot::AutonomousInit(){
     if(!this->m_hardware_disabled)
         this->m_hw_man->init_suck();
     m_autonomo_disabled = this->m_auto_man->Init();
+    m_jman->checkAutoButtons();
+    log_test("Current Auto mode = %d",m_auto_man->getMode());
 }
 
 void Robot::TeleopInit(){
