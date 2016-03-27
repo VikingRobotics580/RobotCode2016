@@ -201,7 +201,7 @@ int HardwareManager::reset_launch(){
 int HardwareManager::raise(){
     SmartDashboard::PutString("Arm Y: ","UP");
     log_test("ARM Y:UP");
-    this->m_talons["armUpDown"]->Set(-0.3);
+    this->m_talons["armUpDown"]->Set(-0.20);
     return 0;
 }
 
@@ -213,7 +213,7 @@ int HardwareManager::stop_raise(){
 int HardwareManager::lower(){
     SmartDashboard::PutString("Arm Y: ","DOWN");
     log_test("ARM Y:DWN");
-    this->m_talons["armUpDown"]->Set(0.3);
+    this->m_talons["armUpDown"]->Set(0.20);
     return 0;
 }
 
