@@ -48,7 +48,7 @@
 #define ENABLE_ERROR
 #define ENABLE_WARN
 #define ENABLE_INFO
-#define ENABLE_TEST
+//#define ENABLE_TEST
 
 
 #ifdef ENABLE_ERROR
