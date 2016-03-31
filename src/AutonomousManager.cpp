@@ -107,17 +107,49 @@ int AutonomousManager::mode1(){
     return 0;
 }
 
+// Shoot from straight on
 int AutonomousManager::mode2(){
-    return 2;
+    if(m_hw_man->hasPassed(m_mode_start,5)){
+        m_hw_man->launch();
+    }else if(m_hw_man->hasPassed(m_mode_start,4)){
+        m_hw_man->init_launch();
+    }else{
+        // mode1 does exactly what we want to do 3 seconds and earlier, so we just call it rather than repeat code
+        return this->mode1();
+    }
+    return 0;
 }
 
-// TODO: Define the rest of these
+// Shoot from the left side of the goal (turn to the right to angle ourselves correctly)
 int AutonomousManager::mode3(){
-    return 2;
+    if(m_hw_man->hasPassed(m_mode_start,7)){
+        m_hw_man->launch();
+    }else if(m_hw_man->hasPassed(m_mode_start,6)){
+        m_hw_man->init_launch();
+        m_hw_man->move(0,0);
+    }else if(m_hw_man->hasPassed(m_mode_start,4)){
+        m_hw_man->move(0.5,0);
+    }else{
+        // mode1 does exactly what we want to do 3 seconds and earlier, so we just call it rather than repeat code
+        return this->mode1();
+    }
+    return 0;
 }
 
+// Shoot from the right side of the goal (turn to the left to angle ourselves correctly)
 int AutonomousManager::mode4(){
-    return 2;
+    if(m_hw_man->hasPassed(m_mode_start,7)){
+        m_hw_man->launch();
+    }else if(m_hw_man->hasPassed(m_mode_start,6)){
+        m_hw_man->init_launch();
+        m_hw_man->move(0,0);
+    }else if(m_hw_man->hasPassed(m_mode_start,4)){
+        m_hw_man->move(0,0.5);
+    }else{
+        // mode1 does exactly what we want to do 3 seconds and earlier, so we just call it rather than repeat code
+        return this->mode1();
+    }
+    return 0;
 }
 
 int AutonomousManager::mode5(){
