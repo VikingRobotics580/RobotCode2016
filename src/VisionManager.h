@@ -4,6 +4,7 @@
 
 #include <string>
 #include "Vision/AxisCamera.h"
+#include "Vision/VisionAPI.h"
 #include "BaseManager.h"
 
 class VisionManager: public BaseManager {
@@ -17,7 +18,7 @@ class VisionManager: public BaseManager {
         const int MASK_COLOR = 0xFF0000;
         const int TOLERANCE_PERCENT = 30; // How much of a percentage is allowed to be different before we decide that it is not right
 
-        VisionManager();
+        VisionManager(int);
         ~VisionManager();
 
         int Update() override;
@@ -31,11 +32,17 @@ class VisionManager: public BaseManager {
 
         int* compareImgFrom(Image*,int,int);
         int findMostSignificantArtifact(Image*,int[2]);
+
+        int takeAndSaveTestImage();
     private:
         int* m_lastPos;
         int* m_currPos;
+        int m_updateTimer;
+        int m_maxUpdateTicks;
         bool m_finished;
         AxisCamera* m_camera;
+
+        Image* m_sample_img;
 };
 
 #endif

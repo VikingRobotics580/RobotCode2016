@@ -3,12 +3,15 @@
 #include "Vision/RGBImage.h"
 #include "macros.h"
 
-VisionManager::VisionManager():
-    BaseManager()
+VisionManager::VisionManager(int updateTicks):
+    BaseManager(),
+    m_updateTimer(updateTicks), // Start out at updateTicks, so we run once at the beginning, then do the rest of the things
+    m_maxUpdateTicks(updateTicks)
 {
     m_camera = new AxisCamera(VisionManager::CAM_IP);
     m_lastPos = new int[2];
     m_currPos = new int[2];
+    m_sample_img = NULL;
 }
 
 VisionManager::~VisionManager(){
@@ -17,6 +20,14 @@ VisionManager::~VisionManager(){
 }
 
 int VisionManager::Update(){
+    // Because these are lengthy calculations, only do them ever m_maxUpdateTicks ticks
+    if(m_updateTimer != m_maxUpdateTicks){
+        m_updateTimer++;
+        return 0;
+    }
+    // Set it to 0 once the timer reaches the thing.
+    m_updateTimer = 0;
+
     // Get image from camera
     RGBImage* image = new RGBImage();
     if(this->m_camera->GetImage(image)){
@@ -43,7 +54,7 @@ int VisionManager::Update(){
 }
 
 int VisionManager::Init(){
-    return 0;
+    return frcReadImage(m_sample_img,"VISION_MANAGER_SAMPLE_IMG.PNG");
 }
 
 int VisionManager::End(){
@@ -79,7 +90,7 @@ int* VisionManager::compareImgFrom(Image* img,int x,int y){
                 // NOTE: I'm taking the address of the value here, watch out for seg-faults!
                 // Get the pixels at p1 and p2
                 // If either throw an error, count this as a failure
-                if(frcGetPixelValue(img,p1,pixel1) || frcGetPixelValue(img,p2,pixel2)){
+                if(frcGetPixelValue(img,p1,pixel1) || frcGetPixelValue(m_sample_img,p2,pixel2)){
                     err_succ[0]++;
                     continue;
                 }
@@ -125,3 +136,12 @@ int VisionManager::findMostSignificantArtifact(Image* image,int pos[2]){
     return 1;
 }
 
+int VisionManager::takeAndSaveTestImage(){
+    RGBImage* image = new RGBImage();
+    if(this->m_camera->GetImage(image)){
+        log_err("Failed to get image from camera.");
+        return 1;
+    }
+    BinaryImage* masked = image->ThresholdRGB(0,0,0,0,0,0);
+    return frcWriteImage((Image*)masked,"VISION_MANAGER_SAMPLE_IMG.PNG");
+}
