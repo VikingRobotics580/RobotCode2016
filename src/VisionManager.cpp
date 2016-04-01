@@ -73,6 +73,11 @@ int* VisionManager::compareImgFrom(Image* img,int x,int y){
     int* err_succ = new int[2];
     for(int w=0; w<VisionManager::SAMPLE_WIDTH;w++){
         for(int h=0; h<VisionManager::SAMPLE_HEIGHT;h++){
+            // If sample_img is NULL here, then nothing will work, so don't even bother
+            if(m_sample_img == NULL){
+                err_succ[0]++;
+                continue; // Continue because we want to do it for every single fucking thing
+            }
             if(h < VisionManager::CAM_HEIGHT || w < VisionManager::CAM_WIDTH){
                 // Generate the two points
                 Point p1;
@@ -143,5 +148,6 @@ int VisionManager::takeAndSaveTestImage(){
         return 1;
     }
     BinaryImage* masked = image->ThresholdRGB(0,0,0,0,0,0);
+    this->m_sample_img = (Image*)masked; // set the actual thing
     return frcWriteImage((Image*)masked,"VISION_MANAGER_SAMPLE_IMG.PNG");
 }

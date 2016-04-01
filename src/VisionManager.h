@@ -11,10 +11,10 @@ class VisionManager: public BaseManager {
     public:
         // TODO: Finish off these constants
         const std::string CAM_IP = "";
-        const int CAM_HEIGHT = 480;
-        const int CAM_WIDTH = 640;
-        const int SAMPLE_HEIGHT = 480;
-        const int SAMPLE_WIDTH = 640;
+        const int CAM_WIDTH = 320;
+        const int CAM_HEIGHT = 240;
+        const int SAMPLE_WIDTH = 320;
+        const int SAMPLE_HEIGHT = 240;
         const int MASK_COLOR = 0xFF0000;
         const int TOLERANCE_PERCENT = 30; // How much of a percentage is allowed to be different before we decide that it is not right
 
