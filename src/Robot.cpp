@@ -36,30 +36,8 @@ void Robot::RobotInit(){
             If you feel that this is incorrect, please talk to a programmer.");
 #endif
 
-    /*
-    // Just in case ;)
-    try{
-        for(auto& j : m_joysticks){
-            if(j->Init()){
-                m_joystick_disabled = true;
-                break;
-            }
-        }
-    }catch(...){
-        log_err("Initialization of one of the joysticks failed. Disabling joysticks.");
-        m_joystick_disabled = true;
-    }
-
-    this->m_hw_man->setJoystickVector(m_joysticks);
-    */
-
     m_hardware_disabled = this->m_hw_man->Init();
     /*m_joystick_disabled = */this->m_jman->Init();
-
-    // TODO: Change this hardcoded filename
-    //   Create some way to let the driver choose the auto mode they want (Maybe using the button box)
-    //this->m_auto_man->setFilename("auto_1.joy");
-    //m_autonomo_disabled = this->m_auto_man->Init();
 
     log_test("Current Manager Status:");
     log_test("(int)m_hardware_disabled=%d",(int)m_hardware_disabled);
