@@ -44,11 +44,19 @@ int HardwareManager::Init(){
     this->m_talons["rightShoot"] = new Talon(8);
     log_info("Adding Talon armExtRet at ID=1");
     this->m_talons["armExtRet"] = new Talon(1);
-    log_info("Adding Talon armUpDown at ID=2");
-    this->m_talons["armUpDown"] = new Talon(2);
+    log_info("Adding Talon armUpDown at ID=3");
+    this->m_talons["armUpDown"] = new Talon(3);
 
     log_info("Adding Talon TESTTALON at ID=3");
     this->m_talons["TESTTALON"] = new Talon(3);
+
+
+    // PLEASE WORK! D:
+    log_info("Setting all SpeedControllers to 0");
+    for(talon_map::iterator it = m_talons.begin(); it != m_talons.end(); ++it){
+        it->second->Set(0);
+    }
+
 
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
@@ -134,6 +142,7 @@ int HardwareManager::release(){
     this->m_talons["leftShoot"]->Set(0.4);
     this->m_talons["rightShoot"]->Set(-0.4);
     this->m_servos["flap thing"]->SetAngle(180);
+    this->m_talons["intake"]->Set(-1);
 
     return 0;
 }
@@ -225,7 +234,7 @@ int HardwareManager::stop_lower(){
 int HardwareManager::extend(){
     SmartDashboard::PutString("Arm Extend: ","FWD");
     log_test("ARM EXT:FWD");
-    this->m_talons["armExtRet"]->Set(0.5);
+    this->m_talons["armExtRet"]->Set(-0.6);
     return 0;
 }
 
@@ -237,7 +246,7 @@ int HardwareManager::stopExtRet(){
 int HardwareManager::retract(){
     SmartDashboard::PutString("Arm Extend: ","REV");
     log_test("ARM EXT:REV");
-    this->m_talons["armExtRet"]->Set(-0.5);
+    this->m_talons["armExtRet"]->Set(0.6);
     return 0;
 }
 
