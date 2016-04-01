@@ -110,7 +110,7 @@ int joystickManager::checkTeleopButtons(){
     // Do suck stuff
     if(m_joysticks["buttonBox"]->GetButton(SUCK_BUTTON)){
         ret |= m_hardware_manager->suck();
-    }else{
+    }else if(!m_joysticks["buttonBox"]->GetButton(RELEASE_BUTTON)){
         ret |= m_hardware_manager->stop_suck();
     }
 
