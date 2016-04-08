@@ -53,6 +53,7 @@ int AutonomousManager::Init(){
 }
 
 int AutonomousManager::Update(){
+    // Nothing else should be done here. Everything is determined by mode()
     return this->mode();
 }
 
@@ -65,6 +66,8 @@ int AutonomousManager::End(){
 }
 
 int AutonomousManager::mode(){
+    // Determine which method to call
+    // I wish there was an easier way to do this that didn't involve CTRL-C and CTRL-V
     switch(this->m_mode){
         case 0:
             return this->mode0();
@@ -94,6 +97,7 @@ int AutonomousManager::mode0(){
 }
 
 int AutonomousManager::mode1(){
+    // Simply move forwards
     if(m_hw_man->hasPassed(m_mode_start,4)){
         m_hw_man->move(0,0);
     }else{

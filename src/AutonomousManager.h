@@ -75,7 +75,19 @@ class AutonomousManager: public BaseManager{
          */
         int End() override;
 
+        /*
+         * setMode
+         * Accepts an int
+         * Returns nothing
+         * Sets the current mode to m_mode
+         */
         inline void setMode(int mode){ this->m_mode = mode; };
+        /*
+         * getMode
+         * Accepts nothing
+         * Returns an int
+         * returns the current mode
+         */
         inline int getMode(){ return this->m_mode; };
 
     protected:
@@ -109,7 +121,9 @@ class AutonomousManager: public BaseManager{
         bool m_useHardcodedAuto;
         bool m_finished;
 
+        // A number which determins which autonomous mode to run
         int m_mode;
+        // A number which specifies the time at which the mode starts
         float m_mode_start;
 };
 
