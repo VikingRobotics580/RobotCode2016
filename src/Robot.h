@@ -14,12 +14,17 @@
 #include "AutonomousManager.h"
 #include "joystick.h"
 
+// A simple enumeration of each one of the possible modes the Robot could be in
 enum class RModes { TELEOP=0, AUTO=1, TEST=2, DISABLED=3 };
 
 class IterativeRobot;
 
 class Robot: public IterativeRobot{
     public:
+        /*
+         * A public static variable which indicates what mode the Robot is currently in.
+         * This helps other classes (like joystickManager) with their own functionality
+         */
         static RModes s_mode;
 
         /*
@@ -43,6 +48,7 @@ class Robot: public IterativeRobot{
         inline bool isJoystickDisabled(){ return m_joystick_disabled; };
         inline bool isAutonomoDisabled(){ return m_autonomo_disabled; };
 
+        // 3 methods that simply return the specified manager
         inline AutonomousManager* getAutoMan(){ return m_auto_man; };
         inline HardwareManager* getHardMan(){ return m_hw_man; };
         inline joystickManager* getJoyMan(){ return m_jman; };
