@@ -30,8 +30,8 @@ class joystick {
         // Accepts 3 ints, and a hardware manager
         // ID, number of buttons, number of axes, HardwareManager object
         joystick(int,int,int,HardwareManager*);
-        joystick(Joystick*,int,int,HardwareManager*);
         ~joystick();
+
         int Init(void);
         int GetButton(int);
         float GetAxis(int);
