@@ -64,11 +64,6 @@ int AutonomousManager::End(){
     return 1;
 }
 
-/*
-void AutonomousManager::Interrupted(){
-}
-*/
-
 int AutonomousManager::mode(){
     switch(this->m_mode){
         case 0:

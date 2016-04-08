@@ -75,14 +75,6 @@ class AutonomousManager: public BaseManager{
          */
         int End() override;
 
-        /*
-         * Interrupted
-         * Accepts nothing
-         * Returns nothing
-         * Similarly to End, Interrupted runs cleanup on AutonomousManager if an error occurs while it is running.
-         */
-        //void Interrupted() override;
-        
         inline void setMode(int mode){ this->m_mode = mode; };
         inline int getMode(){ return this->m_mode; };
 

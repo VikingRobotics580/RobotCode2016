@@ -37,7 +37,7 @@ void Robot::RobotInit(){
 #endif
 
     m_hardware_disabled = this->m_hw_man->Init();
-    /*m_joystick_disabled = */this->m_jman->Init();
+    this->m_jman->Init();
 
     log_test("Current Manager Status:");
     log_test("(int)m_hardware_disabled=%d",(int)m_hardware_disabled);
@@ -69,27 +69,11 @@ void Robot::TeleopInit(){
         m_hardware_disabled = true;
     }
 
-    /*m_joystick_disabled =*/ m_jman->checkSanity();
-
-    /*
-    if(!this->m_hardware_disabled)
-        this->m_hw_man->init_suck();
-        */
+    m_jman->checkSanity();
 }
 
 void Robot::TestInit(){
     Robot::s_mode = RModes::TEST;
-
-    /*
-    for(int j=0; j<3; j++){
-        for(int a=0; a<m_joysticks[j]->getAAmt(); a++){
-            printf("Joystick(%d) - Axis(%d)",j,a);
-            printf("-%f\n",m_joysticks[j]->GetAxis(a));
-        }
-        for(int b=0; b<m_joysticks[j]->getBAmt(); b++)
-            log_test("Joystick(%d) - Button(%d)-%d",j,b,m_joysticks[j]->GetButton(b));
-    }
-    */
 }
 
 void Robot::DisabledInit(){
@@ -111,19 +95,12 @@ void Robot::TeleopPeriodic(){
 
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
-    //if(!this->m_joystick_disabled)
     this->m_jman->Update();
     printf("");
 }
 
 void Robot::TestPeriodic(){
-    /*
-    if(!this->m_joystick_disabled)
-        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
-        */
-
     std::string str = "buttonBox";
-    //log_test("BAmt()=%d",stick->getBAmt());
     log_test("Calling GetButton");
     log_test("BAmt()=%d",m_jman->getJoystick(str)->getBAmt());
     m_jman->getJoystick(str)->GetButton(1);
@@ -134,8 +111,7 @@ void Robot::DisabledPeriodic(){
     if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
         log_warn("WARNING! NOT IMPLEMENTED YET!\nNote to Tyler: Remember to ask Rick if we need to do something here.");
 
-    //if(!this->m_joystick_disabled)
-        this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
+    this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
 }
 
 void Robot::End(){
