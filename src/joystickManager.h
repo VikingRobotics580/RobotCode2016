@@ -33,7 +33,6 @@ class joystickManager: public BaseManager {
         inline joystick* getJoystick(std::string& str){ return m_joysticks[str]; };
 
     private:
-        //std::vector<joystick*> m_joysticks;
         jmap m_joysticks;
         HardwareManager* m_hardware_manager;
         Robot* m_robot;
