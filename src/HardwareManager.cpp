@@ -26,7 +26,6 @@ HardwareManager::~HardwareManager(){
 
 int HardwareManager::Init(){
     log_info("Beginning HardwareManager Initialization.");
-    //this->addTalon(0,"frontLeft");
     log_info("Adding CANTalon frontLeft at ID=0");
     this->m_talons["frontLeft"] = new CANTalon(0);
     log_info("Adding CANTalon backLeft at ID=1");
@@ -57,18 +56,12 @@ int HardwareManager::Init(){
         it->second->Set(0);
     }
 
-
     log_info("Registering Servos.");
     log_info("Adding Servo TESTSERVO at ID=0");
     this->m_servos["TESTSERVO"] = new Servo(0);
 
     log_info("Adding Servo WinchActive at ID=5");
     this->m_servos["WinchActivate"] = new Servo(5);
-
-    /*
-    log_info("Adding Servo IntakeArmActivate at ID=2");
-    this->m_servos["IntakeArmActivate"] = new Servo(6);
-    */
 
     log_info("Adding Servo flap thing at ID=7");
     this->m_servos["flap thing"] = new Servo(7);
@@ -101,12 +94,6 @@ int HardwareManager::Init(){
 
 int HardwareManager::Update(){
     int ret = 0;
-
-    /*
-    if(this->m_digios["ballDetector"]->Get()){
-        ret |= this->stop_suck();
-    }
-    */
 
     return ret;
 }
@@ -153,12 +140,10 @@ int HardwareManager::init_climb(){
 }
 
 int HardwareManager::init_suck(){
-    //this->m_servos["IntakeArmActivate"]->SetAngle(180);
     return 0;
 }
 
 int HardwareManager::uninit_suck(){
-    //this->m_servos["IntakeArmActivate"]->SetAngle(0);
     return 0;
 }
 
@@ -186,10 +171,6 @@ int HardwareManager::move_arm(){
 int HardwareManager::stop_suck(){
     SmartDashboard::PutBoolean("Sucking",false);
     this->m_talons["intake"]->Set(0);
-    /*
-    this->m_talons["leftShoot"]->Set(0);
-    this->m_talons["rightShoot"]->Set(0);
-    */
     return 0;
 }
 

@@ -19,7 +19,6 @@ typedef std::map<std::string,SpeedController*> talon_map;
 typedef std::map<std::string,Servo*> servo_map;
 typedef std::map<std::string,AnalogInput*> analogio_map;
 typedef std::map<std::string,DigitalInput*> digitalio_map;
-//typedef std::map<std::string,SpeedController*> talon_map;
 
 class HardwareManager: public BaseManager {
     public:
@@ -139,7 +138,6 @@ class HardwareManager: public BaseManager {
         servo_map m_servos; // :(
         analogio_map m_anaios; // Oh well, guess we are using a map for each port now.
         digitalio_map m_digios;
-        //sensor_map m_sensors;
         RobotDrive* m_drive;
         Timer* m_internal_timer;
         std::vector<joystick*> m_joysticks;
