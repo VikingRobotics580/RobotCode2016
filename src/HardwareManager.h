@@ -294,7 +294,6 @@ class HardwareManager: public BaseManager {
         digitalio_map m_digios;
         RobotDrive* m_drive;
         Timer* m_internal_timer;
-        std::vector<joystick*> m_joysticks;
 };
 
 #endif

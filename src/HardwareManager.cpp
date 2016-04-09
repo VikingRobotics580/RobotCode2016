@@ -12,8 +12,7 @@ HardwareManager::HardwareManager():
     m_talons(),
     m_servos(),
     m_anaios(),
-    m_digios(),
-    m_joysticks()
+    m_digios()
 {
     m_drive = NULL;
     m_internal_timer = new Timer();
