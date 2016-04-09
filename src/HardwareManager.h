@@ -286,15 +286,6 @@ class HardwareManager: public BaseManager {
             return m_internal_timer->Get();
         };
 
-        /*
-         * setJoystickVector
-         * Accepts a std::vector<joystick*>&
-         * Returns nothing
-         * Sets the current vector of joysticks to joy
-         * NOTE: This method is deprecated. Using it will have no effect.
-         */
-        inline void setJoystickVector(std::vector<joystick*>& joy){ this->m_joysticks = joy; };
-
     private:
         bool m_finished;
         talon_map m_talons;
