@@ -44,33 +44,164 @@ class HardwareManager: public BaseManager {
         HardwareManager();
         virtual ~HardwareManager();
 
+        /*
+         * Init
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Initializes all hardware-related things.
+         */
         int Init() override;
+
+        /*
+         * Update
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Constantly updates various hardware objects if necessary
+         */
         int Update() override;
+
+        /*
+         * IsFinished
+         * Accepts nothing
+         * Returns a bool if the manager is finished doing its thing
+         * Simply returns if it is finished doing things.
+         */
         bool IsFinished() override;
+
+        /*
+         * End
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Cleans up and uninitializes hardware objects
+         */
         int End() override;
 
-        int move();
+        /*
+         * move
+         * Accepts two floats
+         * Returns an int (0 upon success, 1 upon failure)
+         * Moves the robot based on the two floats passed
+         */
         int move(float,float);
+
+        /*
+         * launch
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Launches the held ball
+         */
         int launch();
+
+        /*
+         * suck
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * sucks a ball into the shooting mechanism
+         */
         int suck();
-        int climb();
+
+        /*
+         * release
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * gently ejects the ball from the shooting mechanism
+         */
         int release();
+
+        /*
+         * init_climb
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Connects the winch mechanism to the drive system.
+         * If you want to know why we do this, ask the Hardware team, as it is too long to explain here.
+         */
         int init_climb();
-        int init_suck();
-        int uninit_suck();
-        int move_arm();
+
+        /*
+         * stop_suck
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Turns off the intake system
+         */
         int stop_suck();
 
+        /*
+         * init_launch
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Initializes the launch system before shooting
+         */
         int init_launch();
+
+        /*
+         * reset_launch
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Resets the launch system by setting everything back to its starting point
+         */
         int reset_launch();
+
+        /*
+         * raise
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Raises the arm
+         */
         int raise();
+
+        /*
+         * stop_raise
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Stops the arm from raising or lowering
+         */
         int stop_raise();
+
+        /*
+         * lower
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Lowers the arm
+         */
         int lower();
+
+        /*
+         * stop_lower
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Stops the arm from raising or lowering
+         */
         int stop_lower();
+
+        /*
+         * extend
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Extends the arm
+         */
         int extend();
+        /*
+         * retract
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Retracts the arm
+         */
         int retract();
+
+        /*
+         * stopExtRet
+         * Accepts nothing
+         * Returns an int (0 upon success, 1 upon failure)
+         * Stops both the extension and retraction of the arm
+         */
         int stopExtRet();
 
+        /*
+         * getDistanceSensorValue
+         * Accepts nothing
+         * Returns a float 
+         * Returns the current value of the distance sensor in meters
+         */
         float getDistanceSensorValue();
 
         /*
@@ -81,6 +212,12 @@ class HardwareManager: public BaseManager {
          */
         inline talon_map& getAllTalons(){ return this->m_talons; };
 
+        /*
+         * getAllServos
+         * Accepts void
+         * Returns a servo_map
+         * Returns the map of existing servos
+         */
         inline servo_map& getAllServos(){ return this->m_servos; };
 
         /*
@@ -99,6 +236,12 @@ class HardwareManager: public BaseManager {
             return this->getTalon((std::string&)iden);
         }
 
+        /*
+         * getDrive
+         * Accepts nothing
+         * Returns a RobotDrive*
+         * Returns the instance of RobotDrive held by this object
+         */
         inline RobotDrive* getDrive(){ return this->m_drive; };
 
         /*
@@ -106,6 +249,7 @@ class HardwareManager: public BaseManager {
          * Accepts an int and std::string&
          * Returns void
          * Adds a CANTalon to the registered talons, with a unique identifier
+         * IMPORTANT NOTE: These methods are broken. Do not use them
          */
         inline void addTalon(int id){
             std::string i = std::to_string(id);
@@ -119,6 +263,12 @@ class HardwareManager: public BaseManager {
             this->addTalon(id,(std::string&)identifier);
         }
 
+        /*
+         * hasWinchBeenActivated
+         * Accepts nothing
+         * Returns a bool
+         * Returns whether or not the arm-winch has been activated
+         */
         inline bool hasWinchBeenActivated(){ return this->m_servos["WinchActivate"]->GetAngle() == 360; };
 
         // Has a certain amount of time passed since start
@@ -126,10 +276,23 @@ class HardwareManager: public BaseManager {
             return (start+duration) < m_internal_timer->Get();
         }
 
+        /*
+         * getCurrentTime
+         * Accepts nothing
+         * Returns a float
+         * Returns the current time since initialization
+         */
         inline float getCurrentTime(){
             return m_internal_timer->Get();
         };
 
+        /*
+         * setJoystickVector
+         * Accepts a std::vector<joystick*>&
+         * Returns nothing
+         * Sets the current vector of joysticks to joy
+         * NOTE: This method is deprecated. Using it will have no effect.
+         */
         inline void setJoystickVector(std::vector<joystick*>& joy){ this->m_joysticks = joy; };
 
     private:
