@@ -16,12 +16,13 @@ joystick::joystick(int id, int num_buttons, int num_axes, HardwareManager* hwm):
 }
 
 joystick::~joystick(){
-    // Delete the JoystickButton*'s first because they use m_joystick
+    // Delete the JoystickButton*'s first because they use m_joystick (prevent a SEGFAULT)
     for(auto& jb : m_joybuttons) delete jb;
     delete m_joystick;
 }
 
 int joystick::Init(){
+    // Populate m_joybuttons with pointers to JoystickButton objects
     for(int i=0;i<m_button_amt;i++){
         m_joybuttons.push_back(new JoystickButton(m_joystick,i+1));
         m_button_fakes.push_back({0.0,0.0,0.0});
@@ -35,36 +36,17 @@ int joystick::Init(){
 
 // :)
 int joystick::GetButton(int id){
-#ifdef ENABLE_JOYSTICK_FAKING
-    if(m_hardware_manager->hasPassed(m_button_fakes.at(id).at(0),m_button_fakes[id][1])){
-#endif
-        try{
-            if(m_joybuttons.at(id) == NULL){
-                log_err("NULL BUTTON FOUND!");
-                return -1;
-            }else{
-                return m_joybuttons[id]->Get();
-            }
-        }catch(const char* e){
-            log_err("Some error happened.");
-            log_err("%s",e);
-            return -1;
-        }
-#ifdef ENABLE_JOYSTICK_FAKING
-    }else
-        return (int)(m_button_fakes[id][2]);
-#endif
+    // A NULL-check
+    if(m_joybuttons.at(id) == NULL){
+        log_err("NULL BUTTON FOUND!");
+        return -1;
+    }else{
+        return m_joybuttons[id]->Get();
+    }
 }
 
 float joystick::GetAxis(int id){
-#ifdef ENABLE_JOYSTICK_FAKING
-    if(m_hardware_manager->hasPassed(m_axis_fakes.at(id).at(0),m_axis_fakes[id][1]))
-#endif
-        return m_joystick->GetRawAxis(id);
-#ifdef ENABLE_JOYSTICK_FAKING
-    else
-        return m_axis_fakes[id][2];
-#endif
+    return m_joystick->GetRawAxis(id);
 }
 
 void joystick::FakeButton(int id, float value, float duration){
@@ -80,6 +62,8 @@ void joystick::FakeAxis(int id, float value, float duration){
 }
 
 bool joystick::checkSanity(){
+    if(m_joybuttons.size() != m_button_amt) return false;
+
     for(auto& b : m_joybuttons){
         if(b == NULL) return false;
     }
