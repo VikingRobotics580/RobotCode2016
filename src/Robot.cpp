@@ -31,14 +31,10 @@ Robot::~Robot(){
 void Robot::RobotInit(){
     log_info("Registering joystick objects.");
 
-#ifndef ENABLE_JOYSTICK_FAKING
-    log_warn("Joystick faking has been disabled!\n \
-            If you feel that this is incorrect, please talk to a programmer.");
-#endif
-
     m_hardware_disabled = this->m_hw_man->Init();
     this->m_jman->Init();
 
+    // log out the current status of each manager (are they disabled or not?)
     log_test("Current Manager Status:");
     log_test("(int)m_hardware_disabled=%d",(int)m_hardware_disabled);
     log_test("(int)m_joystick_disabled=%d",(int)m_joystick_disabled);
@@ -53,10 +49,15 @@ void Robot::RobotInit(){
 void Robot::AutonomousInit(){
     Robot::s_mode = RModes::AUTO;
 
+    // Don't worry, it shouldn't get disabled (I hope)
     m_autonomo_disabled = this->m_auto_man->Init();
     if(m_autonomo_disabled)
         log_warn("Autonomous got disabled! D:");
+
+    // We only care about the current autonomous mode once at the beginning
     m_jman->checkAutoButtons();
+
+    // Print out the current autonomous mode
     log_test("Current Auto mode = %d",m_auto_man->getMode());
     SmartDashboard::PutNumber("Autonomous Mode",m_auto_man->getMode());
 }
@@ -64,20 +65,24 @@ void Robot::AutonomousInit(){
 void Robot::TeleopInit(){
     Robot::s_mode = RModes::TELEOP;
 
+    // This should never happen
     if(m_hw_man == NULL){
         log_warn("OH GOD! HardwareManager is NULL! D:");
         m_hardware_disabled = true;
     }
 
+    // Check the sanity
     m_jman->checkSanity();
 }
 
 void Robot::TestInit(){
     Robot::s_mode = RModes::TEST;
+    // Nothing else to do
 }
 
 void Robot::DisabledInit(){
     Robot::s_mode = RModes::DISABLED;
+    // Nothing else to do
 }
 
 void Robot::AutonomousPeriodic(){
@@ -88,6 +93,7 @@ void Robot::AutonomousPeriodic(){
 }
 
 void Robot::TeleopPeriodic(){
+    // Put some basic values to the SmartDashboard
     SmartDashboard::PutNumber("Distance",m_hw_man->getDistanceSensorValue());
     SmartDashboard::PutBoolean("Hardware Disabled",this->m_hardware_disabled);
     SmartDashboard::PutBoolean("Joystick Disabled",this->m_joystick_disabled);
@@ -96,10 +102,13 @@ void Robot::TeleopPeriodic(){
     if(!this->m_hardware_disabled)
         this->m_hardware_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_hw_man->Update();
     this->m_jman->Update();
+
+    // TODO: Check the robot to see if this is still necessary
     printf("");
 }
 
 void Robot::TestPeriodic(){
+    // Since this method is mainly just for testing stuff (as the name implies), nothing here is important, and it can change wildly. Don't bother documenting it
     std::string str = "buttonBox";
     log_test("Calling GetButton");
     log_test("BAmt()=%d",m_jman->getJoystick(str)->getBAmt());
@@ -107,11 +116,8 @@ void Robot::TestPeriodic(){
 }
 
 void Robot::DisabledPeriodic(){
-    // TODO: Add something here to hold the robot in place until we can get it down.
-    if(!this->m_hardware_disabled && this->m_hw_man->hasWinchBeenActivated())
-        log_warn("WARNING! NOT IMPLEMENTED YET!\nNote to Tyler: Remember to ask Rick if we need to do something here.");
-
-    this->m_joystick_disabled = DISABLE_MANAGER_ON_FAILURE && this->m_jman->Update();
+    // Nothing need to be done here (nothing can be done here actually. The motors are all disabled during this mode)
+    // Maybe we could add some logging stuff here?
 }
 
 void Robot::End(){
@@ -121,6 +127,7 @@ void Robot::End(){
 }
 
 bool Robot::IsFinished(){
+    // Check each manager to see if they are finished 
     return this->m_hw_man->IsFinished() && this->m_auto_man->IsFinished() && this->m_jman->IsFinished();
 }
 
