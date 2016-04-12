@@ -9,11 +9,9 @@
 #include "joystick.h"
 #include "BaseManager.h"
 #include "HardwareManager.h"
+#include "types.h"
 
 class Robot; // Forward declaration of Robot (this fixes a compiler-error when we just included it, no idea why though)
-
-// A typedef to make writing this thing easier
-typedef std::map<std::string,joystick*> jmap;
 
 class joystickManager: public BaseManager {
     public:
