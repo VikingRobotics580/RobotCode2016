@@ -10,7 +10,6 @@
 #include "WPILib.h"
 
 #include "BaseManager.h"
-#include "structs.h"
 #include "macros.h"
 
 class joystick;
