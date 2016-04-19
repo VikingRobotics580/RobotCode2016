@@ -10,7 +10,9 @@
 #include <cstring>
 #include <cmath>
 #include <climits>
+
 #include "help.h"
+#include "types.h"
 
 using namespace help;
 
@@ -31,7 +33,7 @@ bool strings::startswith(std::string& input, std::string& check){
     return true;
 }
 
-bool strings::startswith(std::string& input, const char* check){
+bool strings::startswith(std::string& input, cstr check){
     if(input.size() < strlen(check)) return false;
     for(size_t i=0;i<strlen(check);i++){
         if(input.at(i) != check[i]) return false;
@@ -39,7 +41,7 @@ bool strings::startswith(std::string& input, const char* check){
     return true;
 }
 
-bool strings::startswith(const char* input, const char* check){
+bool strings::startswith(cstr input, cstr check){
     if(strlen(input) < strlen(check)) return false;
     for(size_t i=0;i<strlen(check);i++){
         if(input[i] != check[i]) return false;
@@ -47,7 +49,7 @@ bool strings::startswith(const char* input, const char* check){
     return true;
 }
 
-bool strings::startswith(const char* input, std::string& check){
+bool strings::startswith(cstr input, std::string& check){
     if(strlen(input) < check.size()) return false;
     for(size_t i=0;i<check.size();i++){
         if(input[i] != check.at(i)) return false;
@@ -64,7 +66,7 @@ bool strings::endswith(std::string& input, std::string& check){
     return true;
 }
 
-bool strings::endswith(std::string& input, const char* check){
+bool strings::endswith(std::string& input, cstr check){
     if(input.size() < strlen(check)) return false;
     for(size_t i=strlen(check)-1;i>0;i--){
         if(input.at(i) != check[i]) return false;
@@ -72,7 +74,7 @@ bool strings::endswith(std::string& input, const char* check){
     return true;
 }
 
-bool strings::endswith(const char* input, const char* check){
+bool strings::endswith(cstr input, cstr check){
     if(strlen(input) < strlen(check)) return false;
     for(size_t i=strlen(check)-1;i>0;i--){
         if(input[strlen(input)-i] != check[i]) return false;
@@ -80,7 +82,7 @@ bool strings::endswith(const char* input, const char* check){
     return true;
 }
 
-bool strings::endswith(const char* input, std::string& check){
+bool strings::endswith(cstr input, std::string& check){
     if(strlen(input) < check.size()) return false;
     for(size_t i=check.size();i>0;i++){
         if(input[strlen(input)-i] != check.at(i)) return false;

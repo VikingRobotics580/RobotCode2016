@@ -19,6 +19,7 @@
 #include <locale>
 #include <cctype>
 
+#include "types.h"
 #include "macros.h"
 #include "math_help.h"
 
@@ -72,9 +73,9 @@ namespace help{
    * Returns true if the input string starts with the check string
    */
   bool startswith(std::string&,std::string&);
-  bool startswith(std::string&,const char*);
-  bool startswith(const char*,const char*);
-  bool startswith(const char*,std::string&);
+  bool startswith(std::string&,cstr);
+  bool startswith(cstr,cstr);
+  bool startswith(cstr,std::string&);
 
   /*
    * endswith
@@ -82,9 +83,9 @@ namespace help{
    * Returns true if the input string ends with the check string
    */
   bool endswith(std::string&,std::string&);
-  bool endswith(std::string&,const char*);
-  bool endswith(const char*,const char*);
-  bool endswith(const char*,std::string&);
+  bool endswith(std::string&,cstr);
+  bool endswith(cstr,cstr);
+  bool endswith(cstr,std::string&);
 
   /*
    * split
