@@ -254,7 +254,7 @@ class HardwareManager: public BaseManager {
             log_info("Adding Talon '%s' : %d",identifier.c_str(),id);
             this->m_talons[identifier] = new CANTalon(id);
         }
-        inline void addTalon(int id,const char* identifier){
+        inline void addTalon(int id,const char* identifier=""){
             this->addTalon(id,(std::string&)identifier);
         }
 
