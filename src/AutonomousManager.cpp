@@ -3,6 +3,8 @@
  *
  *  Created on: Dec 14, 2015
  *      Author: tyler
+ *
+ *  This file manages everything related to Autonomous mode.
  */
 
 #include <stdio.h>
@@ -28,6 +30,10 @@ AutonomousManager::~AutonomousManager(){
 
 int AutonomousManager::Init(){
     log_info("AutonomousManager::Init()");
+    // This is only for the experimental way of handling Autonomous mode that Max and I thought of.
+    // We were never able to finish this, so I'm leaving this code here for two reasons:
+    //  If anybody would like to finish what we started,
+    //  And as a monument to our stupidity
 #ifdef USE_EXPERIMENTAL_AUTO_METHOD
     this->m_current_instruction = 0;
     // Don't initialize if the filename hasn't been set yet
@@ -48,6 +54,7 @@ int AutonomousManager::Init(){
     this->m_useHardcodedAuto = true;
 #endif
 
+    // Define the time we start autonomous mode as the current time as defined by HardwareManager
     this->m_mode_start = m_hw_man->getCurrentTime();
     return 0;
 }
@@ -151,6 +158,8 @@ int AutonomousManager::mode4(){
     return 0;
 }
 
+// The rest of these methods were never defined
+// A '2' return code means that they haven't been implemented yet.
 int AutonomousManager::mode5(){
     return 2;
 }

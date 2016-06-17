@@ -19,6 +19,7 @@ enum AutoModes{MODE1,MODE2,MODE3,MODE4,MODE5,MODE6};
 
 class AutonomousManager: public BaseManager{
     public:
+        // These constants are related to the idea Max and I had of using a special file type to store Autonomous mode code
         const static int AUTO_MAGIC_NUMBER = 0x4155544f;
         const static int AUTO_TYPE_MASK = 0xFF00; // 255 different types supported
         const static int AUTO_ID_MASK = 0x00FF; // 255 different ID's supported
