@@ -17,7 +17,7 @@ class joystick;
 
 class HardwareManager: public BaseManager {
     public:
-        // TODO: Replace these with the actual buttons
+        // I don't think these button definitions actually do anything anymore, since we've replaced it all with the definitions in buttons.h
         // These 4 are actually just for the arcade-controller thing
         const static int HW_RAISE_BUTTON_IDX = 1;
         const static int HW_LOWER_BUTTON_IDX = 2;

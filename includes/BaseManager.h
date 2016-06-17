@@ -10,9 +10,13 @@
 
 class BaseManager {
     public:
+        // This method is to be overrided to initialize the manager one time before it is updated
         virtual int Init(void) = 0;
+        // This method is to be overrided with the code that is run constantly until IsFinished is true
         virtual int Update(void) = 0;
+        // This method is to be overrided to return true when Update should end
         virtual bool IsFinished(void) = 0;
+        // This method runs once when IsFinished has returned true
         virtual int End(void) = 0;
 };
 

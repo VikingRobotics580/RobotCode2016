@@ -1,3 +1,7 @@
+/*
+ * An important note about this file: It is unused, however I am not deleting it because it has some useful code in it, which could be used later
+ */
+
 #include "VisionManager.h"
 #include "Vision/VisionAPI.h"
 #include "Vision/RGBImage.h"
@@ -141,6 +145,7 @@ int VisionManager::findMostSignificantArtifact(Image* image,int pos[2]){
     return 1;
 }
 
+// This is a debugging method, to only be used for testing purposes
 int VisionManager::takeAndSaveTestImage(){
     RGBImage* image = new RGBImage();
     if(this->m_camera->GetImage(image)){
